@@ -1,12 +1,12 @@
+// frontend/src/pages/SellerDashboardPage.js
 import React from 'react';
-import Header from '../../components/layouts/Header/Header';
-import Footer from '../../components/layouts/Footer/Footer';
-import SellerDashboard from '../../components/SellerDashboard/SellerDashboard';
-import './SellerDashboardPage.module.scss';
+import Header from '../../components/layouts/Header';
+import Footer from '../../components/layouts/Footer';
+import SellerDashboard from '../../pages/SellerDashboard';
 
 const SellerDashboardPage = () => {
   return (
-    <div className="seller-dashboard-page">
+    <div className="page-container seller-dashboard-page">
       <Header userRole="seller" />
       <main>
         <SellerDashboard />

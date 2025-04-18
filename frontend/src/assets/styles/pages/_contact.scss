@@ -1,0 +1,34 @@
+/* Styles for the Contact Page */
+   .contact-page {
+    padding: calc(var(--spacing-unit) * 3);
+    background-color: var(--color-bg);
+    
+    &__content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: calc(var(--spacing-unit) * 2);
+    }
+    
+    &__description {
+      font-size: var(--font-size-base);
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      color: var(--color-text);
+    }
+    
+    &__privacy {
+      font-size: var(--font-size-small, 14px);
+      margin-top: calc(var(--spacing-unit) * 2);
+      color: var(--color-text);
+      text-align: center;
+    }
+    
+    /* Add additional styling for ContactForm */
+  }
+  
+  .contact-success {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: var(--font-size-heading);
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
+  

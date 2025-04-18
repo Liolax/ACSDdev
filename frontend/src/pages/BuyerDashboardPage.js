@@ -1,12 +1,11 @@
 import React from 'react';
-import Header from '../../components/layouts/Header/Header';
-import Footer from '../../components/layouts/Footer/Footer';
-import BuyerDashboard from '../../components/BuyerDashboard/BuyerDashboard';
-import styles from './BuyerDashboardPage.module.scss';
+import Header from '../../components/layouts/Header';
+import Footer from '../../components/layouts/Footer';
+import BuyerDashboard from '../../pages/BuyerDashboard';
 
 const BuyerDashboardPage = () => {
   return (
-    <div className={styles["dashboard-container"]}>
+    <div className="page-container buyer-dashboard-page">
       <Header userRole="buyer" />
       <main>
         <BuyerDashboard />

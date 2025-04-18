@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Home.module.scss';
 
 const Home = () => {
   const products = [
@@ -11,22 +10,22 @@ const Home = () => {
   ];
 
   return (
-    <div className={styles["home-container"]}>
-      <header className={styles.header}>
-        <div className={styles["logo"]}>
+    <div className="page-container home-page">
+      <header className="home-page__header">
+        <div className="home-page__logo">
           <img src="/assets/images/logo.svg" alt="ÉireCraft Logo" />
           <span>ÉireCraft - Artisan Market</span>
         </div>
-        <nav>
+        <nav className="home-page__nav">
           <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
           <Link to="/contact">Contact</Link>
         </nav>
       </header>
 
-      <main className={styles["main-content"]}>
+      <main className="home-page__main-content">
         {products.map((product) => (
-          <div key={product.id} className={styles["product-thumbnail"]}>
+          <div key={product.id} className="home-page__product-thumbnail">
             <h3>{product.name}</h3>
             <p>${product.price}</p>
             <Link to="/login">See More</Link>
@@ -34,13 +33,16 @@ const Home = () => {
         ))}
       </main>
 
-      <section className={styles["cta-section"]}>
-        <button className={styles["cta-button"]} onClick={() => console.log('CTA Clicked')}>
+      <section className="home-page__cta-section">
+        <button 
+          className="home-page__cta-button"
+          onClick={() => console.log('CTA Clicked')}
+        >
           See More
         </button>
       </section>
 
-      <footer className={styles.footer}>
+      <footer className="home-page__footer">
         <p>Contact Info | Social Media Icons</p>
       </footer>
     </div>

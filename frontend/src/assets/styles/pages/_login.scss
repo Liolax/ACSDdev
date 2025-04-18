@@ -1,0 +1,83 @@
+/* Styles for the Login Page */
+   .login-page {
+    padding: calc(var(--spacing-unit) * 3);
+    background-color: var(--color-bg);
+  
+    &__header {
+      text-align: center;
+      padding: calc(var(--spacing-unit) * 2);
+      background-color: var(--color-primary);
+      color: #fff;
+    }
+    
+    &__nav {
+      margin-top: calc(var(--spacing-unit) * 1);
+      
+      a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 calc(var(--spacing-unit) * 0.75);
+      }
+    }
+    
+    &__form {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: calc(var(--spacing-unit) * 2);
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: var(--shadow-light);
+      
+      input,
+      button {
+        width: 100%;
+        padding: calc(var(--spacing-unit) * 0.75);
+        margin-bottom: calc(var(--spacing-unit) * 1);
+        font-size: var(--font-size-base);
+        border-radius: 4px;
+      }
+      
+      input {
+        border: 1px solid var(--color-primary);
+      }
+      
+      .login-page__remember-me {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--spacing-unit) * 0.5);
+        margin-bottom: calc(var(--spacing-unit) * 1);
+        
+        input {
+          width: auto;
+        }
+      }
+      
+      .login-page__role-selection {
+        display: flex;
+        justify-content: space-evenly;
+        gap: calc(var(--spacing-unit) * 1);
+        
+        button {
+          background-color: var(--color-primary);
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          @include transition(background-color);
+          
+          &:hover,
+          &:focus {
+            background-color: var(--color-primary-light);
+          }
+        }
+      }
+    }
+    
+    &__footer {
+      text-align: center;
+      padding: calc(var(--spacing-unit) * 1.5);
+      background-color: var(--color-primary);
+      color: #fff;
+      margin-top: calc(var(--spacing-unit) * 2);
+    }
+  }
+  

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Login.module.scss';
+import Header from '../../components/layouts/Header';
+import Footer from '../../components/layouts/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,41 +15,34 @@ const Login = () => {
   };
 
   return (
-    <div className={styles["login-container"]}>
-      <header className={styles.header}>
-        <h1>ÉireCraft</h1>
-        <p>Artisan Market</p>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/contact">Contact</a>
-        </nav>
-      </header>
-      
-      <main className={styles["login-form"]}>
+    <div className="page-container login-page">
+      {/* For consistency, we include Header and Footer */}
+      <Header />
+      <main className="login-page__form">
         <h2>Login</h2>
         <form>
-          <input 
-            type="email" 
-            placeholder="Email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <div className={styles["remember-me"]}>
-            <input 
-              type="checkbox" 
-              id="remember-me" 
-              checked={rememberMe} 
-              onChange={(e) => setRememberMe(e.target.checked)} 
+          <div className="login-page__remember-me">
+            <input
+              type="checkbox"
+              id="remember-me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
             />
             <label htmlFor="remember-me">Remember Me</label>
           </div>
-          <div className={styles["role-selection"]}>
+          <div className="login-page__role-selection">
             <button type="button" onClick={() => handleLogin('BUY')}>
               BUY
             </button>
@@ -58,10 +52,7 @@ const Login = () => {
           </div>
         </form>
       </main>
-      
-      <footer className={styles.footer}>
-        <p>Contact Info | Privacy Policy</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
