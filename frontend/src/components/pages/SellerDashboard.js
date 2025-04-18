@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../api/axiosConfig';
-import styles from './SellerDashboard.module.scss';
+import axios from '../api/axiosConfig';
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +9,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products'); // Use your API route
+        const response = await axios.get('/products');
         setProducts(response.data);
         setLoading(false);
       } catch (err) {
@@ -25,7 +24,7 @@ const SellerDashboard = () => {
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`/products/${productId}`);
-      setProducts(products.filter((product) => product._id !== productId));
+      setProducts(products.filter(product => product._id !== productId));
     } catch (err) {
       setError('Failed to delete product');
     }
@@ -35,17 +34,17 @@ const SellerDashboard = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className={styles['seller-dashboard']}>
+    <div className="seller-dashboard">
       <h2>Manage Your Products</h2>
-      <button className={styles['add-product-btn']}>Add New Product</button>
-      <div className={styles['product-list']}>
+      <button className="add-product-btn">Add New Product</button>
+      <div className="product-list">
         {products.map((product) => (
-          <div key={product._id} className={styles['product-card']}>
+          <div key={product._id} className="product-card">
             <img src={product.image} alt={product.name} />
             <div>
               <h3>{product.name}</h3>
               <p>${product.price}</p>
-              <div className={styles.actions}>
+              <div className="actions">
                 <button onClick={() => handleDelete(product._id)}>Delete</button>
                 <button>Edit</button>
               </div>

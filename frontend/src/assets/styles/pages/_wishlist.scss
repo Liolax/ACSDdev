@@ -1,31 +1,33 @@
 /* Styles for the Wishlist page */
-   .wishlist {
-    padding: calc(var(--spacing-unit) * 3);
-    background-color: #fff;
-    
-    &__header {
-      font-size: var(--font-size-heading);
-      margin-bottom: calc(var(--spacing-unit) * 2);
-      text-align: center;
-      color: var(--color-dark-primary);
-    }
-    
-    &__empty {
-      text-align: center;
-      font-size: var(--font-size-base);
-      color: var(--color-text);
-    }
-    
-    &__list {
-      list-style: none;
-      padding: 0;
-    }
-    
-    &__item {
-      padding: calc(var(--spacing-unit) * 0.5);
-      border-bottom: 1px solid var(--color-bg);
-      font-size: var(--font-size-base);
-      color: var(--color-text);
-    }
+
+.wishlist {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: #fff;
+  
+  &__header {
+    font-size: var(--font-size-heading);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    text-align: center;
+    color: var(--color-dark-primary);
   }
+  
+  &__empty {
+    text-align: center;
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+  }
+  
+  &__list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  &__item {
+    padding: calc(var(--spacing-unit) * 0.5);
+    border-bottom: 1px solid var(--color-bg);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+  }
+}
+
   

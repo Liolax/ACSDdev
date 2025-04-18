@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import styles from './ContactForm.module.scss';
 
 const ContactForm = () => {
-  // Dummy state to ensure useState is loaded correctly
-  // eslint-disable-next-line no-unused-vars
+  // Dummy state for demo purposes.
   const [dummy] = useState(null);
-  
   const [state, handleSubmit] = useForm("mjkydqyo");
 
   if (state.succeeded) {
-    return <p className={styles["contact-success"]}>Thanks for contacting us!</p>;
+    return <p className="contact-success">Thanks for contacting us!</p>;
   }
 
   return (
@@ -18,7 +15,7 @@ const ContactForm = () => {
       action="https://formspree.io/f/mjkydqyo"
       method="POST"
       onSubmit={handleSubmit}
-      className={styles["contact-form"]}
+      className="contact-form"
     >
       <label htmlFor="name">Name:</label>
       <input id="name" type="text" name="name" required />

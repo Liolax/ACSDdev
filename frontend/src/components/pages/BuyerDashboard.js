@@ -1,9 +1,8 @@
 import React from 'react';
-import styles from './BuyerDashboard.module.scss';
 
 const BuyerDashboard = () => {
   return (
-    <div className={styles["buyer-dashboard"]}>
+    <div className="buyer-dashboard">
       <h2>Buyer Dashboard</h2>
       <p>
         Welcome to your dashboard! Here you can view your orders, track shipments,
@@ -11,7 +10,7 @@ const BuyerDashboard = () => {
       </p>
 
       {/* Recent Orders Section */}
-      <section className={styles["orders-section"]}>
+      <section className="orders-section">
         <h3>Recent Orders</h3>
         <ul>
           <li>
@@ -24,7 +23,7 @@ const BuyerDashboard = () => {
       </section>
 
       {/* Wishlist Section */}
-      <section className={styles["wishlist-section"]}>
+      <section className="wishlist-section">
         <h3>Wishlist</h3>
         <ul>
           <li>Custom Jewelry – $60</li>
@@ -33,7 +32,7 @@ const BuyerDashboard = () => {
       </section>
 
       {/* Cart Summary Section */}
-      <section className={styles["cart-section"]}>
+      <section className="cart-section">
         <h3>Cart Summary</h3>
         <ul>
           <li>Handcrafted Mug – $20 x 2</li>
@@ -42,10 +41,10 @@ const BuyerDashboard = () => {
         <p>Total: $85</p>
       </section>
 
-      {/* Dashboard Actions Section */}
-      <section className={styles["dashboard-actions"]}>
+      {/* Dashboard Actions */}
+      <section className="dashboard-actions">
         <h3>Quick Actions</h3>
-        <div className={styles["actions-container"]}>
+        <div className="actions-container">
           <button>Track Shipment</button>
           <button>Update Profile</button>
           <button>View Detailed Orders</button>

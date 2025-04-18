@@ -1,7 +1,7 @@
 import React from 'react';
- 
+
 const Wishlist = () => {
-  const wishlistItems = []; // Replace with dynamic data
+  const wishlistItems = []; // Replace with dynamic data later
 
   return (
     <div className="wishlist">
