@@ -5,6 +5,7 @@ import Login from './pages/Login/Login';
 import BuyerDashboardPage from './pages/BuyerDashboardPage/BuyerDashboardPage';
 import SellerDashboardPage from './pages/SellerDashboardPage/SellerDashboardPage';
 import ContactPage from './pages/ContactPage/ContactPage';
+import './assets/styles/main.scss';
 import './App.css';
 
 const App = () => {
