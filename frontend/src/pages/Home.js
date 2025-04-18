@@ -19,7 +19,6 @@ const Home = () => {
   };
 
   const handleLogin = (email, password, rememberMe, role) => {
-    // Validate credentials, call an API, etc.
     console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
     if (role === 'buyer') {
       navigate('/buyer-dashboard');
@@ -30,7 +29,6 @@ const Home = () => {
 
   return (
     <div className="page-container home-page">
-      {/* Pass onLoginClick so Header can trigger the login modal (e.g., when clicking "Login") */}
       <Header onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />

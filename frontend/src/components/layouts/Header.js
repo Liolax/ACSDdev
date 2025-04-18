@@ -5,8 +5,7 @@ const Header = ({ userRole, onLoginClick }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear session state here later
-    // Then navigate to Home
+    // Clear any session state and navigate back to Home
     navigate('/');
   };
 
@@ -19,7 +18,7 @@ const Header = ({ userRole, onLoginClick }) => {
             <Link to="/seller-dashboard">My Products</Link>
             <Link to="/add-product">Add Product</Link>
             <Link to="/feedback">Feedback</Link>
-            <button onClick={handleLogout} className="header__logout-btn">
+            <button className="header__nav-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
@@ -30,7 +29,7 @@ const Header = ({ userRole, onLoginClick }) => {
             <Link to="/wishlist">Wishlist</Link>
             <Link to="/cart">Cart</Link>
             <Link to="/contact">Contact</Link>
-            <button onClick={handleLogout} className="header__logout-btn">
+            <button className="header__nav-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
@@ -38,7 +37,7 @@ const Header = ({ userRole, onLoginClick }) => {
           <>
             <Link to="/">Home</Link>
             {onLoginClick ? (
-              <button className="header__login-btn" onClick={onLoginClick}>
+              <button className="header__nav-btn" onClick={onLoginClick}>
                 Login
               </button>
             ) : (

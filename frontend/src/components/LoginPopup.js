@@ -4,7 +4,6 @@ const LoginPopup = ({ closePopup, handleLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  // We use lowercase role strings to simplify comparisons.
   const [role, setRole] = useState('buyer'); // Default role is "buyer"
 
   const onSubmit = (e) => {
@@ -16,7 +15,6 @@ const LoginPopup = ({ closePopup, handleLogin }) => {
   return (
     <div className="login-popup-overlay">
       <div className="login-popup">
-        {/* Header text */}
         <h2 style={{ marginBottom: 'calc(var(--spacing-unit) * 1.5)' }}>
           Welcome Back – Please Log In
         </h2>
