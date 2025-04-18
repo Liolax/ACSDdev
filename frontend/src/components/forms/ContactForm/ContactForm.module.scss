@@ -1,28 +1,52 @@
-.contact-page {
-    background-color: var(--light-green, #f0f9f1);
-    padding: calc(var(--spacing-unit, 8px) * 3);
-  
-    .contact-page-content {
-      max-width: 600px;
-      margin: 0 auto;
-  
-      h2 {
-        color: var(--dark-green, #004d00);
-        margin-bottom: calc(var(--spacing-unit, 8px) * 2);
-        text-align: center;
-      }
-  
-      p {
-        margin-bottom: calc(var(--spacing-unit, 8px) * 2);
-        color: var(--text-color, #004d00);
-        font-size: var(--font-size-base, 16px);
-      }
-  
-      .contact-success {
-        color: var(--forest-green, #228B22);
-        font-weight: bold;
-        text-align: center;
-      }
+@use "../../../assets/styles/abstracts/_variables.scss" as vars;
+@use "../../../assets/styles/abstracts/_mixins.scss" as mixins;
+@use "sass:color";
+
+.contact-form {
+  background-color: var(--light-green, #f0f9f1);
+  padding: calc(var(--spacing-unit, 8px) * 3);
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+
+  label {
+    margin-bottom: calc(var(--spacing-unit, 8px) * 0.5);
+    color: var(--text-color, #004d00);
+    display: block;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    margin-bottom: var(--spacing-unit, 8px);
+    padding: calc(var(--spacing-unit, 8px) * 1);
+    border: 1px solid var(--dark-green, #004d00);
+    border-radius: 4px;
+
+    &:focus {
+      border-color: var(--forest-green, #228B22);
+      outline: none;
+    }
+  }
+
+  button {
+    margin-top: var(--spacing-unit, 8px);
+    background-color: var(--forest-green, #228B22);
+    color: white;
+    border: none;
+    padding: var(--spacing-unit, 8px);
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color.adjust(vars.$forest-green, $lightness: -10%);
     }
   }
   
+  .contact-success {
+    color: var(--forest-green, #228B22);
+    font-weight: bold;
+    text-align: center;
+    margin: calc(var(--spacing-unit, 8px) * 2) 0;
+  }
+}

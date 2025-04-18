@@ -1,13 +1,13 @@
 import React from 'react';
-import Header from '../../components/layouts/Header/Header'; 
-import Footer from '../../components/layouts/Footer/Footer'; 
-import SellerDashboard from '../../components/SellerDashboard/SellerDashboard'; 
-import './SellerDashboardPage.module.scss'; // Assuming this is a SASS file
+import Header from '../../components/layouts/Header/Header';
+import Footer from '../../components/layouts/Footer/Footer';
+import SellerDashboard from '../../components/SellerDashboard/SellerDashboard';
+import './SellerDashboardPage.module.scss';
 
 const SellerDashboardPage = () => {
   return (
     <div className="seller-dashboard-page">
-      <Header />
+      <Header userRole="seller" />
       <main>
         <SellerDashboard />
       </main>

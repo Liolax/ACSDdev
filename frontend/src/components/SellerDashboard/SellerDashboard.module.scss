@@ -1,24 +1,20 @@
-@import '../../assets/styles/abstracts/_variables.scss';
+@import "../../assets/styles/abstracts/_variables.scss";
 @import "../../assets/styles/abstracts/_mixins.scss";
 
-.seller-dashboard-page {
-  padding: calc(var(--spacing-unit, 8px) * 3);
+.seller-dashboard {
+  padding: calc(var(--spacing-unit, 8px) * 2);
   background-color: #fff;
 
-  .page-header {
+  h2 {
+    color: $forest-green;
+    font-size: var(--font-size-heading, 2.4rem);
+    margin-bottom: calc(var(--spacing-unit, 8px) * 2);
     text-align: center;
-    margin-bottom: calc(var(--spacing-unit, 8px) * 3);
-
-    h2 {
-      // Use SASS variable $forest-green (imported from _variables.scss)
-      color: $forest-green;
-      font-size: var(--font-size-heading, 2.4rem);
-      margin-bottom: calc(var(--spacing-unit, 8px) * 1);
-    }
   }
 
   .add-product-btn {
-    margin-bottom: calc(var(--spacing-unit, 8px) * 3);
+    display: block;
+    margin: 0 auto calc(var(--spacing-unit, 8px) * 3);
     background-color: $forest-green;
     color: white;
     border: none;
@@ -26,7 +22,6 @@
     border-radius: 4px;
     cursor: pointer;
     @include transition(background-color);
-
     &:hover {
       background-color: darken($forest-green, 10%);
     }
@@ -42,9 +37,8 @@
       border: 1px solid var(--light-green, #f0f9f1);
       border-radius: 8px;
       padding: calc(var(--spacing-unit, 8px) * 2);
-      box-shadow: var(--shadow-light, 0px 2px 4px rgba(0, 0, 0, 0.1));
+      box-shadow: var(--shadow-light, 0px 2px 4px rgba(0,0,0,0.1));
       @include transition(transform);
-
       &:hover {
         transform: translateY(-4px);
       }
@@ -80,7 +74,6 @@
           color: white;
           cursor: pointer;
           @include transition(background-color);
-
           &:first-child {
             background-color: $forest-green;
             &:hover {

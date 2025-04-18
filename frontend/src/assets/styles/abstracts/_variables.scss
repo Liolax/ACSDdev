@@ -11,6 +11,11 @@ $transition-duration: 0.3s;
 $transition-ease: ease-in-out;
 $shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
+// Extra computed variables for hover/darker variants
+$hover-forest-green: darken($forest-green, 10%);
+$forest-green-darker: darken($forest-green, 10%);
+$forest-green-darker-hover: darken($forest-green, 15%);
+
 // Export CSS variables using :root
 :root {
   --forest-green: #228B22;

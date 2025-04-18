@@ -7,6 +7,16 @@
   padding: calc(var(--spacing-unit, 8px) * 2);
   text-align: center;
 
+  // Modifier for seller header (if userRole is 'seller')
+  &.seller {
+    background-color: #444; // A darker tone for sellers
+  }
+
+  // Modifier for buyer header (if userRole is 'buyer')
+  &.buyer {
+    background-color: #007f5f; // An alternative tone for buyers (adjust as needed)
+  }
+
   h1 {
     margin: 0;
     font-size: var(--font-size-heading, 2.4rem);

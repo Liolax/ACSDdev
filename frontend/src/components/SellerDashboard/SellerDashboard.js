@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axiosConfig';
-import './SellerDashboard.module.scss'; // Assuming this is now using SASS
+import styles from './SellerDashboard.module.scss';
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +10,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products'); // Use our API route
+        const response = await axios.get('/products'); // Use your API route
         setProducts(response.data);
         setLoading(false);
       } catch (err) {
@@ -35,18 +35,20 @@ const SellerDashboard = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="seller-dashboard">
+    <div className={styles['seller-dashboard']}>
       <h2>Manage Your Products</h2>
-      <button className="add-product-btn">Add New Product</button>
-      <div className="product-list">
+      <button className={styles['add-product-btn']}>Add New Product</button>
+      <div className={styles['product-list']}>
         {products.map((product) => (
-          <div key={product._id} className="product-item">
+          <div key={product._id} className={styles['product-card']}>
             <img src={product.image} alt={product.name} />
             <div>
               <h3>{product.name}</h3>
               <p>${product.price}</p>
-              <button onClick={() => handleDelete(product._id)}>Delete</button>
-              <button>Edit</button>
+              <div className={styles.actions}>
+                <button onClick={() => handleDelete(product._id)}>Delete</button>
+                <button>Edit</button>
+              </div>
             </div>
           </div>
         ))}
