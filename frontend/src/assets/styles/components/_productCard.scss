@@ -5,6 +5,9 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2); // Adds spacing between image and text
   padding: calc(var(--spacing-unit) * 2);
   transition: box-shadow var(--transition-default);
 
@@ -13,22 +16,29 @@
   }
 
   &__image {
-    width: 100%;
+    width: 160px;
     height: 160px;
     object-fit: cover;
     border-radius: 6px;
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    flex-shrink: 0; // Prevents the image from resizing
   }
   
-  &__title {
-    color: var(--color-dark-primary);
-    font-size: 1.2rem;
-    margin-bottom: var(--spacing-unit);
-  }
-  
-  &__price {
-    color: var(--color-primary);
-    font-size: 1rem;
-    margin-bottom: var(--spacing-unit);
+  &__content {
+    flex: 1; // Ensures the text takes up remaining space
+    text-align: left;
+
+    &__title {
+      color: var(--color-dark-primary);
+      font-size: 1.2rem;
+      margin-bottom: var(--spacing-unit);
+    }
+    
+    &__price {
+      color: var(--color-accent); // Use a distinctive accent color for emphasis
+      font-size: 1.4rem; // Make the price stand out more
+      font-weight: bold;
+      margin-bottom: calc(var(--spacing-unit) * 1);
+    }
   }
 }
+

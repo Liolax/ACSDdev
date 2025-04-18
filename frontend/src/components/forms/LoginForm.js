@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [role, setRole] = useState('BUY'); // Default role is 'BUY'
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -10,7 +11,7 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Logging in with credentials:', credentials);
+    console.log('Logging in with credentials:', credentials, 'Role:', role);
   };
 
   return (
@@ -36,6 +37,22 @@ const LoginForm = () => {
           onChange={handleChange}
           required
         />
+
+        {/* Role Selection Toggle */}
+        <div className="login-form__role-toggle">
+          <span
+            className={`toggle-option ${role === 'BUY' ? 'active' : ''}`}
+            onClick={() => setRole('BUY')}
+          >
+            BUY
+          </span>
+          <span
+            className={`toggle-option ${role === 'SELL' ? 'active' : ''}`}
+            onClick={() => setRole('SELL')}
+          >
+            SELL
+          </span>
+        </div>
 
         <button type="submit">Login</button>
       </form>

@@ -2,16 +2,21 @@
 @import '../mixins.scss';
 
 .button {
-  background-color: darken($primary-color, 10%); 
+  background-color: $secondary-color; 
   color: #fff;
-  padding: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5); // Adjust button size
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-small);
   @include transition(background-color);
 
   &:hover {
-    background-color: darken($primary-color, 15%);
+    background-color: darken($secondary-color, 10%); // Hover effect
+  }
+
+  &:focus {
+    background-color: darken($secondary-color, 10%); // Focus effect
   }
 }

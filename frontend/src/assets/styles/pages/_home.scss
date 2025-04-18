@@ -1,22 +1,67 @@
 /* Styles for the Home Page */
-   .home {
-    padding: calc(var(--spacing-unit) * 3);
-    background-color: var(--color-bg);
+.home-page {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--color-bg);
+
+  &__community {
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    padding: calc(var(--spacing-unit) * 2);
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: var(--shadow-light);
+
+    h2 {
+      font-size: var(--font-size-heading);
+      color: var(--color-primary);
+      text-align: center;
+      margin-bottom: calc(var(--spacing-unit) * 2);
+    }
+    
+    p {
+      font-size: var(--font-size-base);
+      color: var(--color-text);
+      line-height: var(--line-height-base);
+      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      padding: 0 calc(var(--spacing-unit) * 1);
+      text-align: justify;
+    }
   }
-  
-  .home__hero {
-    text-align: center;
-    padding: calc(var(--spacing-unit) * 4);
-    font-size: var(--font-size-heading);
-    color: var(--color-primary);
-  }
-  
-  .home__products {
+
+  &__products {
     margin-top: calc(var(--spacing-unit) * 3);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: calc(var(--spacing-unit) * 2);
+
+    h2 {
+      font-size: var(--font-size-heading);
+      text-align: center;
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      color: var(--color-primary);
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: calc(var(--spacing-unit) * 2.5);
+      padding: 0 calc(var(--spacing-unit) * 2);
+    }
   }
-  
-  /* Extend these with additional classes for sections, CTA buttons, etc. */
-  
+
+  &__cta-section {
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 4);
+
+    .home-page__cta-button {
+      padding: calc(var(--spacing-unit) * 1);
+      background-color: var(--color-primary);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      @include transition(background-color);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-primary-light);
+      }
+    }
+  }
+}

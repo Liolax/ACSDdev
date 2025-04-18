@@ -7,9 +7,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [role, setRole] = useState('BUY'); // Default role is 'BUY'
   const navigate = useNavigate();
 
-  const handleLogin = (role) => {
+  const handleLogin = () => {
     console.log(`Logged in as: ${email}, Role: ${role}, Remember Me: ${rememberMe}`);
     navigate(role === 'BUY' ? '/buyer-dashboard' : '/seller-dashboard');
   };
@@ -19,15 +20,19 @@ const Login = () => {
       <Header />
       <main className="login-page__form">
         <h2>Login</h2>
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <label htmlFor="login-email">Email:</label>
           <input
             type="email"
+            id="login-email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <label htmlFor="login-password">Password:</label>
           <input
             type="password"
+            id="login-password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -41,14 +46,24 @@ const Login = () => {
             />
             <label htmlFor="remember-me">Remember Me</label>
           </div>
-          <div className="login-page__role-selection">
-            <button type="button" onClick={() => handleLogin('BUY')}>
+          {/* Role Toggle */}
+          <div className="login-page__role-toggle">
+            <span
+              className={`toggle-option ${role === 'BUY' ? 'active' : ''}`}
+              onClick={() => setRole('BUY')}
+            >
               BUY
-            </button>
-            <button type="button" onClick={() => handleLogin('SELL')}>
+            </span>
+            <span
+              className={`toggle-option ${role === 'SELL' ? 'active' : ''}`}
+              onClick={() => setRole('SELL')}
+            >
               SELL
-            </button>
+            </span>
           </div>
+          <button type="button" onClick={handleLogin}>
+            Login
+          </button>
         </form>
       </main>
       <Footer />

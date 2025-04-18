@@ -1,83 +1,96 @@
 /* Styles for the Login Page */
-   .login-page {
-    padding: calc(var(--spacing-unit) * 3);
-    background-color: var(--color-bg);
-  
-    &__header {
-      text-align: center;
-      padding: calc(var(--spacing-unit) * 2);
-      background-color: var(--color-primary);
-      color: #fff;
+.login-page {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--color-bg);
+
+  &__form {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: calc(var(--spacing-unit) * 2);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+
+    label {
+      display: block;
+      margin-bottom: calc(var(--spacing-unit) * 0.5);
+      font-weight: bold;
+      color: var(--color-dark-primary);
     }
-    
-    &__nav {
-      margin-top: calc(var(--spacing-unit) * 1);
-      
-      a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 calc(var(--spacing-unit) * 0.75);
-      }
-    }
-    
-    &__form {
-      max-width: 500px;
-      margin: 2rem auto;
-      padding: calc(var(--spacing-unit) * 2);
-      background-color: #fff;
+
+    input {
+      width: 100%;
+      padding: calc(var(--spacing-unit) * 0.75);
+      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      font-size: 1rem;
+      border: 1px solid var(--color-primary);
       border-radius: 4px;
-      box-shadow: var(--shadow-light);
-      
-      input,
-      button {
-        width: 100%;
-        padding: calc(var(--spacing-unit) * 0.75);
-        margin-bottom: calc(var(--spacing-unit) * 1);
-        font-size: var(--font-size-base);
-        border-radius: 4px;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primary-light);
+        box-shadow: 0 0 4px rgba(0, 128, 0, 0.2);
       }
-      
+    }
+
+    .login-page__remember-me {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 0.5);
+      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      font-size: var(--font-size-small);
+
       input {
-        border: 1px solid var(--color-primary);
+        width: auto;
       }
-      
-      .login-page__remember-me {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--spacing-unit) * 0.5);
-        margin-bottom: calc(var(--spacing-unit) * 1);
-        
-        input {
-          width: auto;
-        }
-      }
-      
-      .login-page__role-selection {
-        display: flex;
-        justify-content: space-evenly;
-        gap: calc(var(--spacing-unit) * 1);
-        
-        button {
-          background-color: var(--color-primary);
-          border: none;
+    }
+
+    .login-page__role-toggle {
+      display: flex;
+      justify-content: space-evenly;
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      padding: calc(var(--spacing-unit) * 1);
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-primary);
+      border-radius: 4px;
+
+      .toggle-option {
+        flex: 1;
+        text-align: center;
+        padding: calc(var(--spacing-unit) * 0.75);
+        cursor: pointer;
+        font-weight: bold;
+        color: var(--color-dark-primary);
+        transition: all var(--transition-default);
+
+        &:hover {
+          background-color: var(--color-primary-light);
           color: #fff;
-          cursor: pointer;
-          @include transition(background-color);
-          
-          &:hover,
-          &:focus {
-            background-color: var(--color-primary-light);
-          }
+        }
+
+        &.active {
+          background-color: var(--color-primary);
+          color: #fff;
         }
       }
     }
-    
-    &__footer {
-      text-align: center;
-      padding: calc(var(--spacing-unit) * 1.5);
-      background-color: var(--color-primary);
+
+    button {
+      width: 100%;
+      padding: calc(var(--spacing-unit) * 1);
+      background-color: var(--color-secondary);
+      border: none;
       color: #fff;
-      margin-top: calc(var(--spacing-unit) * 2);
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color var(--transition-default);
+
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+      }
     }
   }
-  
+}

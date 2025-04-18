@@ -1,33 +1,47 @@
 /* Styles for the Role Selection component */
-   .role-selection {
-    padding: calc(var(--spacing-unit) * 3);
+.role-selection {
+  padding: calc(var(--spacing-unit) * 2.5);
+  text-align: center;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+
+  &__header {
+    font-size: var(--font-size-heading);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    color: var(--color-primary);
     text-align: center;
-  
-    &__header {
-      font-size: var(--font-size-heading);
-      margin-bottom: calc(var(--spacing-unit) * 2);
-      color: var(--color-primary);
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  &__button {
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border: 1px solid var(--color-primary-light);
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: var(--font-size-small);
+    @include transition(background-color);
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-primary-light);
+      border-color: var(--color-primary-light);
     }
-  
-    &__buttons {
-      display: flex;
-      justify-content: center;
-      gap: calc(var(--spacing-unit) * 2);
-    }
-  
-    &__button {
-      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-      border: none;
-      border-radius: 4px;
-      background-color: var(--color-primary);
+
+    &.active {
+      background-color: var(--color-primary-light);
+      border-color: var(--color-primary-light);
       color: #fff;
-      cursor: pointer;
-      @include transition(background-color);
-  
-      &:hover,
-      &:focus {
-        background-color: var(--color-primary-light);
-      }
+      box-shadow: 0px 4px 10px rgba(0, 128, 0, 0.2);
     }
   }
-  
+}
