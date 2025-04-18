@@ -1,15 +1,16 @@
-/* Styles for the Buyer Dashboard page. */
+/* Styles for the Buyer Dashboard page */
 
    .buyer-dashboard {
     padding: calc(var(--spacing-unit) * 3);
-    background-color: #fff;
+    background-color: #fff; // Card-like background
+    color: var(--color-dark-primary);
   }
   
   .buyer-dashboard__header {
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 2);
     font-size: var(--font-size-heading);
-    color: var(--color-dark-green);
+    color: var(--color-dark-primary);
   }
   
   .buyer-dashboard__content {

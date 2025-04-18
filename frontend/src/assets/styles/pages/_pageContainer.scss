@@ -1,8 +1,9 @@
-@import './base.scss';
+/* Common container styles for all pages */
 
-.page-container {
-  min-height: 100vh;
-  background-color: var(--color-bg);
-  font-family: var(--font-family-base);
-  padding: calc(var(--spacing-unit) * 2);
-}
+   .page-container {
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    font-family: var(--font-family-base);
+    padding: calc(var(--spacing-unit) * 2);
+  }
+  

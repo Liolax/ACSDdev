@@ -1,9 +1,9 @@
-/* Styles for the Seller Dashboard page. */
+/* Styles for the Seller Dashboard page */
 
    .seller-dashboard {
     padding: calc(var(--spacing-unit) * 3);
-    background-color: #fff; // White card-like background
-    color: var(--color-dark-green);
+    background-color: #fff;
+    color: var(--color-dark-primary);
   }
   
   .seller-dashboard__header {
@@ -12,7 +12,7 @@
     font-size: var(--font-size-heading);
   }
   
-  .seller-dashboard__product-list {
+  .seller-dashboard__list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: calc(var(--spacing-unit) * 2);
