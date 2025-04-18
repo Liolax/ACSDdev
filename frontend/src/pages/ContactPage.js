@@ -1,8 +1,7 @@
 import React from 'react';
 import Header from '../components/layouts/Header/Header';
 import Footer from '../components/layouts/Footer/Footer';
-import ContactForm from '../components/forms/ContactForm/ContactForm';  // Ensure this path is correct
-// Remove module.scss import for centralized styling
+import ContactForm from '../components/forms/ContactForm/ContactForm'; 
 
 const ContactPage = () => {
   return (
