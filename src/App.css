@@ -1,38 +1,35 @@
-.App {
-  text-align: center;
+/* Main app container: Uses design tokens via CSS custom properties */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--light-green);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global link styles */
+a {
+  text-decoration: none;
+  color: var(--forest-green);
+  transition: color var(--transition-duration) var(--transition-ease);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a:hover {
+  /* Use a static color value because CSS doesn’t support SCSS functions directly */
+  color: #186318;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Headings */
+h1, h2, h3 {
+  color: var(--dark-green);
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Generic page container styling */
+.page-container {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid var(--forest-green);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,40 @@
+// Color Palette
+$forest-green: #228B22;
+$light-green: #f0f9f1;
+$dark-green: #004d00;
+$text-color: $dark-green;
+$background-color: #ffffff;
+
+$secondary-color: #f5a623; // Example: for accents or warning elements
+$error-color: #e63946; // Example: for validation/error states
+
+// Typography
+$font-family-base: 'Helvetica Neue', Arial, sans-serif;
+$font-family-heading: 'Georgia', serif; // Example: for headings
+$font-size-base: 16px;
+$font-size-heading: 2.4rem;
+$font-size-subheading: 1.8rem;
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+$line-height-base: 1.5;
+
+// Spacing
+$spacing-unit: 8px; // Base unit for spacing
+$spacing-small: $spacing-unit; // 8px
+$spacing-medium: calc($spacing-unit * 2); // 16px
+$spacing-large: calc($spacing-unit * 4); // 32px
+
+// Transitions
+$transition-duration: 0.3s;
+$transition-ease: ease-in-out;
+
+// Shadows
+$shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0px 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-dark: 0px 6px 12px rgba(0, 0, 0, 0.2);
+
+// Breakpoints
+$breakpoint-sm: 576px; // Small screens (mobile)
+$breakpoint-md: 768px; // Medium screens (tablets)
+$breakpoint-lg: 992px; // Large screens (desktop)
+$breakpoint-xl: 1200px; // Extra large screens

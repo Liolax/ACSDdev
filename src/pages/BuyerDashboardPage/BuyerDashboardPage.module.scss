@@ -1,0 +1,136 @@
+@import '../../assets/styles/abstracts/_variables.scss'; 
+@import '../../assets/styles/abstracts/_mixins.scss';   
+
+.dashboard-container {
+  background-color: var(--light-green); 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-family-base);
+}
+
+.header {
+  background-color: var(--forest-green);
+  color: white;
+  padding: calc(var(--spacing-unit) * 2);
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-unit);
+
+    a {
+      color: white;
+      text-decoration: none;
+      padding: var(--spacing-unit);
+      transition: color var(--transition-duration) var(--transition-ease);
+
+      &:hover {
+        color: var(--light-green);
+      }
+    }
+
+    button {
+      background: none;
+      border: 1px solid white;
+      color: white;
+      padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all var(--transition-duration) var(--transition-ease);
+
+      &:hover {
+        background-color: white;
+        color: var(--forest-green);
+      }
+    }
+  }
+}
+
+.product-section {
+  margin: calc(var(--spacing-unit) * 4) 0;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+
+  h2 {
+    color: var(--dark-green);
+    margin-bottom: var(--spacing-unit);
+  }
+
+  div {
+    background-color: white;
+    border: 1px solid var(--light-green);
+    border-radius: 8px;
+    padding: calc(var(--spacing-unit) * 2);
+    margin-bottom: var(--spacing-unit);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-duration) var(--transition-ease);
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    h3 {
+      color: var(--dark-green);
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: var(--spacing-unit) 0;
+      color: var(--forest-green);
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: var(--forest-green);
+      transition: color var(--transition-duration) var(--transition-ease);
+
+      &:hover {
+        color: var(--dark-green);
+      }
+    }
+  }
+}
+
+footer {
+  margin-top: auto;
+  background-color: var(--forest-green);
+  color: white;
+  padding: calc(var(--spacing-unit) * 2);
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+    .header nav {
+      flex-direction: column;
+      align-items: center;
+  
+      a {
+        margin-bottom: var(--spacing-unit);
+      }
+  
+      button {
+        margin-top: var(--spacing-unit);
+      }
+    }
+  
+    .product-section {
+      div {
+        text-align: left;
+  
+        p {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  

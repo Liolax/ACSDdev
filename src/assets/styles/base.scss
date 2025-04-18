@@ -1,0 +1,47 @@
+// Design Tokens
+$forest-green: #228B22;
+$light-green: #f0f9f1;
+$dark-green: #004d00;
+$font-family-base: 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 16px;
+$spacing-unit: 8px;
+$transition-duration: 0.3s;
+$transition-ease: ease-in-out;
+
+// CSS Variables
+:root {
+  --forest-green: #{$forest-green};
+  --light-green: #{$light-green};
+  --dark-green: #{$dark-green};
+  --font-family-base: #{$font-family-base};
+  --font-size-base: #{$font-size-base};
+  --spacing-unit: #{$spacing-unit};
+  --transition-duration: #{$transition-duration};
+  --transition-ease: #{$transition-ease};
+}
+
+/* Base Reset & Global Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  color: $dark-green;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utility Classes */
+.mt-1 { margin-top: $spacing-unit; }
+.mt-2 { margin-top: calc(#{$spacing-unit} * 2); }
+.mb-1 { margin-bottom: $spacing-unit; }
+.mb-2 { margin-bottom: calc(#{$spacing-unit} * 2); }
+.p-1  { padding: $spacing-unit; }
+.p-2  { padding: calc(#{$spacing-unit} * 2); }
+.flex { display: flex; }
+.flex-center { justify-content: center; align-items: center; }

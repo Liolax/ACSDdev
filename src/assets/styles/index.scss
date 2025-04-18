@@ -1,10 +1,12 @@
-@import '~normalize.css/normalize.css';
-@import 'base';
+@import "~normalize.css/normalize.css";
+@import "abstracts/_variables.scss";
+@import "abstracts/_mixins.scss";
+@import "base";
+@import "overrides";
 
-/* Global body styles override if needed */
+/* Additional global rules */
 body {
   margin: 0;
-  /* We now use our design token by referencing the CSS variable, which was set in base.scss */
   font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
