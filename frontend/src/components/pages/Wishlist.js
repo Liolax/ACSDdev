@@ -1,19 +1,17 @@
 import React from 'react';
-import './Wishlist.css'; // Create and adjust styles as needed
-
+ 
 const Wishlist = () => {
-  // Use state or props to load wishlist items; for now, we use placeholder content
-  const wishlistItems = []; // Replace with dynamic data later
+  const wishlistItems = []; // Replace with dynamic data
 
   return (
     <div className="wishlist">
-      <h2>Your Wishlist</h2>
+      <h2 className="wishlist__header">Your Wishlist</h2>
       {wishlistItems.length === 0 ? (
-        <p>Your wishlist is currently empty.</p>
+        <p className="wishlist__empty">Your wishlist is currently empty.</p>
       ) : (
-        <ul>
+        <ul className="wishlist__list">
           {wishlistItems.map(item => (
-            <li key={item.id}>{item.name}</li>
+            <li key={item.id} className="wishlist__item">{item.name}</li>
           ))}
         </ul>
       )}

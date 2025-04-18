@@ -1,22 +1,21 @@
-// Global Core Files
+/* src/assets/styles/main.scss */
 @import 'base.scss';
 @import 'mixins.scss';
 @import 'utilities.scss';
 @import 'overrides.scss';
 
-// Component Partials (BEM-based)
+// Component Partials
 @import 'components/_header.scss';
 @import 'components/_footer.scss';
 @import 'components/_button.scss';
 @import 'components/_productCard.scss';
 @import 'components/_feedback.scss';
+@import 'components/_role-selection.scss';      
 
 // Page-Specific Styles
 @import 'pages/_pageContainer.scss';
 @import 'pages/_seller-dashboard.scss';
 @import 'pages/_buyer-dashboard.scss';
 @import 'pages/_home.scss';
-
-// Shared Component Styles
-@import 'shared/_cart.scss';
-@import 'shared/_productGrid.scss';
+@import 'pages/_wishlist.scss';
+@import 'pages/_shipping-details.scss';

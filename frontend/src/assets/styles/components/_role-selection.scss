@@ -1,0 +1,33 @@
+/* Styles for the Role Selection component */
+   .role-selection {
+    padding: calc(var(--spacing-unit) * 3);
+    text-align: center;
+  
+    &__header {
+      font-size: var(--font-size-heading);
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      color: var(--color-primary);
+    }
+  
+    &__buttons {
+      display: flex;
+      justify-content: center;
+      gap: calc(var(--spacing-unit) * 2);
+    }
+  
+    &__button {
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+      border: none;
+      border-radius: 4px;
+      background-color: var(--color-primary);
+      color: #fff;
+      cursor: pointer;
+      @include transition(background-color);
+  
+      &:hover,
+      &:focus {
+        background-color: var(--color-primary-light);
+      }
+    }
+  }
+  

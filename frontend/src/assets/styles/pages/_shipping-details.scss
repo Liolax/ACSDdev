@@ -1,0 +1,15 @@
+/* Styles for the Shipping Details page */
+   .shipping-details {
+    padding: calc(var(--spacing-unit) * 3);
+    background-color: #fff;
+    
+    &__header {
+      font-size: var(--font-size-heading);
+      margin-bottom: calc(var(--spacing-unit) * 2);
+      text-align: center;
+      color: var(--color-dark-primary);
+    }
+    
+    // Additional form and content styling...
+  }
+  

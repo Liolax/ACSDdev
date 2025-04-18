@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../../assets/styles/components/_header.scss';
-
+ 
 const Header = ({ userRole }) => (
   <header className="header">
     <div className="header__logo">ÉireCraft</div>
