@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/layouts/Header';
-import Footer from '../../components/layouts/Footer';
+import Header from '../components/layouts/Header/Header';
+import Footer from '../components/layouts/Footer/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +16,6 @@ const Login = () => {
 
   return (
     <div className="page-container login-page">
-      {/* For consistency, we include Header and Footer */}
       <Header />
       <main className="login-page__form">
         <h2>Login</h2>

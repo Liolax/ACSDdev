@@ -1,7 +1,8 @@
 import React from 'react';
-import Header from '../../components/layouts/Header';
-import Footer from '../../components/layouts/Footer';
-import ContactForm from '../../components/forms/ContactForm';
+import Header from '../components/layouts/Header/Header';
+import Footer from '../components/layouts/Footer/Footer';
+import ContactForm from '../components/forms/ContactForm/ContactForm';  // Ensure this path is correct
+// Remove module.scss import for centralized styling
 
 const ContactPage = () => {
   return (
@@ -15,7 +16,7 @@ const ContactPage = () => {
         </p>
         <ContactForm />
         <p className="contact-page__privacy">
-          By clicking “Send Message”, you consent to our Privacy Policy and agree 
+          By clicking “Send Message”, you consent to our Privacy Policy and agree
           that your message will be processed accordingly.
         </p>
       </div>

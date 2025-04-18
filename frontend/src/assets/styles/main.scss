@@ -1,4 +1,3 @@
-/* src/assets/styles/main.scss */
 @import 'base.scss';
 @import 'mixins.scss';
 @import 'utilities.scss';
@@ -10,7 +9,7 @@
 @import 'components/_button.scss';
 @import 'components/_productCard.scss';
 @import 'components/_feedback.scss';
-@import 'components/_role-selection.scss'; 
+@import 'components/_role-selection.scss';
 
 // Page-Specific Styles
 @import 'pages/_pageContainer.scss';
@@ -19,3 +18,5 @@
 @import 'pages/_home.scss';
 @import 'pages/_wishlist.scss';
 @import 'pages/_shipping-details.scss';
+@import 'pages/_contact.scss';
+@import 'pages/_login.scss';

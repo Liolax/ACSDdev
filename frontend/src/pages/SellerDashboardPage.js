@@ -1,8 +1,7 @@
-// frontend/src/pages/SellerDashboardPage.js
 import React from 'react';
-import Header from '../../components/layouts/Header';
-import Footer from '../../components/layouts/Footer';
-import SellerDashboard from '../../pages/SellerDashboard';
+import Header from '../components/layouts/Header/Header';
+import Footer from '../components/layouts/Footer/Footer';
+import SellerDashboard from '../components/SellerDashboard/SellerDashboard';
 
 const SellerDashboardPage = () => {
   return (

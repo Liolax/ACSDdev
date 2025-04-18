@@ -35,7 +35,7 @@ const Home = () => {
 
       <section className="home-page__cta-section">
         <button 
-          className="home-page__cta-button"
+          className="home-page__cta-button" 
           onClick={() => console.log('CTA Clicked')}
         >
           See More

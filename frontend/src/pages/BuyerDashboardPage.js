@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '../../components/layouts/Header';
-import Footer from '../../components/layouts/Footer';
-import BuyerDashboard from '../../pages/BuyerDashboard';
+import Header from '../components/layouts/Header/Header';
+import Footer from '../components/layouts/Footer/Footer';
+import BuyerDashboard from '../components/BuyerDashboard/BuyerDashboard'; 
 
 const BuyerDashboardPage = () => {
   return (

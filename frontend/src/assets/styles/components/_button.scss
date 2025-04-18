@@ -2,7 +2,7 @@
 @import '../mixins.scss';
 
 .button {
-  background-color: var(--color-primary);
+  background-color: darken($primary-color, 10%);
   color: #fff;
   padding: calc(var(--spacing-unit) * 1);
   border: none;
@@ -12,6 +12,6 @@
   @include transition(background-color);
 
   &:hover {
-    background-color: darken(var(--color-primary), 10%);
+    background-color: darken($primary-color, 15%);
   }
 }
