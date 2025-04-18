@@ -1,20 +1,22 @@
-// Global Design Tokens and Variables
+// Global Core Files
 @import 'base.scss';
-// Global Mixins (includes functions)
 @import 'mixins.scss';
-// Global Utility Classes
 @import 'utilities.scss';
-// Third-Party Overrides
 @import 'overrides.scss';
 
-// Component Partial Styles
+// Component Partials (BEM-based)
 @import 'components/_header.scss';
 @import 'components/_footer.scss';
 @import 'components/_button.scss';
 @import 'components/_productCard.scss';
+@import 'components/_feedback.scss';
 
-// Page-Specific Partial Styles
+// Page-Specific Styles
 @import 'pages/_pageContainer.scss';
 @import 'pages/_seller-dashboard.scss';
 @import 'pages/_buyer-dashboard.scss';
 @import 'pages/_home.scss';
+
+// Shared Component Styles
+@import 'shared/_cart.scss';
+@import 'shared/_productGrid.scss';

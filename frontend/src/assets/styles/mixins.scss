@@ -1,6 +1,6 @@
 @import './mixins/functions.scss';
 
-/* Flexbox Utility Mixin */
+/* Flexbox utility mixin */
 @mixin flexbox($justify: flex-start, $align: stretch, $direction: row) {
   display: flex;
   justify-content: $justify;
@@ -8,7 +8,7 @@
   flex-direction: $direction;
 }
 
-/* Responsive Media Query Mixin */
+/* Responsive media query mixin */
 @mixin respond-to($breakpoint) {
   @if $breakpoint == sm {
     @media (max-width: 576px) { @content; }
@@ -21,13 +21,12 @@
   }
 }
 
-/* Transition Mixin */
+/* Transition mixin */
 @mixin transition($property: all, $duration: var(--transition-default), $ease: ease-in-out) {
   transition: #{$property} #{$duration} #{$ease};
 }
 
-/* Box Shadow Mixin */
+/* Box shadow mixin */
 @mixin box-shadow($shadow: var(--shadow-light)) {
   box-shadow: #{$shadow};
 }
-

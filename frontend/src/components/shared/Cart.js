@@ -1,19 +1,19 @@
 import React from 'react';
-import './Cart.css'; // Create and adjust styles as needed
+import '../../../assets/styles/shared/_cart.scss';
 
 const Cart = () => {
-  // For now, we use a placeholder. In a real application, we would fetch cart items from state.
-  const cartItems = []; // Replace with dynamic data later
+  // Placeholder array — replace with dynamic data later.
+  const cartItems = [];
 
   return (
     <div className="cart">
-      <h2>Your Shopping Cart</h2>
+      <h2 className="cart__title">Your Shopping Cart</h2>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="cart__empty">Your cart is empty.</p>
       ) : (
-        <ul>
-          {cartItems.map(item => (
-            <li key={item.id}>{item.name} – {item.price}</li>
+        <ul className="cart__list">
+          {cartItems.map((item) => (
+            <li key={item.id} className="cart__item">{item.name} – ${item.price}</li>
           ))}
         </ul>
       )}

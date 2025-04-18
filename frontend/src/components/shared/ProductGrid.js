@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from './ProductGrid.module.scss';
+import '../../../assets/styles/shared/_productGrid.scss';
 
 const ProductGrid = () => {
   const [products, setProducts] = useState([]);
@@ -11,9 +11,9 @@ const ProductGrid = () => {
       try {
         const response = await axios.get('/api/products');
         setProducts(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
+      } finally {
         setLoading(false);
       }
     })();
@@ -22,12 +22,12 @@ const ProductGrid = () => {
   if (loading) return <p>Loading products...</p>;
 
   return (
-    <div className={styles["product-grid"]}>
+    <div className="product-grid">
       {products.map((product) => (
-        <div key={product._id} className={styles["product-card"]}>
-          <img src={product.image} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>${product.price}</p>
+        <div key={product._id} className="product-grid__card">
+          <img src={product.image} alt={product.name} className="product-grid__card__image" />
+          <h3 className="product-grid__card__title">{product.name}</h3>
+          <p className="product-grid__card__price">${product.price}</p>
         </div>
       ))}
     </div>
@@ -35,3 +35,4 @@ const ProductGrid = () => {
 };
 
 export default ProductGrid;
+

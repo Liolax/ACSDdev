@@ -2,6 +2,4 @@
 .mt-2 { margin-top: var(--spacing-unit) !important; }
 .mt-3 { margin-top: calc(var(--spacing-unit) * 1.5) !important; }
 
-.flex-center { 
-  @include flexbox(center, center);
-}
+.flex-center { @include flexbox(center, center); }

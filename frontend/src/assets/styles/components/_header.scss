@@ -1,38 +1,35 @@
-/* Global header styles using BEM */
+@import '../base.scss';
+@import '../mixins.scss';
 
-   @import '../base.scss';
-   @import '../mixins.scss';
-   
-   .header {
-     width: 100%;
-     background-color: var(--color-primary);
-     padding: calc(var(--spacing-unit) * 2);
-     color: #fff;
-     @include flexbox(space-between, center);
-   
-     &__logo {
-       font-family: var(--font-family-heading);
-       font-size: var(--font-size-heading);
-       font-weight: var(--font-weight-bold);
-     }
-   
-     &__nav {
-       @include flexbox(row, center);
-       gap: calc(var(--spacing-unit) * 1.5);
-   
-       a {
-         color: #fff;
-         text-decoration: none;
-         padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
-         border-radius: 4px;
-         @include transition(background-color);
-   
-         &:hover,
-         &:focus {
-           background-color: var(--color-primary-light);
-           color: var(--color-dark-primary);
-         }
-       }
-     }
-   }
-   
+.header {
+  width: 100%;
+  background-color: var(--color-primary);
+  padding: calc(var(--spacing-unit) * 2);
+  color: #fff;
+  @include flexbox(space-between, center);
+
+  &__logo {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-bold);
+  }
+
+  &__nav {
+    @include flexbox(row, center);
+    gap: calc(var(--spacing-unit) * 1.5);
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
+      border-radius: 4px;
+      @include transition(background-color);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-primary-light);
+        color: var(--color-dark-primary);
+      }
+    }
+  }
+}

@@ -1,20 +1,17 @@
-/* Global button styles */
+@import '../base.scss';
+@import '../mixins.scss';
 
-   @import '../base.scss';
-   @import '../mixins.scss';
-   
-   .button {
-     background-color: var(--color-primary);
-     color: #fff;
-     padding: calc(var(--spacing-unit) * 1);
-     border: none;
-     border-radius: 4px;
-     cursor: pointer;
-     font-weight: var(--font-weight-bold);
-     @include transition(background-color);
-   
-     &:hover {
-       background-color: darken(var(--color-primary), 10%);
-     }
-   }
-   
+.button {
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: calc(var(--spacing-unit) * 1);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  @include transition(background-color);
+
+  &:hover {
+    background-color: darken(var(--color-primary), 10%);
+  }
+}
