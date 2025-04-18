@@ -18,7 +18,9 @@
     @include flexbox(row, center);
     gap: calc(var(--spacing-unit) * 1.5);
 
-    a {
+    a,
+    .header__login-btn,
+    .header__logout-btn {
       color: #fff;
       text-decoration: none;
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
@@ -30,6 +32,13 @@
         background-color: var(--color-primary-light);
         color: var(--color-dark-primary);
       }
+    }
+
+    .header__login-btn,
+    .header__logout-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
     }
   }
 }
