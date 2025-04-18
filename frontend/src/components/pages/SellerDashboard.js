@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../api/axiosConfig';
+import axios from '../../api/axiosConfig';
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products');
+        const response = await axios.get('/products'); // Use your API route
         setProducts(response.data);
         setLoading(false);
       } catch (err) {
@@ -24,7 +24,7 @@ const SellerDashboard = () => {
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`/products/${productId}`);
-      setProducts(products.filter(product => product._id !== productId));
+      setProducts(products.filter((product) => product._id !== productId));
     } catch (err) {
       setError('Failed to delete product');
     }

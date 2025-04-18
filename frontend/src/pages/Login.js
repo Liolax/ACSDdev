@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/layouts/Header/Header';
-import Footer from '../components/layouts/Footer/Footer';
+import Header from '../components/layouts/Header';
+import Footer from '../components/layouts/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');

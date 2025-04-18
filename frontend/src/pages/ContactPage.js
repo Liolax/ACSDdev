@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '../components/layouts/Header/Header';
-import Footer from '../components/layouts/Footer/Footer';
-import ContactForm from '../components/forms/ContactForm/ContactForm'; 
+import Header from '../components/layouts/Header';
+import Footer from '../components/layouts/Footer';
+import ContactForm from '../components/forms/ContactForm'; 
 
 const ContactPage = () => {
   return (
