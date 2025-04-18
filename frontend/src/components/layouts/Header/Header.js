@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Header.module.scss';
+import styles from './Header.module.scss';
 
 const Header = ({ userRole }) => {
   return (
-    <header className={`header ${userRole ? userRole : ''}`}>
+    <header className={styles.header}>
       <h1>ÉireCraft</h1>
       <p>Artisan Market</p>
-      <nav className="nav-links">
+      <nav className={styles['nav-links']}>
         {userRole === 'seller' ? (
           <>
             <Link to="/seller-dashboard">My Products</Link>

@@ -3,21 +3,33 @@
 
 .header {
   width: 100%;
-  background-color: var(--forest-green, #228B22);
-  color: white;
-  padding: calc(var(--spacing-unit, 8px) * 2);
-  @include flexbox(space-between, center);
+  background-color: var(--color-forest-green);
+  color: #fff;
+  font-family: var(--font-family-base);
+  padding: calc(var(--spacing-unit) * 2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-light);
+}
 
-  nav {
-    a {
-      color: white;
-      text-decoration: none;
-      margin-left: var(--spacing-unit, 8px);
-      padding: var(--spacing-unit, 8px);
-      @include transition;
-      &:hover {
-        color: var(--light-green, #f0f9f1);
-      }
+.nav-links {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1.5);
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
+    border-radius: 4px;
+    transition: background-color var(--transition-default);
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-light-green);
+      color: var(--color-dark-green);
+      outline: none;
     }
   }
 }

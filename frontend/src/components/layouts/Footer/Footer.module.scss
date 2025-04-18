@@ -1,11 +1,10 @@
+@import '../../../assets/styles/abstracts/_variables.scss';
+
 .footer {
-    background-color: var(--forest-green, #228B22);
-    color: white;
-    padding: calc(var(--spacing-unit, 8px) * 2);
-    text-align: center;
-  
-    p {
-      margin: 0;
-    }
-  }
-  
+  width: 100%;
+  background-color: var(--color-forest-green);
+  color: white;
+  padding: calc(var(--spacing-unit) * 2);
+  text-align: center;
+  margin-top: calc(var(--spacing-unit) * 3);
+}

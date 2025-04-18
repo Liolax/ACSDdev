@@ -1,12 +1,10 @@
 import React from 'react';
-import './Footer.module.scss'; // Converted to SASS module
+import styles from './Footer.module.scss';
 
-const Footer = () => {
-  return (
-    <footer className="footer">
-      <p>Contact Info | Social Media Icons</p>
-    </footer>
-  );
-};
+const Footer = () => (
+  <footer className={styles.footer}>
+    <p>© 2025 ÉireCraft. All rights reserved.</p>
+  </footer>
+);
 
 export default Footer;

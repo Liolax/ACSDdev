@@ -18,13 +18,16 @@ $forest-green-darker-hover: darken($forest-green, 15%);
 
 // Export CSS variables using :root
 :root {
-  --forest-green: #228B22;
-  --light-green: #f0f9f1;
-  --dark-green: #004d00;
-  --text-color: var(--dark-green);
-  --background-color: #ffffff;
-  --secondary-color: #f5a623;
-  --error-color: #e63946;
+  --color-forest-green: #228B22;
+  --color-light-green: #f0f9f1;
+  --color-dark-green: #004d00;
+  --color-accent: #ff9800;
+  --font-family-base: Arial, sans-serif;
+  --font-size-base: 16px;
+  --font-size-heading: 2.4rem;
+  --spacing-unit: 8px;
+  --shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --transition-default: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   // Typography
   --font-family-base: 'Helvetica Neue', Arial, sans-serif;
