@@ -1,0 +1,21 @@
+/* Styles for the Home page. */
+
+   .home {
+    padding: calc(var(--spacing-unit) * 3);
+    background-color: var(--color-bg);
+  }
+  
+  .home__hero {
+    text-align: center;
+    padding: calc(var(--spacing-unit) * 4);
+    font-size: var(--font-size-heading);
+    color: var(--color-primary);
+  }
+  
+  .home__products {
+    margin-top: calc(var(--spacing-unit) * 3);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: calc(var(--spacing-unit) * 2);
+  }
+  

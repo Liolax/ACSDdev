@@ -1,0 +1,20 @@
+/* Styles for the Buyer Dashboard page. */
+
+   .buyer-dashboard {
+    padding: calc(var(--spacing-unit) * 3);
+    background-color: #fff;
+  }
+  
+  .buyer-dashboard__header {
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    font-size: var(--font-size-heading);
+    color: var(--color-dark-green);
+  }
+  
+  .buyer-dashboard__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: calc(var(--spacing-unit) * 3);
+  }
+  

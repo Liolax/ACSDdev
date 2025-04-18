@@ -1,77 +1,8 @@
-/*
-  This file is intended to override third-party styles and
-  provide additional adjustments for interactive or responsive elements.
-  
-  It assumes that our base.scss (with design tokens, base styles, and utilities)
-  has already been imported so that variables are available.
-*/
-
-/* ----------------------------------------------------- */
-/* Third-Party Library Overrides                         */
-/* ----------------------------------------------------- */
-
-/* Override Swiper slider navigation buttons */
-.swiper-button-next.custom,
-.swiper-button-prev.custom {
+// Override 
+.ant-btn-primary {
   background-color: $forest-green !important;
-  border-radius: 4px;
-  padding: $spacing-unit;
-  color: #fff !important;
-  transition: background-color $transition-duration $transition-ease;
-}
-
-/* Override active pagination bullet for Swiper */
-.swiper-pagination-bullet-active {
-  background-color: $forest-green !important;
-}
-
-/* Override styles for an Elfsight widget (or similar third-party component) */
-.elfsight-app-custom {
-  border: 1px solid $dark-green;
-  padding: $spacing-unit;
-  border-radius: 4px;
-  background-color: $light-green;
-}
-
-/* ----------------------------------------------------- */
-/* Custom Interactive Elements                           */
-/* ----------------------------------------------------- */
-
-/* Custom Button Overrides */
-button.custom {
-  background-color: $forest-green;
-  border: none;
-  border-radius: 4px;
-  padding: calc($spacing-unit * 1.5);
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color $transition-duration $transition-ease;
-}
-
-button.custom:hover,
-button.custom:focus {
-  background-color: darken($forest-green, 10%);
-}
-
-/* Custom Link Overrides */
-a.custom {
-  color: $forest-green;
-  text-decoration: underline;
-  transition: color $transition-duration $transition-ease;
-}
-
-a.custom:hover,
-a.custom:focus {
-  color: darken($forest-green, 15%);
-}
-
-/* ----------------------------------------------------- */
-/* Responsive Overrides                                   */
-/* ----------------------------------------------------- */
-
-/* Adjust flex layout on smaller screens */
-@media screen and (max-width: 768px) {
-  .flex-center-mobile {
-    flex-direction: column !important;
+  border-color: $forest-green !important;
+  &:hover {
+    background-color: $hover-forest-green !important;
   }
 }

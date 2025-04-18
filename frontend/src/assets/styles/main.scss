@@ -1,0 +1,17 @@
+// Global Core Files
+@import 'base.scss';
+@import 'mixins.scss';
+@import 'utilities.scss';
+@import 'overrides.scss';
+
+// Component Partials
+@import 'components/_header.scss';
+@import 'components/_footer.scss';
+@import 'components/_button.scss';
+@import 'components/_productCard.scss';
+
+// Page-Specific Styles
+@import 'pages/_pageContainer.scss';
+@import 'pages/_seller-dashboard.scss';
+@import 'pages/_buyer-dashboard.scss';
+@import 'pages/_home.scss';

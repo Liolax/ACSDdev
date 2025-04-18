@@ -1,47 +1,35 @@
-// Design Tokens
+:root {
+  /* Colors */
+  --color-primary: #228B22;
+  --color-primary-light: #42ba96;
+  --color-secondary: #ff9800;
+  --color-bg: #f0f9f1;
+  --color-text: #222;
+  --color-dark-green: #004d00;
+  
+  /* Typography */
+  --font-family-base: 'Helvetica Neue', Arial, sans-serif;
+  --font-family-heading: 'Georgia', serif;
+  --font-size-base: 16px;
+  --font-size-heading: 2.4rem;
+  --font-size-subheading: 1.8rem;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --line-height-base: 1.5;
+  
+  /* Spacing */
+  --spacing-unit: 8px;
+  
+  /* Shadows */
+  --shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-default: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* SASS variables for internal use */
 $forest-green: #228B22;
 $light-green: #f0f9f1;
 $dark-green: #004d00;
-$font-family-base: 'Helvetica Neue', Arial, sans-serif;
-$font-size-base: 16px;
-$spacing-unit: 8px;
-$transition-duration: 0.3s;
-$transition-ease: ease-in-out;
-
-// CSS Variables
-:root {
-  --forest-green: #{$forest-green};
-  --light-green: #{$light-green};
-  --dark-green: #{$dark-green};
-  --font-family-base: #{$font-family-base};
-  --font-size-base: #{$font-size-base};
-  --spacing-unit: #{$spacing-unit};
-  --transition-duration: #{$transition-duration};
-  --transition-ease: #{$transition-ease};
-}
-
-/* Base Reset & Global Styles */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  line-height: 1.5;
-  color: $dark-green;
-  background-color: #ffffff;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Utility Classes */
-.mt-1 { margin-top: $spacing-unit; }
-.mt-2 { margin-top: calc(#{$spacing-unit} * 2); }
-.mb-1 { margin-bottom: $spacing-unit; }
-.mb-2 { margin-bottom: calc(#{$spacing-unit} * 2); }
-.p-1  { padding: $spacing-unit; }
-.p-2  { padding: calc(#{$spacing-unit} * 2); }
-.flex { display: flex; }
-.flex-center { justify-content: center; align-items: center; }
+$text-color: $dark-green;
+$hover-forest-green: darken($forest-green, 10%);

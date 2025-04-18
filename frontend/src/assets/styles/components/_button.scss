@@ -1,0 +1,17 @@
+@import '../base.scss';
+@import '../mixins.scss';
+
+.button {
+  background-color: var(--color-primary);
+  color: white;
+  padding: calc(var(--spacing-unit) * 1);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  @include transition(background-color);
+
+  &:hover {
+    background-color: darken(var(--color-primary), 10%);
+  }
+}

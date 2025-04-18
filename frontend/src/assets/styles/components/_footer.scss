@@ -1,0 +1,9 @@
+@import '../base.scss';
+
+.footer {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: #fff;
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 2);
+}
