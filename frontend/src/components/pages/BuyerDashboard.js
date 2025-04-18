@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../../api/axiosConfig';
 
 const BuyerDashboard = () => {
+  const [orders, setOrders] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const ordersResponse = await axios.get('/buyer/orders'); // Replace with our API endpoint
+        const wishlistResponse = await axios.get('/buyer/wishlist'); // Replace with our API endpoint
+        const cartResponse = await axios.get('/buyer/cart'); // Replace with our API endpoint
+        
+        setOrders(ordersResponse.data);
+        setWishlist(wishlistResponse.data);
+        setCart(cartResponse.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) return <p>Loading dashboard data...</p>;
+
   return (
     <div className="buyer-dashboard">
       <h2>Buyer Dashboard</h2>
@@ -13,12 +41,11 @@ const BuyerDashboard = () => {
       <section className="orders-section">
         <h3>Recent Orders</h3>
         <ul>
-          <li>
-            Artisan Vase – <span>Shipped</span> (2023-10-05)
-          </li>
-          <li>
-            Handwoven Basket – <span>Processing</span> (2023-10-07)
-          </li>
+          {orders.map((order) => (
+            <li key={order.id}>
+              {order.productName} – <span>{order.status}</span> ({order.date})
+            </li>
+          ))}
         </ul>
       </section>
 
@@ -26,8 +53,9 @@ const BuyerDashboard = () => {
       <section className="wishlist-section">
         <h3>Wishlist</h3>
         <ul>
-          <li>Custom Jewelry – $60</li>
-          <li>Organic Candle – $25</li>
+          {wishlist.map((item) => (
+            <li key={item.id}>{item.name} – ${item.price}</li>
+          ))}
         </ul>
       </section>
 
@@ -35,10 +63,16 @@ const BuyerDashboard = () => {
       <section className="cart-section">
         <h3>Cart Summary</h3>
         <ul>
-          <li>Handcrafted Mug – $20 x 2</li>
-          <li>Vintage Clock – $45 x 1</li>
+          {cart.map((item) => (
+            <li key={item.id}>
+              {item.name} – ${item.price} x {item.quantity}
+            </li>
+          ))}
         </ul>
-        <p>Total: $85</p>
+        <p>
+          Total: $
+          {cart.reduce((total, item) => total + item.price * item.quantity, 0)}
+        </p>
       </section>
 
       {/* Dashboard Actions */}
