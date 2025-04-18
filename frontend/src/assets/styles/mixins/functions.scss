@@ -1,0 +1,15 @@
+// Darken Function (Alternative for Built-in Tools)
+@function custom-darken($color, $percentage) {
+    @return mix(black, $color, $percentage);
+  }
+  
+  // Lighten Function (Alternative for Built-in Tools)
+  @function custom-lighten($color, $percentage) {
+    @return mix(white, $color, $percentage);
+  }
+  
+  // Rem Function (Convert Pixels to rems)
+  @function px-to-rem($size, $base: 16px) {
+    @return $size / $base * 1rem;
+  }
+  

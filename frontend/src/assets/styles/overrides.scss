@@ -1,8 +1,15 @@
-// Override 
+// Override Ant Design Button Styles
 .ant-btn-primary {
-  background-color: $forest-green !important;
-  border-color: $forest-green !important;
+  background-color: $primary-color !important;
+  border-color: $primary-color !important;
   &:hover {
-    background-color: $hover-forest-green !important;
+    background-color: $hover-primary-color !important;
+    border-color: $hover-primary-color !important;
   }
+}
+
+// Override Default Button Padding
+.ant-btn {
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  font-size: var(--font-size-base);
 }
