@@ -1,0 +1,16 @@
+{
+  "name": "Artisan & Local Craft Marketplace",
+  "short_name": "ArtisanMarket",
+  "description": "A React-based Progressive Web App connecting local artisans with craft enthusiasts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0efeb",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

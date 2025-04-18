@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Product from '../models/ProductModel';
+import Product from '../models/ProductModel.js'; 
 const router = Router();
 
 // GET /api/products - Retrieve all products

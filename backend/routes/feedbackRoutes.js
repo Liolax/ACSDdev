@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { submitFeedback, getFeedbacks } from '../controllers/feedbackController';
+import { submitFeedback, getFeedbacks } from '../controllers/feedbackController.js';
 const router = Router();
 
 // GET /api/feedback - Retrieve all feedback entries
@@ -30,3 +30,4 @@ router.post('/', async (req, res) => {
 });
 
 export default router;
+

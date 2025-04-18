@@ -1,0 +1,11 @@
+.footer {
+    background-color: var(--forest-green, #228B22);
+    color: white;
+    padding: calc(var(--spacing-unit, 8px) * 2);
+    text-align: center;
+  
+    p {
+      margin: 0;
+    }
+  }
+  

@@ -1,4 +1,4 @@
-import Feedback from '../models/FeedbackModel';
+import Feedback from '../models/FeedbackModel.js';
 
 // Controller to handle submitting user feedback
 export async function submitFeedback(req, res) {

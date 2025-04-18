@@ -1,7 +1,10 @@
 import { Router } from 'express';
-import User from '../models/UserModel';
+import User from '../models/UserModel.js';
 import { hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'; // Import the default export from jsonwebtoken
+
+const { sign } = jwt; // Destructure the 'sign' method
+
 const router = Router();
 
 // Use environment variable for the secret key with a fallback value
@@ -56,7 +59,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate a JWT token
+    // Generate a JWT token using the sign method from jsonwebtoken
     const token = sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
     return res.status(200).json({ token, user });
   } catch (error) {

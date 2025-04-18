@@ -1,0 +1,100 @@
+@import "../../assets/styles/abstracts/_variables.scss";
+@import "../../assets/styles/abstracts/_mixins.scss";
+
+.seller-dashboard-page {
+  padding: calc(var(--spacing-unit, 8px) * 3);
+  background-color: #fff;
+
+  .page-header {
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit, 8px) * 3);
+
+    h2 {
+      // Use SASS variable $forest-green (imported from _variables.scss)
+      color: $forest-green;
+      font-size: var(--font-size-heading, 2.4rem);
+      margin-bottom: calc(var(--spacing-unit, 8px) * 1);
+    }
+  }
+
+  .add-product-btn {
+    margin-bottom: calc(var(--spacing-unit, 8px) * 3);
+    background-color: $forest-green;
+    color: white;
+    border: none;
+    padding: calc(var(--spacing-unit, 8px) * 1) calc(var(--spacing-unit, 8px) * 2);
+    border-radius: 4px;
+    cursor: pointer;
+    @include transition(background-color);
+
+    &:hover {
+      background-color: darken($forest-green, 10%);
+    }
+  }
+
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit, 8px) * 2);
+
+    .product-card {
+      background-color: white;
+      border: 1px solid var(--light-green, #f0f9f1);
+      border-radius: 8px;
+      padding: calc(var(--spacing-unit, 8px) * 2);
+      box-shadow: var(--shadow-light, 0px 2px 4px rgba(0, 0, 0, 0.1));
+      @include transition(transform);
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+
+      img {
+        max-width: 100%;
+        border-radius: 4px;
+        margin-bottom: calc(var(--spacing-unit, 8px) * 2);
+      }
+
+      h3 {
+        font-size: var(--font-size-subheading, 1.8rem);
+        color: $dark-green;
+        margin-bottom: calc(var(--spacing-unit, 8px) * 1);
+      }
+
+      p {
+        font-size: var(--font-size-base, 16px);
+        color: $forest-green;
+        margin-bottom: calc(var(--spacing-unit, 8px) * 2);
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        gap: calc(var(--spacing-unit, 8px) * 1);
+
+        button {
+          flex: 1;
+          padding: calc(var(--spacing-unit, 8px) * 1);
+          border: none;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          @include transition(background-color);
+
+          &:first-child {
+            background-color: $forest-green;
+            &:hover {
+              background-color: darken($forest-green, 10%);
+            }
+          }
+          &:last-child {
+            background-color: darken($forest-green, 10%);
+            &:hover {
+              background-color: darken($forest-green, 15%);
+            }
+          }
+        }
+      }
+    }
+  }
+}

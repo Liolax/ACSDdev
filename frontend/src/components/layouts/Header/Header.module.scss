@@ -1,0 +1,45 @@
+@import "../../../assets/styles/abstracts/_variables.scss";
+@import "../../../assets/styles/abstracts/_mixins.scss";
+
+.header {
+  background-color: var(--forest-green, #228B22);
+  color: white;
+  padding: calc(var(--spacing-unit, 8px) * 2);
+  text-align: center;
+
+  h1 {
+    margin: 0;
+    font-size: var(--font-size-heading, 2.4rem);
+    font-weight: var(--font-weight-bold, 700);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-regular, 400);
+  }
+
+  .nav-links {
+    margin-top: calc(var(--spacing-unit, 8px) * 2);
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit, 8px) * 2);
+
+    a {
+      color: white;
+      text-decoration: none;
+      margin: 0 calc(var(--spacing-unit, 8px) * 1);
+      padding: var(--spacing-unit, 8px);
+      font-weight: var(--font-weight-bold, 700);
+      border: 1px solid white;
+      border-radius: 4px;
+      @include transition(color, 0.3s, ease-in-out);
+
+      &:hover {
+        color: var(--light-green, #f0f9f1);
+        background-color: white;
+        border-color: var(--light-green, #f0f9f1);
+      }
+    }
+  }
+}
