@@ -19,7 +19,7 @@ const Home = () => {
   };
 
   const handleLogin = (email, password, rememberMe, role) => {
-    // Validate credentials, call an API, etc.
+    // Validate credentials or call an API here
     console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
     if (role === 'buyer') {
       navigate('/buyer-dashboard');
@@ -30,6 +30,7 @@ const Home = () => {
 
   return (
     <div className="page-container home-page">
+      {/* onLoginClick prop so Header can trigger the login popup */}
       <Header onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />
@@ -37,10 +38,7 @@ const Home = () => {
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup 
-          closePopup={closeLoginPopup} 
-          handleLogin={handleLogin} 
-        />
+        <LoginPopup closePopup={closeLoginPopup} handleLogin={handleLogin} />
       )}
     </div>
   );

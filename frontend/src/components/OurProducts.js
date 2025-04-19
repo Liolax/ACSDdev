@@ -1,8 +1,7 @@
 // src/components/OurProducts.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const OurProducts = () => {
+const OurProducts = ({ openLoginPopup }) => {
   const products = [
     {
       id: 1,
@@ -56,7 +55,10 @@ const OurProducts = () => {
             <div className="product-card__content">
               <h3 className="product-card__content__title">{product.name}</h3>
               <p className="product-card__content__price">${product.price}</p>
-              <Link className="button" to="/login">See More</Link>
+              {/* A button that triggers the login modal */}
+              <button className="button" onClick={openLoginPopup}>
+                See More
+              </button>
             </div>
           </div>
         ))}
