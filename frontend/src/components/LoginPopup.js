@@ -1,3 +1,4 @@
+// src/components/LoginPopup.js
 import React, { useState } from 'react';
 
 const LoginPopup = ({ closePopup, handleLogin }) => {
@@ -15,9 +16,11 @@ const LoginPopup = ({ closePopup, handleLogin }) => {
   return (
     <div className="login-popup-overlay">
       <div className="login-popup">
-        <h2 style={{ marginBottom: 'calc(var(--spacing-unit) * 1.5)' }}>
-          Please Log In:
-        </h2>
+        <h2 className="login-popup__title">Please Log In</h2>
+        {/* Instructional text with a dedicated class */}
+        <p className="login-popup__instruction">
+          Choose your role: <strong>BUY</strong> or <strong>SELL</strong>.
+        </p>
         <form className="login-page__form" onSubmit={onSubmit}>
           <input
             type="email"

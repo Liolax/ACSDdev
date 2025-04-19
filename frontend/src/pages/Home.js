@@ -30,7 +30,7 @@ const Home = () => {
 
   return (
     <div className="page-container home-page">
-      {/* onLoginClick prop so Header can trigger the login popup */}
+      {/* Pass onLoginClick prop so Header can trigger the login popup */}
       <Header onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />

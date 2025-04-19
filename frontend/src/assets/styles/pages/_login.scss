@@ -1,11 +1,11 @@
-/* Styles for the Login*/
+/* Styles for the Login */
 .login-page {
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
 
   &__form {
     max-width: 400px;
-    margin: 2rem auto;
+    margin: 0.8rem auto 2rem auto;
     padding: calc(var(--spacing-unit) * 2);
     background-color: #fff;
     border-radius: 8px;
@@ -93,4 +93,20 @@
       }
     }
   }
+}
+
+/* Title for the login popup */
+.login-popup__title {
+  font-size: var(--font-size-heading);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  text-align: center;
+  color: var(--color-dark-primary);
+}
+
+/* Instructional text for role selection */
+.login-popup__instruction {
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+  margin-bottom: calc(var(--spacing-unit) * 0.5);
+  text-align: center;
 }
