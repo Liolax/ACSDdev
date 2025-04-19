@@ -8,19 +8,56 @@
   justify-content: space-between;
 
   &__logo {
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-heading);
-    font-weight: var(--font-weight-bold);
+    display: flex;
+    align-items: center;
 
     a {
+      display: flex;
+      align-items: center;
       text-decoration: none;
       color: #fff;
       transition: color var(--transition-default);
-
-      &:hover {
-        color: var(--color-primary-light);
-      }
     }
+  }
+
+  /* Logo image with rotation animation */
+  &__logo-image {
+    height: 50px; /* Adjust height as needed */
+    width: auto;
+    margin-right: calc(var(--spacing-unit) * 1);
+    animation: rotate 20s linear infinite;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Logo text container */
+  &__logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__logo-main {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* Slogan styled in a signature font */
+  &__logo-slogan {
+    font-family: var(--font-family-signature);
+    font-size: 1.2rem; 
+    font-weight: var(--font-weight-regular);
+    color: inherit;
+    text-align: center;
   }
 
   &__mobile-toggle {
