@@ -1,96 +1,113 @@
-/* Styles for the Login */
-.login-page {
+@import '../base.scss';
+@import '../mixins.scss';
+
+/* Styles for the Contact Page */
+.contact-page {
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
 
-  &__form {
-    max-width: 400px;
-    margin: 2rem auto;
+  /* Add spacing below header */
+  &__header {
+    margin-bottom: calc(var(--spacing-unit) * 3);
+  }
+
+  &__content {
+    max-width: 800px;
+    margin: 0 auto;
     padding: calc(var(--spacing-unit) * 2);
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: var(--shadow-light);
+  }
 
-    label {
-      display: block;
-      margin-bottom: calc(var(--spacing-unit) * 0.5);
-      font-weight: bold;
-      color: var(--color-dark-primary);
-    }
+  &__title {
+    font-size: var(--font-size-heading);
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+  }
 
-    input {
-      width: 100%;
-      padding: calc(var(--spacing-unit) * 0.75);
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
-      font-size: 1rem;
-      border: 1px solid var(--color-primary);
-      border-radius: 4px;
-      box-sizing: border-box;
+  &__description {
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    text-align: center;
+    line-height: var(--line-height-base);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
 
-      &:focus {
-        outline: none;
-        border-color: var(--color-primary-light);
-        box-shadow: 0 0 4px rgba(0, 128, 0, 0.2);
-      }
-    }
+  /* Add top and bottom margins to the form wrapper */
+  .contact-form-wrapper {
+    margin-top: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+  }
 
-    .login-page__remember-me {
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-unit) * 0.5);
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
-      font-size: var(--font-size-small);
+  &__privacy {
+    font-size: var(--font-size-small);
+    color: var(--color-text);
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
 
-      input {
-        width: auto;
-      }
-    }
+  /* Add spacing above footer */
+  &__footer {
+    margin-top: calc(var(--spacing-unit) * 3);
+  }
+}
 
-    .login-page__role-toggle {
-      display: flex;
-      justify-content: space-evenly;
-      margin-bottom: calc(var(--spacing-unit) * 2);
-      padding: calc(var(--spacing-unit) * 1);
-      background-color: var(--color-bg);
-      border: 1px solid var(--color-primary);
-      border-radius: 4px;
+/* Styles for the Contact Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 2);
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
 
-      .toggle-option {
-        flex: 1;
-        text-align: center;
-        padding: calc(var(--spacing-unit) * 0.75);
-        cursor: pointer;
-        font-weight: bold;
-        color: var(--color-dark-primary);
-        transition: all var(--transition-default);
+  &__label {
+    font-weight: bold;
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    color: var(--color-dark-primary);
+  }
 
-        &:hover {
-          background-color: var(--color-primary-light);
-          color: #fff;
-        }
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 0.75);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    font-size: var(--font-size-base);
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    box-sizing: border-box;
 
-        &.active {
-          background-color: var(--color-primary);
-          color: #fff;
-        }
-      }
-    }
-
-    button {
-      width: 100%;
-      padding: calc(var(--spacing-unit) * 1);
-      background-color: var(--color-secondary);
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color var(--transition-default);
-
-      &:hover {
-        background-color: darken($secondary-color, 10%);
-      }
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary-light);
+      box-shadow: 0 0 6px rgba(0, 128, 0, 0.2);
     }
   }
+
+  &__button {
+    padding: calc(var(--spacing-unit) * 1);
+    background-color: $secondary-color;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color var(--transition-default);
+    margin-top: calc(var(--spacing-unit) * 1);
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+}
+
+/* Success message styling */
+.contact-success {
+  text-align: center;
+  color: var(--color-primary);
+  font-size: var(--font-size-heading);
+  margin-top: calc(var(--spacing-unit) * 2);
 }
