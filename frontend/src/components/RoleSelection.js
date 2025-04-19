@@ -1,4 +1,5 @@
 import React from 'react';
+import { ROLES } from '../../constants/roles'; // Import roles constant
 
 const RoleSelection = ({ onSelectRole }) => {
   const handleRoleSelect = (role) => {
@@ -13,13 +14,13 @@ const RoleSelection = ({ onSelectRole }) => {
       <div className="role-selection__buttons">
         <button
           className="role-selection__button"
-          onClick={() => handleRoleSelect('buyer')}
+          onClick={() => handleRoleSelect(ROLES.BUYER)}
         >
           Buyer
         </button>
         <button
           className="role-selection__button"
-          onClick={() => handleRoleSelect('seller')}
+          onClick={() => handleRoleSelect(ROLES.SELLER)}
         >
           Seller
         </button>

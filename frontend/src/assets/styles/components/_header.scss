@@ -1,7 +1,7 @@
 .header {
   width: 100%;
   background-color: var(--color-primary);
-  padding: calc(var(--spacing-unit) * 2); 
+  padding: calc(var(--spacing-unit) * 2);
   color: #fff;
   display: flex;
   align-items: center;
@@ -16,6 +16,7 @@
       text-decoration: none;
       color: #fff;
       transition: color var(--transition-default);
+
       &:hover {
         color: var(--color-primary-light);
       }
@@ -29,8 +30,8 @@
 
   &__nav {
     display: flex;
-    gap: calc(var(--spacing-unit) * 2); /* Spacing between logo and nav items */
-    margin-left: calc(var(--spacing-unit) * 2); /* Space separating logo from nav */
+    gap: calc(var(--spacing-unit) * 2);
+    margin-left: calc(var(--spacing-unit) * 2);
 
     a,
     .header__nav-btn {
@@ -49,7 +50,6 @@
     }
 
     .header__link.active {
-      /* Active state with underline and white text */
       border-bottom: 2px solid var(--color-primary-light);
       color: #fff;
       background: none;
@@ -63,7 +63,6 @@
     }
   }
 
-  /* Mobile responsive adjustments */
   @media (max-width: 768px) {
     &__mobile-toggle {
       display: block;
@@ -71,17 +70,17 @@
 
     &__nav {
       flex-direction: column;
-      align-items: flex-end; /* Align items to the right on mobile */
+      align-items: flex-end;
       width: auto;
-      display: none; /* Hidden by default */
-      
+      display: none;
+
       &.open {
-        display: flex; /* Shown when menuOpen is true */
+        display: flex;
       }
 
       a,
       .header__nav-btn {
-        text-align: right; /* Align individual items to the right */
+        text-align: right;
         width: auto;
       }
     }

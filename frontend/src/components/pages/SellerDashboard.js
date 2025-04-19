@@ -35,9 +35,9 @@ const SellerDashboard = () => {
 
   return (
     <div className="seller-dashboard">
-      <h2>Manage Your Products</h2>
+      <h2 className="seller-dashboard__header">Manage Your Products</h2>
       <button className="add-product-btn">Add New Product</button>
-      <div className="product-list">
+      <div className="seller-dashboard__list">
         {products.map((product) => (
           <div key={product._id} className="product-card">
             <img src={product.image} alt={product.name} />

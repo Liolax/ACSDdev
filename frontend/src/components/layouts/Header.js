@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { ROLES } from '../../constants/roles'; // Import roles constants
 
 const Header = ({ userRole, onLoginClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Perform logout logic (clear tokens, etc.) then navigate to Home
+    // Clear the stored role and perform logout logic, then navigate to Home
+    localStorage.removeItem('userRole');
     navigate('/');
   };
 
   const toggleMenu = () => {
-    setMenuOpen(prev => !prev);
+    setMenuOpen((prev) => !prev);
   };
 
-  // Close menu when a nav link gets clicked (especially on mobile)
+  // Close mobile menu on link click
   const handleLinkClick = () => {
     if (menuOpen) setMenuOpen(false);
   };
@@ -22,45 +24,87 @@ const Header = ({ userRole, onLoginClick }) => {
   return (
     <header className="header">
       <div className="header__logo">
-        <NavLink to="/" onClick={handleLinkClick}>ÉireCraft</NavLink>
+        <NavLink to="/" onClick={handleLinkClick}>
+          ÉireCraft
+        </NavLink>
       </div>
-      {/* Show mobile-toggle only when menu is closed */}
       {!menuOpen && (
         <div className="header__mobile-toggle" onClick={toggleMenu}>
           <span className="header__mobile-icon">&#9776;</span>
         </div>
       )}
       <nav className={`header__nav ${menuOpen ? 'open' : ''}`}>
-        {userRole === 'seller' ? (
+        {userRole === ROLES.SELLER ? (
           <>
-            <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
+            {/* Seller-specific links */}
+            <NavLink
+              to="/seller-dashboard"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               My Products
             </NavLink>
-            <NavLink to="/add-product" className="header__link" onClick={handleLinkClick}>
+            <NavLink
+              to="/add-product"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               Add Product
             </NavLink>
-            <NavLink to="/feedback" className="header__link" onClick={handleLinkClick}>
+            <NavLink
+              to="/feedback"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               Feedback
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
+              Contact
             </NavLink>
             <button className="header__nav-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
-        ) : userRole === 'buyer' ? (
+        ) : userRole === ROLES.BUYER ? (
           <>
-            <NavLink to="/buyer-dashboard" className="header__link" onClick={handleLinkClick}>
-              Dashboard
+            {/* Buyer-specific links */}
+            <NavLink
+              to="/buyer-dashboard"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
+              My Purchases
             </NavLink>
-            <NavLink to="/products" className="header__link" onClick={handleLinkClick}>
-              Products
+            <NavLink
+              to="/market"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
+              Market
             </NavLink>
-            <NavLink to="/wishlist" className="header__link" onClick={handleLinkClick}>
+            <NavLink
+              to="/wishlist"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               Wishlist
             </NavLink>
-            <NavLink to="/cart" className="header__link" onClick={handleLinkClick}>
+            <NavLink
+              to="/cart"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               Cart
             </NavLink>
-            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+            <NavLink
+              to="/contact"
+              className="header__link"
+              onClick={handleLinkClick}
+            >
               Contact
             </NavLink>
             <button className="header__nav-btn" onClick={handleLogout}>
@@ -69,13 +113,18 @@ const Header = ({ userRole, onLoginClick }) => {
           </>
         ) : (
           <>
+            {/* Guest links */}
             <NavLink to="/" end className="header__link" onClick={handleLinkClick}>
               Home
             </NavLink>
             {onLoginClick ? (
-              <button 
-                className="header__nav-btn" 
-                onClick={() => { onLoginClick(); handleLinkClick(); }}>
+              <button
+                className="header__nav-btn"
+                onClick={() => {
+                  onLoginClick();
+                  handleLinkClick();
+                }}
+              >
                 Login
               </button>
             ) : (

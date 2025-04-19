@@ -5,10 +5,14 @@ import Footer from '../components/layouts/Footer';
 import OurCommunity from '../components/OurCommunity';
 import OurProducts from '../components/OurProducts';
 import LoginPopup from '../components/LoginPopup';
+import { handleLogin } from '../services/authUtils';
 
 const Home = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
+
+  // Read the user's role from localStorage.
+  const userRole = localStorage.getItem('userRole') || null;
 
   const openLoginPopup = () => {
     setShowLoginPopup(true);
@@ -18,27 +22,22 @@ const Home = () => {
     setShowLoginPopup(false);
   };
 
-  const handleLogin = (email, password, rememberMe, role) => {
-    // Validate credentials or call an API here
-    console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
-    if (role === 'buyer') {
-      navigate('/buyer-dashboard');
-    } else {
-      navigate('/seller-dashboard');
-    }
-  };
-
   return (
     <div className="page-container home-page">
-      {/* Pass onLoginClick prop so Header can trigger the login popup */}
-      <Header onLoginClick={openLoginPopup} />
+      {/* Pass userRole to Header so logged-in buyers/sellers see their nav links */}
+      <Header userRole={userRole} onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />
         <OurProducts openLoginPopup={openLoginPopup} />
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup closePopup={closeLoginPopup} handleLogin={handleLogin} />
+        <LoginPopup 
+          closePopup={closeLoginPopup} 
+          handleLogin={(email, password, rememberMe, role) =>
+            handleLogin(navigate, email, password, rememberMe, role)
+          } 
+        />
       )}
     </div>
   );

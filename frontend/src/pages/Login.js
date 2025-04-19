@@ -1,22 +1,26 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import LoginPopup from '../components/LoginPopup';
+import { handleLogin } from '../services/authUtils';
 
 const Login = () => {
-  const handleLogin = (email, password, rememberMe, role) => {
-    // Login logic for page-based login
-    console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
-  };
+  const navigate = useNavigate();
 
-  // In a page context, we might not need a close button—here we pass a no-op.
+  // A no-operation close function (provided for consistency)
   const noOpClose = () => {};
 
   return (
     <div className="page-container login-page">
-      <Header />
+      <Header userRole={null} />
       <main className="login-page__main-content">
-        <LoginPopup closePopup={noOpClose} handleLogin={handleLogin} />
+        <LoginPopup 
+          closePopup={noOpClose} 
+          handleLogin={(email, password, rememberMe, role) =>
+            handleLogin(navigate, email, password, rememberMe, role)
+          } 
+        />
       </main>
       <Footer />
     </div>

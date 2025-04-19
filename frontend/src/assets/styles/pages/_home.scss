@@ -29,6 +29,7 @@
 
   &__products {
     margin-top: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 4); 
 
     h2 {
       font-size: var(--font-size-heading);
