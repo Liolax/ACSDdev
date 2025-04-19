@@ -1,49 +1,91 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Header = ({ userRole, onLoginClick }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear any session state and navigate back to Home
+    // Perform logout logic (clear tokens, etc.) then navigate to Home
     navigate('/');
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(prev => !prev);
+  };
+
+  // Close menu when a nav link gets clicked (especially on mobile)
+  const handleLinkClick = () => {
+    if (menuOpen) setMenuOpen(false);
   };
 
   return (
     <header className="header">
-      <div className="header__logo">ÉireCraft</div>
-      <nav className="header__nav">
+      <div className="header__logo">
+        <NavLink to="/" onClick={handleLinkClick}>ÉireCraft</NavLink>
+      </div>
+      {/* Show mobile-toggle only when menu is closed */}
+      {!menuOpen && (
+        <div className="header__mobile-toggle" onClick={toggleMenu}>
+          <span className="header__mobile-icon">&#9776;</span>
+        </div>
+      )}
+      <nav className={`header__nav ${menuOpen ? 'open' : ''}`}>
         {userRole === 'seller' ? (
           <>
-            <Link to="/seller-dashboard">My Products</Link>
-            <Link to="/add-product">Add Product</Link>
-            <Link to="/feedback">Feedback</Link>
+            <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
+              My Products
+            </NavLink>
+            <NavLink to="/add-product" className="header__link" onClick={handleLinkClick}>
+              Add Product
+            </NavLink>
+            <NavLink to="/feedback" className="header__link" onClick={handleLinkClick}>
+              Feedback
+            </NavLink>
             <button className="header__nav-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
         ) : userRole === 'buyer' ? (
           <>
-            <Link to="/buyer-dashboard">Dashboard</Link>
-            <Link to="/products">Products</Link>
-            <Link to="/wishlist">Wishlist</Link>
-            <Link to="/cart">Cart</Link>
-            <Link to="/contact">Contact</Link>
+            <NavLink to="/buyer-dashboard" className="header__link" onClick={handleLinkClick}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/products" className="header__link" onClick={handleLinkClick}>
+              Products
+            </NavLink>
+            <NavLink to="/wishlist" className="header__link" onClick={handleLinkClick}>
+              Wishlist
+            </NavLink>
+            <NavLink to="/cart" className="header__link" onClick={handleLinkClick}>
+              Cart
+            </NavLink>
+            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+              Contact
+            </NavLink>
             <button className="header__nav-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/">Home</Link>
+            <NavLink to="/" end className="header__link" onClick={handleLinkClick}>
+              Home
+            </NavLink>
             {onLoginClick ? (
-              <button className="header__nav-btn" onClick={onLoginClick}>
+              <button 
+                className="header__nav-btn" 
+                onClick={() => { onLoginClick(); handleLinkClick(); }}>
                 Login
               </button>
             ) : (
-              <Link to="/login">Login</Link>
+              <NavLink to="/login" className="header__link" onClick={handleLinkClick}>
+                Login
+              </NavLink>
             )}
-            <Link to="/contact">Contact</Link>
+            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+              Contact
+            </NavLink>
           </>
         )}
       </nav>

@@ -16,7 +16,7 @@ const LoginPopup = ({ closePopup, handleLogin }) => {
     <div className="login-popup-overlay">
       <div className="login-popup">
         <h2 style={{ marginBottom: 'calc(var(--spacing-unit) * 1.5)' }}>
-          Welcome Back – Please Log In
+          Please Log In:
         </h2>
         <form className="login-page__form" onSubmit={onSubmit}>
           <input

@@ -19,6 +19,7 @@ const Home = () => {
   };
 
   const handleLogin = (email, password, rememberMe, role) => {
+    // Validate credentials, call an API, etc.
     console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
     if (role === 'buyer') {
       navigate('/buyer-dashboard');
@@ -36,7 +37,10 @@ const Home = () => {
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup closePopup={closeLoginPopup} handleLogin={handleLogin} />
+        <LoginPopup 
+          closePopup={closeLoginPopup} 
+          handleLogin={handleLogin} 
+        />
       )}
     </div>
   );

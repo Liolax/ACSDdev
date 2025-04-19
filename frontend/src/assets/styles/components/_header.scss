@@ -6,24 +6,40 @@
   background-color: var(--color-primary);
   padding: calc(var(--spacing-unit) * 2);
   color: #fff;
-  @include flexbox(space-between, center);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   &__logo {
     font-family: var(--font-family-heading);
     font-size: var(--font-size-heading);
     font-weight: var(--font-weight-bold);
+
+    a {
+      text-decoration: none;
+      color: #fff;
+      transition: color var(--transition-default);
+      &:hover {
+        color: var(--color-primary-light);
+      }
+    }
+  }
+
+  &__mobile-toggle {
+    display: none;
+    cursor: pointer;
   }
 
   &__nav {
-    @include flexbox(row, center);
-    gap: calc(var(--spacing-unit) * 1.5);
+    display: flex;
+    gap: calc(var(--spacing-unit) * 2); /* Spacing between logo and nav items */
+    margin-left: calc(var(--spacing-unit) * 2); /* Space separating logo from nav */
 
-    /* Common styles for both links and buttons */
     a,
     .header__nav-btn {
       color: #fff;
       text-decoration: none;
-      font-size: var(--font-size-base); /* Ensures consistent font size */
+      font-size: var(--font-size-base);
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border-radius: 4px;
       @include transition(background-color);
@@ -31,14 +47,46 @@
       &:hover,
       &:focus {
         background-color: var(--color-primary-light);
-        color: var(--color-dark-primary);
+        color: #fff;
       }
+    }
+
+    .header__link.active {
+      /* Active state with underline and white text */
+      border-bottom: 2px solid var(--color-primary-light);
+      color: #fff;
+      background: none;
     }
 
     .header__nav-btn {
       background: none;
       border: none;
       cursor: pointer;
+      font-size: var(--font-size-base);
+    }
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    &__mobile-toggle {
+      display: block;
+    }
+
+    &__nav {
+      flex-direction: column;
+      align-items: flex-end; /* Align items to the right on mobile */
+      width: auto; 
+      display: none; /* Hidden by default */
+      
+      &.open {
+        display: flex; /* Shown when menuOpen is true */
+      }
+
+      a,
+      .header__nav-btn {
+        text-align: right; /* Align individual items to the right */
+        width: auto; 
+      }
     }
   }
 }

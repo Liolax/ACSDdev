@@ -18,8 +18,8 @@ const OurProducts = () => {
     },
     {
       id: 3,
-      name: 'Custom Jewelry',
-      price: 60,
+      name: 'Bog Oak Bowl',
+      price: 80,
       image: 'https://picsum.photos/300/200'
     },
     {
@@ -27,6 +27,18 @@ const OurProducts = () => {
       name: 'Organic Candle',
       price: 25,
       image: 'https://picsum.photos/300/200'
+    },
+    {
+      id: 5,
+      name: 'Custom Jewelry',
+      price: 60,
+      image: 'https://picsum.photos/300/200' 
+    },
+    {
+      id: 6,
+      name: 'Aran Knit Sweater',
+      price: 120,
+      image: 'https://picsum.photos/300/200' 
     }
   ];
 
