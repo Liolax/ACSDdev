@@ -6,7 +6,6 @@
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
 
-  /* Add spacing below header */
   &__header {
     margin-bottom: calc(var(--spacing-unit) * 3);
   }
@@ -16,7 +15,6 @@
     margin: 0 auto;
     padding: calc(var(--spacing-unit) * 2);
     background-color: #fff;
-    border-radius: 8px;
   }
 
   &__title {
@@ -34,7 +32,7 @@
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
 
-  /* Add top and bottom margins to the form wrapper */
+  /* The form wrapper gets extra vertical spacing */
   .contact-form-wrapper {
     margin-top: calc(var(--spacing-unit) * 3);
     margin-bottom: calc(var(--spacing-unit) * 3);
@@ -47,7 +45,6 @@
     margin-top: calc(var(--spacing-unit) * 2);
   }
 
-  /* Add spacing above footer */
   &__footer {
     margin-top: calc(var(--spacing-unit) * 3);
   }
@@ -104,10 +101,17 @@
   }
 }
 
-/* Success message styling */
+/* Success Message Styling */
 .contact-success {
+  display: block;
   text-align: center;
-  color: var(--color-primary);
-  font-size: var(--font-size-heading);
-  margin-top: calc(var(--spacing-unit) * 2);
+  color: #fff;
+  font-size: calc(var(--font-size-heading) * 1.2);
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  padding: calc(var(--spacing-unit) * 5);
+  background-color: $secondary-color; 
+  margin-top: calc(var(--spacing-unit) * 26);
+  margin-bottom: calc(var(--spacing-unit) * 26);
+  border-radius: 8px;
 }

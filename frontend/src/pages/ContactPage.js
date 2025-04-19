@@ -4,21 +4,17 @@ import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import ContactForm from '../components/forms/ContactForm';
 import LoginPopup from '../components/LoginPopup';
+import '../assets/styles/pages/_contact.scss'; // Import page-specific styles
 
 const ContactPage = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const openLoginPopup = () => {
-    setShowLoginPopup(true);
-  };
-
-  const closeLoginPopup = () => {
-    setShowLoginPopup(false);
-  };
+  const openLoginPopup = () => setShowLoginPopup(true);
+  const closeLoginPopup = () => setShowLoginPopup(false);
 
   const handleLogin = (email, password, rememberMe, role) => {
-    // Here we can implement our actual login logic
     console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
     if (role === 'buyer') {
       navigate('/buyer-dashboard');
@@ -27,21 +23,33 @@ const ContactPage = () => {
     }
   };
 
+  // This callback will be passed to ContactForm
+  const handleFormSuccess = () => {
+    setFormSubmitted(true);
+  };
+
   return (
     <div className="page-container contact-page">
-      {/* Pass onLoginClick prop so Header can trigger the login popup */}
       <Header onLoginClick={openLoginPopup} />
       <div className="contact-page__content">
-        <h2>Contact Us</h2>
-        <p className="contact-page__description">
-          Please fill out the form below to share your feedback or inquiries.
-          We value your input and will respond as soon as possible.
-        </p>
-        <ContactForm />
-        <p className="contact-page__privacy">
-          By clicking “Send Message”, you consent to our Privacy Policy and agree
-          that your message will be processed accordingly.
-        </p>
+        {/* Only show header title, description, and privacy text when the form hasn't been submitted */}
+        {!formSubmitted && (
+          <>
+            <h2 className="contact-page__title">Contact Us</h2>
+            <p className="contact-page__description">
+              Share your feedback or inquiries below. We value your input and will respond promptly.
+            </p>
+          </>
+        )}
+
+        {/* ContactForm always renders; it will itself show the success message after submission */}
+        <ContactForm onSuccess={handleFormSuccess} />
+
+        {!formSubmitted && (
+          <p className="contact-page__privacy">
+            By clicking "Send Message", you agree to our Privacy Policy and the processing of your message.
+          </p>
+        )}
       </div>
       <Footer />
       {showLoginPopup && (

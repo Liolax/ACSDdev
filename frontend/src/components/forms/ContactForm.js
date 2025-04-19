@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 
-const ContactForm = () => {
+const ContactForm = ({ onSuccess }) => {
   const [state, handleSubmit] = useForm("mjkydqyo");
+  
+  // When form submission succeeds, notify the parent
+  useEffect(() => {
+    if (state.succeeded && onSuccess) {
+      onSuccess();
+    }
+  }, [state.succeeded, onSuccess]);
 
+  // If succeeded, render only the success message
   if (state.succeeded) {
     return <p className="contact-success">Thanks for contacting us!</p>;
   }
