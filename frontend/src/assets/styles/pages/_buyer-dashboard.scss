@@ -60,19 +60,18 @@
     border-color: var(--color-primary-light);
   }
 
-  /* Collage container on the left with fixed dimensions */
+  /* Collage container on the left: using CSS grid with inline sizing */
   &__collage {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: calc(var(--spacing-unit) * 0.25);
   }
   
-  /* Mini image style – the width/height will be set inline dynamically */
+  /* Mini image style: these will fill their grid cell */
   &__mini-image {
-    border-radius: 4px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 4px;
   }
   
   /* Details container on the right */
@@ -119,7 +118,7 @@
   }
 }
 
-/* Wishlist Section Styles (unchanged) */
+/* Wishlist Section Styles */
 .buyer-dashboard__wishlist {
   margin-top: calc(var(--spacing-unit) * 4);
 }
@@ -174,7 +173,7 @@
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
-/* Cart Section Styles (unchanged) */
+/* Cart Section Styles */
 .buyer-dashboard__cart {
   margin-top: calc(var(--spacing-unit) * 4);
 }

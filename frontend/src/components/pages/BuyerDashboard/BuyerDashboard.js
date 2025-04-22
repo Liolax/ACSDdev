@@ -2,6 +2,27 @@ import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
 
+// Helper to determine collage container size and grid layout based on item count
+const getCollageStyle = (count) => {
+  let containerSize, gridTemplateColumns;
+  // Example logic: adjust container size and layout based on count
+  if (count === 1) {
+    containerSize = 120;
+    gridTemplateColumns = '1fr';
+  } else if (count === 2) {
+    containerSize = 120;
+    gridTemplateColumns = 'repeat(2, 1fr)';
+  } else if (count === 3 || count === 4) {
+    containerSize = 120;
+    gridTemplateColumns = 'repeat(2, 1fr)';
+  } else {
+    // For more than 4 items, use a 3-column grid
+    containerSize = 120;
+    gridTemplateColumns = 'repeat(3, 1fr)';
+  }
+  return { containerSize, gridTemplateColumns };
+};
+
 const BuyerDashboard = () => {
   // Orders state for "My Purchases"
   const [orders, setOrders] = useState([]);
@@ -67,20 +88,19 @@ const BuyerDashboard = () => {
   }, []);
 
   // Wishlist handlers – including "Move to Cart"
-  const handleRemoveWishlist = (id) =>
-    setWishlist(wishlist.filter((item) => item.id !== id));
+  const handleRemoveWishlist = (id) => setWishlist(wishlist.filter(item => item.id !== id));
   const handleMoveToCart = (item) => {
-    setWishlist(wishlist.filter((w) => w.id !== item.id));
-    const existingCartItem = cart.find((c) => c.id === item.id);
+    setWishlist(wishlist.filter(w => w.id !== item.id));
+    const existingCartItem = cart.find(c => c.id === item.id);
     if (existingCartItem) {
-      setCart(cart.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
+      setCart(cart.map(c => c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c));
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
   // Cart handlers
-  const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
+  const handleRemoveCart = (id) => setCart(cart.filter(item => item.id !== id));
   const handlePay = () => alert('Proceed to payment and shipping selection.');
   const handleWishlistSeeLess = () => setWishlistVisible(5);
   const handleCartSeeLess = () => setCartVisible(5);
@@ -88,45 +108,56 @@ const BuyerDashboard = () => {
   return (
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
+      
+      {/* Quick Links: Wishlist and Cart icons with links */}
+      <div className="buyer-dashboard__quick-links">
+        <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
+        <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
+      </div>
 
-      {/* Render orders with left-side collage and right-side details */}
+      {/* Render orders with a refined collage style */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
         ) : (
-          orders.map(order => (
-            <div key={order.id} className="order-card">
-              <div className="order-card__collage">
-                {order.items.map((item, idx) => (
-                  <img
-                    key={idx}
-                    src={item.image}
-                    alt={item.name}
-                    className="order-card__mini-image"
-                    // Set inline styles: width as percentage of container based on number of items
-                    style={{
-                      width: `${100 / order.items.length}%`,
-                      height: '100%'
-                    }}
-                  />
-                ))}
+          orders.map(order => {
+            const { containerSize, gridTemplateColumns } = getCollageStyle(order.items.length);
+            return (
+              <div key={order.id} className="order-card">
+                <div
+                  className="order-card__collage"
+                  style={{
+                    width: `${containerSize}px`,
+                    height: `${containerSize}px`,
+                    gridTemplateColumns: gridTemplateColumns
+                  }}
+                >
+                  {order.items.map((item, idx) => (
+                    <img
+                      key={idx}
+                      src={item.image}
+                      alt={item.name}
+                      className="order-card__mini-image"
+                    />
+                  ))}
+                </div>
+                <div className="order-card__details">
+                  <h3 className="order-card__id">Order {order.id}</h3>
+                  <p className="order-card__items-names">
+                    {order.items.map(item => item.name).join(', ')}
+                  </p>
+                  <p className="order-card__status">Status: {order.status}</p>
+                  <p className="order-card__date">Date: {order.date}</p>
+                </div>
+                <button
+                  className="button order-card__track"
+                  onClick={() => alert(`Tracking order ${order.id}`)}
+                >
+                  Track Order
+                </button>
               </div>
-              <div className="order-card__details">
-                <h3 className="order-card__id">Order {order.id}</h3>
-                <p className="order-card__items-names">
-                  {order.items.map(item => item.name).join(', ')}
-                </p>
-                <p className="order-card__status">Status: {order.status}</p>
-                <p className="order-card__date">Date: {order.date}</p>
-              </div>
-              <button
-                className="button order-card__track"
-                onClick={() => alert(`Tracking order ${order.id}`)}
-              >
-                Track Order
-              </button>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
