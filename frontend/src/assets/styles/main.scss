@@ -1,26 +1,27 @@
-@import 'base.scss';
-@import 'mixins.scss';
-@import 'utilities.scss';
-@import 'overrides.scss';
+// New syntax: each file is loaded as a module
+@use 'base';
+@use 'mixins';
+@use 'utilities';
+@use 'overrides';
 
 // Component Partials
-@import 'components/_header.scss';
-@import 'components/_footer.scss';
-@import 'components/_button.scss';
-@import 'components/_productCard.scss';
-@import 'components/_feedback-popup.scss';
-@import 'components/_role-selection.scss';
-@import 'components/_products.scss';
+@use 'components/_header';
+@use 'components/_footer';
+@use 'components/_button';
+@use 'components/_productCard';
+@use 'components/_feedback-popup';
+@use 'components/_role-selection';
+@use 'components/_products';
 
 // Page-Specific Styles
-@import 'pages/_pageContainer.scss';
-@import 'pages/_seller-dashboard.scss';
-@import 'pages/_buyer-dashboard.scss';
-@import 'pages/_home.scss';
-@import 'pages/_shipping-details.scss';
-@import 'pages/_contact.scss';
-@import 'pages/_login.scss';
-@import 'pages/_market.scss';
+@use 'pages/_pageContainer';
+@use 'pages/_seller-dashboard';
+@use 'pages/_buyer-dashboard';
+@use 'pages/_home';
+@use 'pages/_shipping-details';
+@use 'pages/_contact';
+@use 'pages/_login';
+@use 'pages/_market';
 
 // Shared Component Styles
-@import 'shared/_standardProductGrid.scss';
+@use 'shared/_standardProductGrid';

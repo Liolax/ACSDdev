@@ -1,3 +1,5 @@
+@use "sass:color";
+
 :root {
   /* Colors */
   --color-primary: #228B22;
@@ -28,7 +30,7 @@
   --transition-default: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* SASS variables for internal use */
+/* Sass variables for internal use */
 $primary-color: #228B22;
 $primary-light-color: #42ba96;
 $secondary-color: #ff9800;
@@ -36,10 +38,10 @@ $background-color: #f0f9f1;
 $text-color: #222;
 $dark-primary-color: #004d00;
 
-/* Computed variables */
-$hover-primary-color: darken($primary-color, 10%);
+/* Using the new sass:color functions for computed colors */
+$hover-primary-color: color.adjust($primary-color, $lightness: -10%);
 
-/* Popup Overlay styles for login modal */
+/* Popup Overlay styles for the login modal */
 .login-popup-overlay {
   position: fixed;
   top: 0;

@@ -1,3 +1,5 @@
+@use 'base' as *; // Bring all variables from base.scss into the global namespace
+
 // Override for Ant Design primary button styles
 .ant-btn-primary {
   background-color: $primary-color !important;

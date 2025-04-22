@@ -25,7 +25,6 @@ const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback 
     const feedbackData = { orderId, rating, title, comments };
     onSubmitFeedback(feedbackData);
     setSubmitted(true);
-    // Auto-close after 2 seconds
     setTimeout(() => {
       closePopup();
     }, 2000);
