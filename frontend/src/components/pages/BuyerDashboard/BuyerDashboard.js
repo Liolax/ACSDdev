@@ -7,36 +7,60 @@ const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
-  // Dummy order data updated to include images
+  // Dummy order data updated to support multiple items per order
   useEffect(() => {
     const dummyOrders = [
       {
         id: 'A1001',
-        product: 'Handwoven Basket',
         status: 'Shipped',
         date: '2023-05-01',
-        image: 'https://picsum.photos/100/100?random=11'
+        items: [
+          {
+            name: 'Handwoven Basket',
+            image: 'https://picsum.photos/100/100?random=11'
+          },
+          {
+            name: 'Handwoven Rug',
+            image: 'https://picsum.photos/100/100?random=21'
+          }
+        ]
       },
       {
         id: 'A1002',
-        product: 'Artisan Vase',
         status: 'Delivered',
         date: '2023-04-25',
-        image: 'https://picsum.photos/100/100?random=12'
+        items: [
+          {
+            name: 'Artisan Vase',
+            image: 'https://picsum.photos/100/100?random=12'
+          }
+        ]
       },
       {
         id: 'A1003',
-        product: 'Bog Oak Bowl',
         status: 'Processing',
         date: '2023-05-03',
-        image: 'https://picsum.photos/100/100?random=13'
-      },
+        items: [
+          {
+            name: 'Bog Oak Bowl',
+            image: 'https://picsum.photos/100/100?random=13'
+          },
+          {
+            name: 'Antique Plate',
+            image: 'https://picsum.photos/100/100?random=14'
+          },
+          {
+            name: 'Nonewooden Spoon',
+            image: 'https://picsum.photos/100/100?random=15'
+          }
+        ]
+      }
     ];
     setOrders(dummyOrders);
     setLoadingOrders(false);
   }, []);
 
-  // Wishlist and Cart state (dummy data for simulation)
+  // Wishlist and Cart state (dummy data simulation)
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const [wishlistVisible, setWishlistVisible] = useState(5);
@@ -81,27 +105,25 @@ const BuyerDashboard = () => {
 
   return (
     <div className="buyer-dashboard">
-      {/* My Purchases title styled like "Welcome to the Market" */}
       <h2 className="buyer-dashboard__header">My Purchases</h2>
 
-      {/* Quick Links for Wishlist & Cart (Right-Aligned) */}
-      <div className="buyer-dashboard__quick-links">
-        <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
-        <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
-      </div>
-
+      {/* Render orders with multiple items */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
         ) : (
           orders.map((order) => (
             <div key={order.id} className="order-card">
-              {order.image && (
-                <img src={order.image} alt={order.product} className="order-card__image" />
-              )}
               <div className="order-card__info">
                 <h3 className="order-card__id">Order {order.id}</h3>
-                <p className="order-card__product">{order.product}</p>
+                <ul className="order-card__items-list">
+                  {order.items.map((item, idx) => (
+                    <li key={idx} className="order-card__item">
+                      <img src={item.image} alt={item.name} className="order-card__image" />
+                      <span className="order-card__product">{item.name}</span>
+                    </li>
+                  ))}
+                </ul>
                 <p className="order-card__status">Status: {order.status}</p>
                 <p className="order-card__date">Date: {order.date}</p>
               </div>

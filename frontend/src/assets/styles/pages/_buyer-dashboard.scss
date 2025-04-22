@@ -55,7 +55,7 @@
   background-color: #f9f9f9;
   gap: calc(var(--spacing-unit) * 1.5);
 
-  /* Order image styling */
+  /* Order image styling within ordered items */
   &__image {
     width: 64px;
     height: 64px;
@@ -81,6 +81,20 @@
     margin-bottom: calc(var(--spacing-unit) * 0.25);
   }
 
+  /* We'll now render items as a list */
+  .order-card__items-list {
+    list-style: none;
+    padding: 0;
+    margin: calc(var(--spacing-unit) * 0.5) 0;
+  }
+
+  .order-card__item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+  }
+
   .order-card__product {
     font-size: 1rem;
   }
@@ -91,7 +105,7 @@
     color: var(--color-text);
   }
 
-  /* Bold price inside Order Card */
+  /* Bold price inside Order Card if you ever add it */
   .order-card__price {
     font-size: 1rem;
     font-weight: var(--font-weight-bold);
