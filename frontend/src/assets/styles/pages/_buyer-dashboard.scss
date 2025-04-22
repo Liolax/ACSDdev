@@ -81,18 +81,24 @@
     margin-bottom: calc(var(--spacing-unit) * 0.25);
   }
 
-  /* We'll now render items as a list */
+  /* Order items displayed horizontally */
   .order-card__items-list {
-    list-style: none;
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
     margin: calc(var(--spacing-unit) * 0.5) 0;
+    flex-wrap: wrap;
   }
-
+  
+  /* Each order item */
   .order-card__item {
     display: flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 0.5);
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
+  }
+  
+  /* Separator for comma styling */
+  .order-card__separator {
+    margin: 0 calc(var(--spacing-unit) * 0.25);
   }
 
   .order-card__product {
@@ -105,7 +111,7 @@
     color: var(--color-text);
   }
 
-  /* Bold price inside Order Card if you ever add it */
+  /* Bold price inside Order Card if needed */
   .order-card__price {
     font-size: 1rem;
     font-weight: var(--font-weight-bold);

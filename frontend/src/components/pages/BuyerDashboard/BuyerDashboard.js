@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
 
@@ -107,7 +107,7 @@ const BuyerDashboard = () => {
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
 
-      {/* Render orders with multiple items */}
+      {/* Render orders with multiple items displayed horizontally, separated by commas */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
@@ -116,14 +116,19 @@ const BuyerDashboard = () => {
             <div key={order.id} className="order-card">
               <div className="order-card__info">
                 <h3 className="order-card__id">Order {order.id}</h3>
-                <ul className="order-card__items-list">
+                <div className="order-card__items-list">
                   {order.items.map((item, idx) => (
-                    <li key={idx} className="order-card__item">
-                      <img src={item.image} alt={item.name} className="order-card__image" />
-                      <span className="order-card__product">{item.name}</span>
-                    </li>
+                    <Fragment key={idx}>
+                      <span className="order-card__item">
+                        <img src={item.image} alt={item.name} className="order-card__image" />
+                        <span className="order-card__product">{item.name}</span>
+                      </span>
+                      {idx !== order.items.length - 1 && (
+                        <span className="order-card__separator">, </span>
+                      )}
+                    </Fragment>
                   ))}
-                </ul>
+                </div>
                 <p className="order-card__status">Status: {order.status}</p>
                 <p className="order-card__date">Date: {order.date}</p>
               </div>
