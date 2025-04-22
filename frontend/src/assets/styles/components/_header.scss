@@ -1,3 +1,5 @@
+@use "../mixins" as mixins; 
+
 .header {
   width: 100%;
   background-color: var(--color-primary);
@@ -22,7 +24,7 @@
 
   /* Logo image with rotation animation */
   &__logo-image {
-    height: 50px; /* Adjust height as needed */
+    height: 50px; 
     width: auto;
     margin-right: calc(var(--spacing-unit) * 1);
     animation: rotate 20s linear infinite;
@@ -77,7 +79,7 @@
       font-size: var(--font-size-base);
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border-radius: 4px;
-      @include transition(background-color);
+      @include mixins.transition(background-color); 
 
       &:hover,
       &:focus {

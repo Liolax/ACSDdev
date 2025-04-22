@@ -1,27 +1,26 @@
-// New syntax: each file is loaded as a module
 @use 'base';
-@use 'mixins';
+@use 'mixins'; 
 @use 'utilities';
 @use 'overrides';
 
 // Component Partials
-@use 'components/_header';
-@use 'components/_footer';
-@use 'components/_button';
-@use 'components/_productCard';
-@use 'components/_feedback-popup';
-@use 'components/_role-selection';
-@use 'components/_products';
+@use 'components/header';
+@use 'components/footer';
+@use 'components/button';
+@use 'components/productCard';
+@use 'components/feedback-popup';
+@use 'components/role-selection';
+@use 'components/products';
 
 // Page-Specific Styles
-@use 'pages/_pageContainer';
-@use 'pages/_seller-dashboard';
-@use 'pages/_buyer-dashboard';
-@use 'pages/_home';
-@use 'pages/_shipping-details';
-@use 'pages/_contact';
-@use 'pages/_login';
-@use 'pages/_market';
+@use 'pages/pageContainer';
+@use 'pages/seller-dashboard';
+@use 'pages/buyer-dashboard';
+@use 'pages/home';
+@use 'pages/shipping-details';
+@use 'pages/contact';
+@use 'pages/login';
+@use 'pages/market';
 
 // Shared Component Styles
-@use 'shared/_standardProductGrid';
+@use 'shared/standardProductGrid';
