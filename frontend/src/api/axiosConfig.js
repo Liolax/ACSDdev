@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response Interceptor: handle error cases and "duplicate-if" merged
+// Response Interceptor: merged duplicate branches
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

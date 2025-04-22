@@ -27,9 +27,9 @@ const BuyerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   
-  // State to hold feedback data for each order (key = order id)
+  // Feedback storage: key = order id, value = feedback data
   const [feedbackByOrder, setFeedbackByOrder] = useState({});
-  // Order ID for which the Feedback popup is open
+  // The orderId for which the Feedback popup is open
   const [feedbackOrderId, setFeedbackOrderId] = useState(null);
 
   // Dummy order data updated to support multiple items per order
@@ -46,7 +46,7 @@ const BuyerDashboard = () => {
       },
       {
         id: 'A1002',
-        status: 'Delivered', // Delivered -> feedback is available
+        status: 'Delivered', // Delivered → feedback may be given
         date: '2023-04-25',
         items: [
           { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
@@ -67,7 +67,7 @@ const BuyerDashboard = () => {
     setLoadingOrders(false);
   }, []);
 
-  // Wishlist and Cart state (dummy data simulation)
+  // Wishlist and Cart state (dummy simulation)
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const [wishlistVisible, setWishlistVisible] = useState(5);
@@ -117,7 +117,7 @@ const BuyerDashboard = () => {
     setFeedbackOrderId(null);
   };
 
-  // Handler to delete existing feedback
+  // Delete feedback handler
   const handleFeedbackDelete = (orderId) => {
     setFeedbackByOrder(prev => {
       const newFeedback = { ...prev };

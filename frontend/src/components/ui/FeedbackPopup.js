@@ -8,7 +8,6 @@ const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback 
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    // When initialFeedback changes (e.g., when editing), update local state
     if (initialFeedback) {
       setRating(initialFeedback.rating);
       setTitle(initialFeedback.title);
@@ -26,7 +25,7 @@ const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback 
     const feedbackData = { orderId, rating, title, comments };
     onSubmitFeedback(feedbackData);
     setSubmitted(true);
-    // Auto close after 2 seconds
+    // Auto-close after 2 seconds
     setTimeout(() => {
       closePopup();
     }, 2000);
@@ -39,7 +38,9 @@ const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback 
           <p className="feedback-popup__thankyou">Thank you for your feedback!</p>
         ) : (
           <>
-            <h2 className="feedback-popup__title">Provide Feedback</h2>
+            <h2 className="feedback-popup__title">
+              {initialFeedback ? 'Edit Feedback' : 'Provide Feedback'}
+            </h2>
             <form className="feedback-popup__form" onSubmit={handleSubmit}>
               <div className="feedback-popup__rating">
                 <span>Rating:</span>
