@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
+import FeedbackPopup from '../../ui/FeedbackPopup'; // Feedback popup component
 
 // Helper to determine collage container size and grid layout based on item count
 const getCollageStyle = (count) => {
   let containerSize, gridTemplateColumns;
-  // Example logic: adjust container size and layout based on count
   if (count === 1) {
     containerSize = 120;
     gridTemplateColumns = '1fr';
@@ -16,7 +16,6 @@ const getCollageStyle = (count) => {
     containerSize = 120;
     gridTemplateColumns = 'repeat(2, 1fr)';
   } else {
-    // For more than 4 items, use a 3-column grid
     containerSize = 120;
     gridTemplateColumns = 'repeat(3, 1fr)';
   }
@@ -27,6 +26,7 @@ const BuyerDashboard = () => {
   // Orders state for "My Purchases"
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [feedbackOrderId, setFeedbackOrderId] = useState(null); // Order ID for which to show feedback popup
 
   // Dummy order data updated to support multiple items per order
   useEffect(() => {
@@ -42,7 +42,7 @@ const BuyerDashboard = () => {
       },
       {
         id: 'A1002',
-        status: 'Delivered',
+        status: 'Delivered', // Delivered -> feedback is available
         date: '2023-04-25',
         items: [
           { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
@@ -88,7 +88,8 @@ const BuyerDashboard = () => {
   }, []);
 
   // Wishlist handlers – including "Move to Cart"
-  const handleRemoveWishlist = (id) => setWishlist(wishlist.filter(item => item.id !== id));
+  const handleRemoveWishlist = (id) =>
+    setWishlist(wishlist.filter(item => item.id !== id));
   const handleMoveToCart = (item) => {
     setWishlist(wishlist.filter(w => w.id !== item.id));
     const existingCartItem = cart.find(c => c.id === item.id);
@@ -105,17 +106,24 @@ const BuyerDashboard = () => {
   const handleWishlistSeeLess = () => setWishlistVisible(5);
   const handleCartSeeLess = () => setCartVisible(5);
 
+  // Feedback submission handler (simulate CRUD)
+  const handleFeedbackSubmit = (feedbackData) => {
+    console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
+    // Here you might call your API to store feedback.
+    setFeedbackOrderId(null);
+  };
+
   return (
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
       
-      {/* Quick Links: Wishlist and Cart icons with links */}
+      {/* Quick links with icons to Wishlist and Cart */}
       <div className="buyer-dashboard__quick-links">
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
       </div>
 
-      {/* Render orders with a refined collage style */}
+      {/* Render orders with collage style */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
@@ -149,17 +157,36 @@ const BuyerDashboard = () => {
                   <p className="order-card__status">Status: {order.status}</p>
                   <p className="order-card__date">Date: {order.date}</p>
                 </div>
-                <button
-                  className="button order-card__track"
-                  onClick={() => alert(`Tracking order ${order.id}`)}
-                >
-                  Track Order
-                </button>
+                <div>
+                  <button
+                    className="button order-card__track"
+                    onClick={() => alert(`Tracking order ${order.id}`)}
+                  >
+                    Track Order
+                  </button>
+                  {order.status === 'Delivered' && (
+                    <button
+                      className="button order-card__feedback"
+                      onClick={() => setFeedbackOrderId(order.id)}
+                    >
+                      Give Feedback
+                    </button>
+                  )}
+                </div>
               </div>
             );
           })
         )}
       </div>
+
+      {/* Feedback Popup for Delivered Orders */}
+      {feedbackOrderId && (
+        <FeedbackPopup
+          orderId={feedbackOrderId}
+          closePopup={() => setFeedbackOrderId(null)}
+          onSubmitFeedback={handleFeedbackSubmit}
+        />
+      )}
 
       {/* Wishlist Section */}
       <section className="buyer-dashboard__wishlist" id="wishlist-section">
