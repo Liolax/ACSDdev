@@ -1,23 +1,23 @@
 @import '../base.scss';
 @import '../mixins.scss';
 
-.product-grid {
+.standard-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: calc(var(--spacing-unit) * 2);
-  padding: calc(var(--spacing-unit) * 2);
-  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: calc(var(--spacing-unit) * 2.5);
+  padding: 0 calc(var(--spacing-unit) * 2);
+
   &__card {
     background: #fff;
     border-radius: 8px;
     box-shadow: var(--shadow-light);
     padding: calc(var(--spacing-unit) * 2);
     transition: box-shadow var(--transition-default);
-    
+
     &:hover {
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
     }
-    
+
     &__image {
       width: 100%;
       height: 160px;
@@ -25,17 +25,36 @@
       border-radius: 6px;
       margin-bottom: calc(var(--spacing-unit) * 1.5);
     }
-    
+
     &__title {
       color: var(--color-dark-primary);
       font-size: 1.2rem;
       margin-bottom: var(--spacing-unit);
+      text-align: center;
     }
-    
+
     &__price {
       color: var(--color-primary);
       font-size: 1rem;
       margin-bottom: var(--spacing-unit);
+      text-align: center;
+    }
+
+    .button {
+      background-color: $secondary-color; 
+      color: #fff;
+      padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-small);
+      @include transition(background-color);
+
+      &:hover,
+      &:focus {
+        background-color: darken($secondary-color, 10%);
+      }
     }
   }
 }

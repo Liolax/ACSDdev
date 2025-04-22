@@ -1,0 +1,24 @@
+@import '../base.scss';
+@import '../mixins.scss';
+
+.market-page {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--color-bg);
+
+  &__main-content {
+    padding: calc(var(--spacing-unit) * 2);
+  }
+
+  &__title {
+    font-size: var(--font-size-heading);
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    color: var(--color-primary);
+  }
+
+  &__description {
+    text-align: center;
+    font-size: var(--font-size-base);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+}

@@ -1,3 +1,6 @@
+@import '../base.scss';
+@import '../mixins.scss';
+
 /* Styles for the Home Page */
 .home-page {
   padding: calc(var(--spacing-unit) * 3);

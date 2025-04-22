@@ -15,11 +15,10 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      return config;
     } catch (error) {
       console.error('Error retrieving token:', error);
-      return config;
     }
+    return config;
   },
   (error) => {
     console.error('Error in Axios request interceptor:', error);
@@ -30,8 +29,14 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      console.warn('Unauthorized access - consider redirecting to login page');
+    if (error.response) {
+      if (error.response.status === 401) {
+        console.warn('Unauthorized access - consider redirecting to login page.');
+      }
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Axios error:', error.message);
     }
     return Promise.reject(error);
   }

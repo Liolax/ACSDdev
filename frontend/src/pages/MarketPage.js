@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
+import StandardProductGrid from '../components/shared/StandardProductGrid';
 import '../assets/styles/pages/_market.scss';
 
 const MarketPage = () => {
@@ -13,7 +14,7 @@ const MarketPage = () => {
         <p className="market-page__description">
           Browse our available products and discover great deals!
         </p>
-        {/* Additional market content */}
+        <StandardProductGrid />
       </main>
       <Footer />
     </div>

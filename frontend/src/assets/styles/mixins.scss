@@ -22,7 +22,11 @@
 }
 
 /* Transition mixin */
-@mixin transition($property: all, $duration: var(--transition-default), $ease: ease-in-out) {
+@mixin transition(
+  $property: all,
+  $duration: var(--transition-default),
+  $ease: ease-in-out
+) {
   transition: #{$property} #{$duration} #{$ease};
 }
 

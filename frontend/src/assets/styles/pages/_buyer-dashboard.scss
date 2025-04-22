@@ -1,21 +1,227 @@
-/* Styles for the Buyer Dashboard page */
+@import '../base.scss';
+@import '../mixins.scss';
 
-   .buyer-dashboard {
-    padding: calc(var(--spacing-unit) * 3);
-    background-color: #fff; // Card-like background
-    color: var(--color-dark-primary);
-  }
+/* Buyer Dashboard (My Purchases) Page Styles */
+.buyer-dashboard {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: #fff;
+  color: var(--color-dark-primary);
   
-  .buyer-dashboard__header {
+  /* My Purchases - Styled Like "Welcome to the Market" */
+  &__header {
+    font-size: var(--font-size-heading);
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 2);
-    font-size: var(--font-size-heading);
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
+  }
+
+  /* Quick Links to Wishlist & Cart - Right-Aligned */
+  &__quick-links {
+    display: flex;
+    justify-content: flex-end; // Right-align the links
+    gap: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    
+    & .buyer-dashboard__quick-link {
+      font-size: var(--font-size-base);
+      color: var(--color-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 0.5);
+      transition: color var(--transition-default);
+
+      &:hover {
+        color: var(--color-secondary); // Change to secondary color on hover
+        text-decoration: none;
+      }
+    }
   }
   
-  .buyer-dashboard__content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: calc(var(--spacing-unit) * 3);
+  &__orders {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1.5);
   }
-  
+}
+
+/* Order Card – My Purchases */
+.order-card {
+  display: flex;
+  align-items: center;  
+  padding: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  gap: calc(var(--spacing-unit) * 1.5);
+
+  /* Order image styling */
+  &__image {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.25);
+    
+    /* Remove extra margins */
+    p, h3 {
+      margin: 0;
+    }
+  }
+
+  .order-card__id {
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: calc(var(--spacing-unit) * 0.25);
+  }
+
+  .order-card__product {
+    font-size: 1rem;
+  }
+
+  .order-card__status,
+  .order-card__date {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  /* Bold price inside Order Card */
+  .order-card__price {
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
+  &__track {
+    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Wishlist Section Styles */
+.buyer-dashboard__wishlist {
+  margin-top: calc(var(--spacing-unit) * 4);
+}
+
+.buyer-dashboard__wishlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.buyer-dashboard__wishlist-item {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.buyer-dashboard__wishlist-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.buyer-dashboard__wishlist-item > span {
+  flex: 1;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Bold price inside Wishlist */
+.buyer-dashboard__wishlist-price {
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.buyer-dashboard__wishlist-actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 0.5);
+  margin-left: calc(var(--spacing-unit) * 1);
+}
+
+.buyer-dashboard__wishlist-controls {
+  display: flex;
+  justify-content: center;  // Center-align the buttons
+  margin-top: calc(var(--spacing-unit) * 1.5);
+}
+
+/* Cart Section Styles */
+.buyer-dashboard__cart {
+  margin-top: calc(var(--spacing-unit) * 4);
+}
+
+.buyer-dashboard__cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.buyer-dashboard__cart-item {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.buyer-dashboard__cart-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.buyer-dashboard__cart-item > span {
+  flex: 1;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Bold price inside Cart */
+.buyer-dashboard__cart-price {
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.buyer-dashboard__cart-controls {
+  display: flex;
+  justify-content: center;  // Center-align the buttons
+  margin-top: calc(var(--spacing-unit) * 1.5);
+}
+
+.buyer-dashboard__cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: calc(var(--spacing-unit) * 1.5);
+}
+
+/* Bold Total Price */
+.buyer-dashboard__cart-total {
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.buyer-dashboard__pay-button {
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  font-size: var(--font-size-base);
+}

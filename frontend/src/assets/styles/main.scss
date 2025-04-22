@@ -10,18 +10,17 @@
 @import 'components/_productCard.scss';
 @import 'components/_feedback.scss';
 @import 'components/_role-selection.scss';
+@import 'components/_products.scss';
 
 // Page-Specific Styles
 @import 'pages/_pageContainer.scss';
 @import 'pages/_seller-dashboard.scss';
 @import 'pages/_buyer-dashboard.scss';
 @import 'pages/_home.scss';
-@import 'pages/_wishlist.scss';
 @import 'pages/_shipping-details.scss';
 @import 'pages/_contact.scss';
 @import 'pages/_login.scss';
-@import 'pages/_market.scss'; // Ensure this file exists with your Market page styles
+@import 'pages/_market.scss';
 
 // Shared Component Styles
-@import 'shared/_cart.scss';
-@import 'shared/_productGrid.scss';
+@import 'shared/_standardProductGrid.scss';

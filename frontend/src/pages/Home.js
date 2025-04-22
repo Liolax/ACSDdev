@@ -6,25 +6,18 @@ import OurCommunity from '../components/OurCommunity';
 import OurProducts from '../components/OurProducts';
 import LoginPopup from '../components/LoginPopup';
 import { handleLogin } from '../services/authUtils';
+import '../assets/styles/pages/_home.scss';
 
 const Home = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
-
-  // Read the user's role from localStorage.
   const userRole = localStorage.getItem('userRole') || null;
 
-  const openLoginPopup = () => {
-    setShowLoginPopup(true);
-  };
-
-  const closeLoginPopup = () => {
-    setShowLoginPopup(false);
-  };
+  const openLoginPopup = () => setShowLoginPopup(true);
+  const closeLoginPopup = () => setShowLoginPopup(false);
 
   return (
     <div className="page-container home-page">
-      {/* Pass userRole to Header so logged-in buyers/sellers see their nav links */}
       <Header userRole={userRole} onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />

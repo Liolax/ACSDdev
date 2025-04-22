@@ -10,6 +10,10 @@ const OurCommunity = () => {
         residents, tourists, and ethically minded consumers around the globe.
       </p>
       <p>
+        Whether you're a buyer looking to purchase unique handmade items or a seller hoping to share your craftsmanship with the world, 
+        simply log in as a buyer to buy or as a seller to sell. Our platform supports both sides of the market seamlessly.
+      </p>
+      <p>
         Our unique approach preserves cultural heritage and supports sustainable businesses. By integrating dynamic
         shipping options and real-time exchange rate conversions tailored to user geolocation, our platform delivers
         a seamless and purposeful shopping experience.
