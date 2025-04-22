@@ -6,8 +6,8 @@
   padding: calc(var(--spacing-unit) * 3);
   background-color: #fff;
   color: var(--color-dark-primary);
-  
-  /* My Purchases - Styled Like "Welcome to the Market" */
+
+  /* My Purchases - Mimic "Welcome to the Market" header style */
   &__header {
     font-size: var(--font-size-heading);
     text-align: center;
@@ -18,10 +18,10 @@
   /* Quick Links to Wishlist & Cart - Right-Aligned */
   &__quick-links {
     display: flex;
-    justify-content: flex-end; // Right-align the links
+    justify-content: flex-end;
     gap: calc(var(--spacing-unit) * 2);
     margin-bottom: calc(var(--spacing-unit) * 2);
-    
+
     & .buyer-dashboard__quick-link {
       font-size: var(--font-size-base);
       color: var(--color-primary);
@@ -32,77 +32,65 @@
       transition: color var(--transition-default);
 
       &:hover {
-        color: var(--color-secondary); // Change to secondary color on hover
+        color: var(--color-secondary);
         text-decoration: none;
       }
     }
   }
-  
+
   &__orders {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing-unit) * 1.5);
+    gap: calc(var(--spacing-unit) * 2);
   }
 }
 
 /* Order Card – My Purchases */
 .order-card {
   display: flex;
-  align-items: center;  
+  align-items: center;
   padding: calc(var(--spacing-unit) * 1.5);
-  border: 1px solid var(--color-primary-light);
+  background-color: #fff;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   gap: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid transparent;
 
-  /* Order image styling within ordered items */
-  &__image {
-    width: 64px;
-    height: 64px;
-    object-fit: cover;
-    border-radius: 6px;
+  &:hover {
+    border-color: var(--color-primary-light);
   }
 
   &__info {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing-unit) * 0.25);
-    
-    /* Remove extra margins */
-    p, h3 {
-      margin: 0;
-    }
+    gap: calc(var(--spacing-unit) * 0.5);
   }
 
   .order-card__id {
     font-size: 1.2rem;
     font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
     margin-bottom: calc(var(--spacing-unit) * 0.25);
   }
 
-  /* Order items displayed horizontally */
+  /* Order items displayed horizontally with commas between */
   .order-card__items-list {
     display: inline-flex;
     align-items: center;
-    margin: calc(var(--spacing-unit) * 0.5) 0;
     flex-wrap: wrap;
-  }
-  
-  /* Each order item */
-  .order-card__item {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 0.5);
-  }
-  
-  /* Separator for comma styling */
-  .order-card__separator {
-    margin: 0 calc(var(--spacing-unit) * 0.25);
+    margin: calc(var(--spacing-unit) * 0.5) 0;
+    font-size: 1rem;
   }
 
-  .order-card__product {
-    font-size: 1rem;
+  .order-card__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .order-card__separator {
+    padding: 0 calc(var(--spacing-unit) * 0.25);
+    color: #888;
   }
 
   .order-card__status,
@@ -111,20 +99,23 @@
     color: var(--color-text);
   }
 
-  /* Bold price inside Order Card if needed */
-  .order-card__price {
-    font-size: 1rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-  }
-
   &__track {
     padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
     font-size: var(--font-size-base);
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #e68900;
+    }
   }
 }
 
-/* Wishlist Section Styles */
+/* Wishlist Section Styles (unchanged from before) */
 .buyer-dashboard__wishlist {
   margin-top: calc(var(--spacing-unit) * 4);
 }
@@ -175,11 +166,11 @@
 
 .buyer-dashboard__wishlist-controls {
   display: flex;
-  justify-content: center;  // Center-align the buttons
+  justify-content: center;
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
-/* Cart Section Styles */
+/* Cart Section Styles (unchanged) */
 .buyer-dashboard__cart {
   margin-top: calc(var(--spacing-unit) * 4);
 }
@@ -223,7 +214,7 @@
 
 .buyer-dashboard__cart-controls {
   display: flex;
-  justify-content: center;  // Center-align the buttons
+  justify-content: center;
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 

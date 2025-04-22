@@ -15,14 +15,8 @@ const BuyerDashboard = () => {
         status: 'Shipped',
         date: '2023-05-01',
         items: [
-          {
-            name: 'Handwoven Basket',
-            image: 'https://picsum.photos/100/100?random=11'
-          },
-          {
-            name: 'Handwoven Rug',
-            image: 'https://picsum.photos/100/100?random=21'
-          }
+          { name: 'Handwoven Basket', image: 'https://picsum.photos/100/100?random=11' },
+          { name: 'Handwoven Rug', image: 'https://picsum.photos/100/100?random=21' }
         ]
       },
       {
@@ -30,10 +24,7 @@ const BuyerDashboard = () => {
         status: 'Delivered',
         date: '2023-04-25',
         items: [
-          {
-            name: 'Artisan Vase',
-            image: 'https://picsum.photos/100/100?random=12'
-          }
+          { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
         ]
       },
       {
@@ -41,18 +32,9 @@ const BuyerDashboard = () => {
         status: 'Processing',
         date: '2023-05-03',
         items: [
-          {
-            name: 'Bog Oak Bowl',
-            image: 'https://picsum.photos/100/100?random=13'
-          },
-          {
-            name: 'Antique Plate',
-            image: 'https://picsum.photos/100/100?random=14'
-          },
-          {
-            name: 'Nonewooden Spoon',
-            image: 'https://picsum.photos/100/100?random=15'
-          }
+          { name: 'Bog Oak Bowl', image: 'https://picsum.photos/100/100?random=13' },
+          { name: 'Antique Plate', image: 'https://picsum.photos/100/100?random=14' },
+          { name: 'Nonewooden Spoon', image: 'https://picsum.photos/100/100?random=15' }
         ]
       }
     ];
@@ -107,7 +89,7 @@ const BuyerDashboard = () => {
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
 
-      {/* Render orders with multiple items displayed horizontally, separated by commas */}
+      {/* Render orders with multiple items displayed horizontally and separated by commas */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
