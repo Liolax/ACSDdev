@@ -7,7 +7,7 @@
   background-color: #fff;
   color: var(--color-dark-primary);
 
-  /* My Purchases header styled like "Welcome to the Market" */
+  /* My Purchases header - Mimic "Welcome to the Market" */
   &__header {
     font-size: var(--font-size-heading);
     text-align: center;
@@ -18,7 +18,7 @@
   /* Quick Links to Wishlist & Cart - Right-Aligned */
   &__quick-links {
     display: flex;
-    justify-content: flex-end; /* Right-align the links */
+    justify-content: flex-end; // Right-align the links
     gap: calc(var(--spacing-unit) * 2);
     margin-bottom: calc(var(--spacing-unit) * 2);
 
@@ -32,7 +32,7 @@
       transition: color var(--transition-default);
 
       &:hover {
-        color: var(--color-secondary); /* Change to secondary color on hover */
+        color: var(--color-secondary); // Change to secondary color on hover
         text-decoration: none;
       }
     }
@@ -60,20 +60,19 @@
     border-color: var(--color-primary-light);
   }
 
-  /* Collage container on the left */
+  /* Collage container on the left with fixed dimensions */
   &__collage {
+    width: 100px;
+    height: 100px;
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--spacing-unit) * 0.25);
-    width: 100px; /* Fixed collage width */
   }
   
-  /* Mini image style */
+  /* Mini image style – the width/height will be set inline dynamically */
   &__mini-image {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
     border-radius: 4px;
+    object-fit: cover;
   }
   
   /* Details container on the right */
@@ -171,7 +170,7 @@
 
 .buyer-dashboard__wishlist-controls {
   display: flex;
-  justify-content: center; /* Center-align the buttons */
+  justify-content: center;  // Center-align the buttons
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -219,7 +218,7 @@
 
 .buyer-dashboard__cart-controls {
   display: flex;
-  justify-content: center; /* Center-align the buttons */
+  justify-content: center;  // Center-align the buttons
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 

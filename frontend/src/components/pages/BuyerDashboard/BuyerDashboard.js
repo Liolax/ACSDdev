@@ -67,19 +67,20 @@ const BuyerDashboard = () => {
   }, []);
 
   // Wishlist handlers – including "Move to Cart"
-  const handleRemoveWishlist = (id) => setWishlist(wishlist.filter(item => item.id !== id));
+  const handleRemoveWishlist = (id) =>
+    setWishlist(wishlist.filter((item) => item.id !== id));
   const handleMoveToCart = (item) => {
-    setWishlist(wishlist.filter(w => w.id !== item.id));
-    const existingCartItem = cart.find(c => c.id === item.id);
+    setWishlist(wishlist.filter((w) => w.id !== item.id));
+    const existingCartItem = cart.find((c) => c.id === item.id);
     if (existingCartItem) {
-      setCart(cart.map(c => c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c));
+      setCart(cart.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
   // Cart handlers
-  const handleRemoveCart = (id) => setCart(cart.filter(item => item.id !== id));
+  const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
   const handlePay = () => alert('Proceed to payment and shipping selection.');
   const handleWishlistSeeLess = () => setWishlistVisible(5);
   const handleCartSeeLess = () => setCartVisible(5);
@@ -88,7 +89,7 @@ const BuyerDashboard = () => {
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
 
-      {/* Render orders with collage style */}
+      {/* Render orders with left-side collage and right-side details */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
@@ -102,6 +103,11 @@ const BuyerDashboard = () => {
                     src={item.image}
                     alt={item.name}
                     className="order-card__mini-image"
+                    // Set inline styles: width as percentage of container based on number of items
+                    style={{
+                      width: `${100 / order.items.length}%`,
+                      height: '100%'
+                    }}
                   />
                 ))}
               </div>
