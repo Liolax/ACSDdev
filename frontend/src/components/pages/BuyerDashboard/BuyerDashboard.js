@@ -26,7 +26,11 @@ const BuyerDashboard = () => {
   // Orders state for "My Purchases"
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  const [feedbackOrderId, setFeedbackOrderId] = useState(null); // Order ID for which to show feedback popup
+  
+  // State to hold feedback data for each order (key = order id)
+  const [feedbackByOrder, setFeedbackByOrder] = useState({});
+  // Order ID for which the Feedback popup is open
+  const [feedbackOrderId, setFeedbackOrderId] = useState(null);
 
   // Dummy order data updated to support multiple items per order
   useEffect(() => {
@@ -42,7 +46,7 @@ const BuyerDashboard = () => {
       },
       {
         id: 'A1002',
-        status: 'Delivered',
+        status: 'Delivered', // Delivered -> feedback is available
         date: '2023-04-25',
         items: [
           { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
@@ -109,14 +113,24 @@ const BuyerDashboard = () => {
   // Feedback submission handler (simulate CRUD)
   const handleFeedbackSubmit = (feedbackData) => {
     console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
+    setFeedbackByOrder(prev => ({ ...prev, [feedbackData.orderId]: feedbackData }));
     setFeedbackOrderId(null);
+  };
+
+  // Handler to delete existing feedback
+  const handleFeedbackDelete = (orderId) => {
+    setFeedbackByOrder(prev => {
+      const newFeedback = { ...prev };
+      delete newFeedback[orderId];
+      return newFeedback;
+    });
   };
 
   return (
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
       
-      {/* Quick Links for Wishlist and Cart */}
+      {/* Quick Links: Wishlist and Cart icons */}
       <div className="buyer-dashboard__quick-links">
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
@@ -164,12 +178,31 @@ const BuyerDashboard = () => {
                     Track Order
                   </button>
                   {order.status === 'Delivered' && (
-                    <button
-                      className="button order-card__feedback"
-                      onClick={() => setFeedbackOrderId(order.id)}
-                    >
-                      Give Feedback
-                    </button>
+                    <>
+                      {feedbackByOrder[order.id] ? (
+                        <>
+                          <button
+                            className="button order-card__feedback"
+                            onClick={() => setFeedbackOrderId(order.id)}
+                          >
+                            Edit Feedback
+                          </button>
+                          <button
+                            className="button order-card__feedback"
+                            onClick={() => handleFeedbackDelete(order.id)}
+                          >
+                            Delete Feedback
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="button order-card__feedback"
+                          onClick={() => setFeedbackOrderId(order.id)}
+                        >
+                          Give Feedback
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -182,6 +215,7 @@ const BuyerDashboard = () => {
       {feedbackOrderId && (
         <FeedbackPopup
           orderId={feedbackOrderId}
+          initialFeedback={feedbackByOrder[feedbackOrderId] || null}
           closePopup={() => setFeedbackOrderId(null)}
           onSubmitFeedback={handleFeedbackSubmit}
         />

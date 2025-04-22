@@ -94,3 +94,10 @@
   color: var(--color-primary);
   cursor: pointer;
 }
+
+.feedback-popup__thankyou {
+  font-size: var(--font-size-base);
+  text-align: center;
+  color: var(--color-primary);
+  padding: calc(var(--spacing-unit) * 1);
+}
