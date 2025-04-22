@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
 
@@ -53,34 +53,33 @@ const BuyerDashboard = () => {
       id: index + 1,
       name: `Wishlist Item ${index + 1}`,
       price: parseFloat((Math.random() * 50).toFixed(2)),
-      image: `https://picsum.photos/300/200?random=${index + 101}`,
+      image: `https://picsum.photos/300/200?random=${index + 101}`
     }));
     const dummyCart = Array.from({ length: 8 }).map((_, index) => ({
       id: index + 1,
       name: `Cart Item ${index + 1}`,
       price: parseFloat((Math.random() * 75).toFixed(2)),
       quantity: Math.floor(Math.random() * 3) + 1,
-      image: `https://picsum.photos/300/200?random=${index + 201}`,
+      image: `https://picsum.photos/300/200?random=${index + 201}`
     }));
     setWishlist(dummyWishlist);
     setCart(dummyCart);
   }, []);
 
   // Wishlist handlers – including "Move to Cart"
-  const handleRemoveWishlist = (id) =>
-    setWishlist(wishlist.filter((item) => item.id !== id));
+  const handleRemoveWishlist = (id) => setWishlist(wishlist.filter(item => item.id !== id));
   const handleMoveToCart = (item) => {
-    setWishlist(wishlist.filter((w) => w.id !== item.id));
-    const existingCartItem = cart.find((c) => c.id === item.id);
+    setWishlist(wishlist.filter(w => w.id !== item.id));
+    const existingCartItem = cart.find(c => c.id === item.id);
     if (existingCartItem) {
-      setCart(cart.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
+      setCart(cart.map(c => c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c));
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
   // Cart handlers
-  const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
+  const handleRemoveCart = (id) => setCart(cart.filter(item => item.id !== id));
   const handlePay = () => alert('Proceed to payment and shipping selection.');
   const handleWishlistSeeLess = () => setWishlistVisible(5);
   const handleCartSeeLess = () => setCartVisible(5);
@@ -89,28 +88,28 @@ const BuyerDashboard = () => {
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
 
-      {/* Render orders with multiple items displayed horizontally and separated by commas */}
+      {/* Render orders with collage style */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
         ) : (
-          orders.map((order) => (
+          orders.map(order => (
             <div key={order.id} className="order-card">
-              <div className="order-card__info">
+              <div className="order-card__collage">
+                {order.items.map((item, idx) => (
+                  <img
+                    key={idx}
+                    src={item.image}
+                    alt={item.name}
+                    className="order-card__mini-image"
+                  />
+                ))}
+              </div>
+              <div className="order-card__details">
                 <h3 className="order-card__id">Order {order.id}</h3>
-                <div className="order-card__items-list">
-                  {order.items.map((item, idx) => (
-                    <Fragment key={idx}>
-                      <span className="order-card__item">
-                        <img src={item.image} alt={item.name} className="order-card__image" />
-                        <span className="order-card__product">{item.name}</span>
-                      </span>
-                      {idx !== order.items.length - 1 && (
-                        <span className="order-card__separator">, </span>
-                      )}
-                    </Fragment>
-                  ))}
-                </div>
+                <p className="order-card__items-names">
+                  {order.items.map(item => item.name).join(', ')}
+                </p>
                 <p className="order-card__status">Status: {order.status}</p>
                 <p className="order-card__date">Date: {order.date}</p>
               </div>
