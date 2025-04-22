@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
-import FeedbackPopup from '../../ui/FeedbackPopup'; // Feedback popup component
+import FeedbackPopup from '../../ui/FeedbackPopup'; // New FeedbackPopup component
 
 // Helper to determine collage container size and grid layout based on item count
 const getCollageStyle = (count) => {
@@ -42,7 +42,7 @@ const BuyerDashboard = () => {
       },
       {
         id: 'A1002',
-        status: 'Delivered', // Delivered -> feedback is available
+        status: 'Delivered',
         date: '2023-04-25',
         items: [
           { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
@@ -109,7 +109,6 @@ const BuyerDashboard = () => {
   // Feedback submission handler (simulate CRUD)
   const handleFeedbackSubmit = (feedbackData) => {
     console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
-    // Here you might call your API to store feedback.
     setFeedbackOrderId(null);
   };
 
@@ -117,12 +116,12 @@ const BuyerDashboard = () => {
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
       
-      {/* Quick links with icons to Wishlist and Cart */}
+      {/* Quick Links for Wishlist and Cart */}
       <div className="buyer-dashboard__quick-links">
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
       </div>
-
+      
       {/* Render orders with collage style */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (

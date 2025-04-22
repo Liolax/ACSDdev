@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
   },
 });
 
+// Request Interceptor: attach token if available
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
@@ -26,12 +27,15 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+// Response Interceptor: handle error cases and "duplicate-if" merged
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
         console.warn('Unauthorized access - consider redirecting to login page.');
+      } else {
+        console.error('Response error:', error.response.data);
       }
     } else if (error.request) {
       console.error('No response received:', error.request);

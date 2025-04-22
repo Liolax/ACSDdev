@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../../assets/styles/components/_feedback-popup.scss';
+import '../../assets/styles/components/_feedback-popup.scss';
 
 const FeedbackPopup = ({ orderId, closePopup, onSubmitFeedback }) => {
   const [rating, setRating] = useState(5);
@@ -19,7 +19,7 @@ const FeedbackPopup = ({ orderId, closePopup, onSubmitFeedback }) => {
         <form className="feedback-popup__form" onSubmit={handleSubmit}>
           <div className="feedback-popup__rating">
             <span>Rating:</span>
-            {[1, 2, 3, 4, 5].map((num) => (
+            {[1, 2, 3, 4, 5].map(num => (
               <label key={num} className="feedback-popup__rating-label">
                 <input
                   type="radio"

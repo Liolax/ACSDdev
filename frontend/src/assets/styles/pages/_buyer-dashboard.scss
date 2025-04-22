@@ -32,7 +32,7 @@
       transition: color var(--transition-default);
 
       &:hover {
-        color: var(--color-secondary); // Change to secondary color on hover
+        color: var(--color-secondary);
         text-decoration: none;
       }
     }
@@ -113,11 +113,12 @@
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: #e68900;
+      /* Instead of darken(), we use a filter */
+      filter: brightness(90%);
     }
   }
 
-  /* New Feedback button styling (for delivered orders) */
+  /* New Feedback button for Delivered orders */
   &__feedback {
     padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
     font-size: var(--font-size-base);
@@ -126,11 +127,11 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: filter 0.3s;
     margin-left: calc(var(--spacing-unit) * 1);
 
     &:hover {
-      background-color: darken(var(--color-secondary), 10%);
+      filter: brightness(90%);
     }
   }
 }
@@ -186,7 +187,7 @@
 
 .buyer-dashboard__wishlist-controls {
   display: flex;
-  justify-content: center;  // Center-align the buttons
+  justify-content: center;
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -234,7 +235,7 @@
 
 .buyer-dashboard__cart-controls {
   display: flex;
-  justify-content: center;  // Center-align the buttons
+  justify-content: center;
   margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
