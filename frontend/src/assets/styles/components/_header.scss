@@ -4,7 +4,7 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  /* No background here—background is on the .header-bg wrapper */
+  /* No background here; background is applied by .header-bg wrapper */
   padding: calc(var(--spacing-unit) * 2);
   display: flex;
   align-items: center;
@@ -14,7 +14,6 @@
   &__logo {
     display: flex;
     align-items: center;
-    margin-right: calc(var(--spacing-unit) * 2);
 
     a {
       display: flex;
@@ -34,14 +33,14 @@
 
   @keyframes rotate {
     from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
   }
 
   &__logo-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center; /* Center-align the logo main and slogan */
+    text-align: center;  /* Center the logo text */
   }
 
   &__logo-main {
@@ -60,16 +59,11 @@
     line-height: 1;
   }
 
-  &__mobile-toggle {
-    display: none;
-    cursor: pointer;
-  }
-
   &__nav {
     display: flex;
     gap: calc(var(--spacing-unit) * 2);
     align-items: center;
-
+    
     a,
     .header__nav-btn {
       color: #fff;
@@ -82,14 +76,11 @@
       &:hover,
       &:focus {
         background-color: var(--color-primary-light);
-        color: #fff;
       }
     }
 
     .header__link.active {
       border-bottom: 2px solid var(--color-primary-light);
-      color: #fff;
-      background: none;
     }
 
     .header__nav-btn {
@@ -100,25 +91,29 @@
     }
   }
 
+  &__mobile-toggle {
+    display: none;
+    cursor: pointer;
+  }
+
+  /* Responsive styling */
   @media (max-width: 768px) {
+    &__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background-color: var(--color-primary);
+      padding: calc(var(--spacing-unit) * 1);
+      gap: calc(var(--spacing-unit) * 1);
+      display: none;  /* Hidden by default */
+    }
+    &__nav.open {
+      display: flex;
+    }
     &__mobile-toggle {
       display: block;
-    }
-    &__nav {
-      flex-direction: column;
-      align-items: flex-end;
-      width: 100%;
-      display: none;
-
-      &.open {
-        display: flex;
-      }
-
-      a,
-      .header__nav-btn {
-        text-align: right;
-        width: 100%;
-      }
     }
   }
 }

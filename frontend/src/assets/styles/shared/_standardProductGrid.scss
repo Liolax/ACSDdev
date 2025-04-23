@@ -8,39 +8,46 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: calc(var(--spacing-unit) * 2.5);
-  padding: 0; /* Remove unnecessary horizontal padding */
+  padding: 0; /* No extra horizontal padding */
 
   &__card {
     background: #fff;
     border-radius: 8px;
     box-shadow: var(--shadow-light);
     padding: calc(var(--spacing-unit) * 2);
-    min-height: 350px; /* Consistent card height */
+    min-height: 350px;
     transition: box-shadow var(--transition-default);
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Left-align content inside cards */
+    align-items: flex-start;  /* Left-align content */
     text-align: left;
 
     &:hover {
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
     }
 
-    .button {
-      background-color: base.$secondary-color;
-      color: #fff;
-      padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: var(--font-weight-bold);
-      font-size: var(--font-size-small);
-      @include mixins.transition(background-color);
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: calc(var(--spacing-unit) * 1);
+    }
 
-      &:hover,
-      &:focus {
-        background-color: color.adjust(base.$secondary-color, $lightness: -10%);
-      }
+    h3 {
+      margin: 0 0 calc(var(--spacing-unit) * 0.5) 0;
+      font-size: var(--font-size-base);
+      color: var(--color-dark-primary);
+    }
+
+    p {
+      margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+      font-size: var(--font-size-base);
+      color: var(--color-primary);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .button {
+      margin-top: auto;  /* Push button to the bottom */
     }
   }
 }
