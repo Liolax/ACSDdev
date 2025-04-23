@@ -7,10 +7,9 @@
   border-radius: 8px;
   box-shadow: var(--shadow-light);
   display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 2); // Spacing between image and text
+  flex-direction: column; // Display image above content
   padding: calc(var(--spacing-unit) * 2);
-  min-height: 180px; // Ensure consistent height among cards
+  min-height: 250px; // Increase card height for better proportions
   @include mixins.transition(box-shadow);
 
   &:hover {
@@ -18,28 +17,28 @@
   }
 
   &__image {
-    width: 160px;
-    height: 160px;
+    width: 100%;         // Full width image
+    height: 200px;       // Fixed height for uniformity
     object-fit: cover;
     border-radius: 6px;
-    flex-shrink: 0; // Prevents the image from resizing
+    margin-bottom: calc(var(--spacing-unit) * 1);
   }
   
   &__content {
-    flex: 1; // Ensures the text takes up remaining space
-    text-align: left;
-
+    width: 100%;
+    text-align: left; // Left-align text in the content section
+    
     &__title {
       color: var(--color-dark-primary);
-      font-size: 1.2rem;
-      margin-bottom: var(--spacing-unit);
+      font-size: 1.4rem;
+      margin: 0 0 calc(var(--spacing-unit) * 0.5) 0;
     }
     
     &__price {
       color: var(--color-primary);
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: bold;
-      margin-bottom: calc(var(--spacing-unit) * 1);
+      margin: 0 0 calc(var(--spacing-unit) * 1) 0;
     }
   }
 }

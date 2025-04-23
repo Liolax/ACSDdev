@@ -1,10 +1,8 @@
 @use "../mixins" as mixins;
 
 .header {
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
-  /* No background here; background is applied by .header-bg wrapper */
+  background: var(--color-primary); // Use primary color as background
   padding: calc(var(--spacing-unit) * 2);
   display: flex;
   align-items: center;
@@ -40,7 +38,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;  /* Center the logo text */
+    text-align: center;  /* Center logo text and slogan */
   }
 
   &__logo-main {
@@ -60,7 +58,9 @@
   }
 
   &__nav {
+    flex: 1;  // Take full available space in the header
     display: flex;
+    justify-content: center;  // Center the nav items
     gap: calc(var(--spacing-unit) * 2);
     align-items: center;
     
@@ -72,17 +72,16 @@
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border-radius: 4px;
       @include mixins.transition(background-color);
-
       &:hover,
       &:focus {
         background-color: var(--color-primary-light);
       }
     }
-
+    
     .header__link.active {
       border-bottom: 2px solid var(--color-primary-light);
     }
-
+    
     .header__nav-btn {
       background: none;
       border: none;
@@ -98,16 +97,15 @@
 
   /* Responsive styling */
   @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
     &__nav {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
+      width: 100%;
       flex-direction: column;
       background-color: var(--color-primary);
       padding: calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 1);
-      display: none;  /* Hidden by default */
+      display: none; // Hidden by default on mobile
     }
     &__nav.open {
       display: flex;

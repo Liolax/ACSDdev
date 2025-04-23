@@ -1,3 +1,4 @@
+// src/services/authUtils.js
 export const handleLogin = (navigate, email, password, rememberMe, role) => {
   console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
   

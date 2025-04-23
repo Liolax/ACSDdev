@@ -8,6 +8,7 @@ const LoginPopup = ({ closePopup, handleLogin }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    // Call handleLogin with proper arguments and then close the popup
     handleLogin(email, password, rememberMe, role);
     closePopup();
   };

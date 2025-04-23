@@ -24,7 +24,9 @@ const Home = () => {
       {showLoginPopup && (
         <LoginPopup 
           closePopup={closeLoginPopup} 
-          handleLogin={handleLogin} 
+          handleLogin={(email, password, rememberMe, role) =>
+            handleLogin(email, password, rememberMe, role)
+          }
         />
       )}
     </div>
