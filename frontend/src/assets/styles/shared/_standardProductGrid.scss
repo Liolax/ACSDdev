@@ -1,5 +1,6 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use "../base" as base;
+@use "../mixins" as mixins;
+@use "sass:color"; // Load Sass color functions
 
 .standard-product-grid {
   display: grid;
@@ -41,7 +42,7 @@
     }
 
     .button {
-      background-color: $secondary-color; 
+      background-color: base.$secondary-color;
       color: #fff;
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border: none;
@@ -49,11 +50,11 @@
       cursor: pointer;
       font-weight: var(--font-weight-bold);
       font-size: var(--font-size-small);
-      @include transition(background-color);
+      @include mixins.transition(background-color);
 
       &:hover,
       &:focus {
-        background-color: darken($secondary-color, 10%);
+        background-color: color.adjust(base.$secondary-color, $lightness: -10%);
       }
     }
   }

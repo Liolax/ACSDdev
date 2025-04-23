@@ -1,8 +1,9 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use "../base" as base;
+@use "../mixins" as mixins;
+@use "sass:color"; // Using the modern Sass color module
 
 .button {
-  background-color: $secondary-color; 
+  background-color: base.$secondary-color;
   color: #fff;
   padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5); // Adjust button size
   border: none;
@@ -10,13 +11,13 @@
   cursor: pointer;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-small);
-  @include transition(background-color);
+  @include mixins.transition(background-color);
 
   &:hover {
-    background-color: darken($secondary-color, 10%); // Hover effect
+    background-color: color.adjust(base.$secondary-color, $lightness: -10%); // Hover effect
   }
 
   &:focus {
-    background-color: darken($secondary-color, 10%); // Focus effect
+    background-color: color.adjust(base.$secondary-color, $lightness: -10%); // Focus effect
   }
 }
