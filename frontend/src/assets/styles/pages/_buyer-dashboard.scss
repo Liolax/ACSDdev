@@ -1,5 +1,5 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use '../base' as base;
+@use '../mixins' as mixins;
 
 /* Buyer Dashboard (My Purchases) Page Styles */
 .buyer-dashboard {
@@ -7,7 +7,6 @@
   background-color: #fff;
   color: var(--color-dark-primary);
 
-  /* My Purchases header - Mimic "Welcome to the Market" */
   &__header {
     font-size: var(--font-size-heading);
     text-align: center;
@@ -15,10 +14,9 @@
     color: var(--color-primary);
   }
 
-  /* Quick Links to Wishlist & Cart - Right-Aligned */
   &__quick-links {
     display: flex;
-    justify-content: flex-end; // Right-align the links
+    justify-content: flex-end;
     gap: calc(var(--spacing-unit) * 2);
     margin-bottom: calc(var(--spacing-unit) * 2);
 
@@ -45,7 +43,7 @@
   }
 }
 
-/* Order Card – My Purchases */
+/* Order Card */
 .order-card {
   display: flex;
   align-items: center;
@@ -60,98 +58,41 @@
     border-color: var(--color-primary-light);
   }
 
-  /* Collage container on the left: using CSS grid; size is set inline */
-  &__collage {
-    display: grid;
-    gap: calc(var(--spacing-unit) * 0.25);
-  }
-  
-  /* Mini image style: fill the grid cell */
-  &__mini-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-  
-  /* Details container on the right */
-  &__details {
-    flex: 1;
-    padding-left: calc(var(--spacing-unit) * 1);
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 0.5);
-  }
-  
-  .order-card__id {
-    font-size: 1.2rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    margin: 0;
-  }
-  
-  .order-card__items-names {
-    font-size: 1rem;
-    margin: 0;
-  }
-  
-  .order-card__status,
-  .order-card__date {
-    font-size: 0.9rem;
-    color: var(--color-text);
-    margin: 0;
-  }
-  
-  &__track {
-    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
-    font-size: var(--font-size-base);
-    background-color: #ff9800;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      /* Instead of darken(), we use a filter */
-      filter: brightness(90%);
-    }
-  }
-
-  /* New Feedback button for Delivered orders */
+  &__track,
   &__feedback {
     padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
     font-size: var(--font-size-base);
-    background-color: var(--color-secondary);
-    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: filter 0.3s;
-    margin-left: calc(var(--spacing-unit) * 1);
 
     &:hover {
       filter: brightness(90%);
     }
   }
+
+  &__track {
+    background-color: #ff9800;
+    color: #fff;
+  }
+
+  &__feedback {
+    background-color: var(--color-secondary);
+    color: #fff;
+    margin-left: calc(var(--spacing-unit) * 1);
+  }
 }
 
-/* Wishlist Section Styles */
+/* Wishlist Section */
 .buyer-dashboard__wishlist {
   margin-top: calc(var(--spacing-unit) * 4);
-}
-
-.buyer-dashboard__wishlist-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .buyer-dashboard__wishlist-item {
   display: flex;
   align-items: center;
   padding: calc(var(--spacing-unit) * 1.5);
-  border: 1px solid var(--color-primary-light);
   border-radius: 8px;
   background-color: #f9f9f9;
   margin-bottom: calc(var(--spacing-unit) * 1.5);
@@ -165,48 +106,21 @@
   border-radius: 6px;
 }
 
-.buyer-dashboard__wishlist-item > span {
-  flex: 1;
-  font-size: 1rem;
-  margin: 0;
-}
-
-/* Bold price inside Wishlist */
 .buyer-dashboard__wishlist-price {
   font-size: 1rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
 }
 
-.buyer-dashboard__wishlist-actions {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 0.5);
-  margin-left: calc(var(--spacing-unit) * 1);
-}
-
-.buyer-dashboard__wishlist-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: calc(var(--spacing-unit) * 1.5);
-}
-
-/* Cart Section Styles */
+/* Cart Section */
 .buyer-dashboard__cart {
   margin-top: calc(var(--spacing-unit) * 4);
-}
-
-.buyer-dashboard__cart-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .buyer-dashboard__cart-item {
   display: flex;
   align-items: center;
   padding: calc(var(--spacing-unit) * 1.5);
-  border: 1px solid var(--color-primary-light);
   border-radius: 8px;
   background-color: #f9f9f9;
   margin-bottom: calc(var(--spacing-unit) * 1.5);
@@ -220,35 +134,8 @@
   border-radius: 6px;
 }
 
-.buyer-dashboard__cart-item > span {
-  flex: 1;
-  font-size: 1rem;
-  margin: 0;
-}
-
-/* Bold price inside Cart */
 .buyer-dashboard__cart-price {
   font-size: 1rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-}
-
-.buyer-dashboard__cart-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: calc(var(--spacing-unit) * 1.5);
-}
-
-.buyer-dashboard__cart-summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: calc(var(--spacing-unit) * 1.5);
-}
-
-/* Bold Total Price */
-.buyer-dashboard__cart-total {
-  font-size: 1.2rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
 }

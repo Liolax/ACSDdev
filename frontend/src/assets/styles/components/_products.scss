@@ -1,5 +1,5 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use '../base' as base;
+@use '../mixins' as mixins;
 
 .home-page__products {
   margin-top: calc(var(--spacing-unit) * 3);
