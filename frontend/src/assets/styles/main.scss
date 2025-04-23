@@ -7,7 +7,6 @@
 @use 'components/header';
 @use 'components/footer';
 @use 'components/button';
-@use 'components/productCard';
 @use 'components/feedback-popup';
 @use 'components/role-selection';
 @use 'components/products';
@@ -23,4 +22,4 @@
 @use 'pages/market';
 
 // Shared Component Styles
-@use 'shared/standardProductGrid';
+@use 'shared/mergedProductGrid';

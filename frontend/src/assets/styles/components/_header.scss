@@ -1,13 +1,13 @@
 @use "../mixins" as mixins;
 
 .header {
-  /* Centered container with a max-width */
+  /* Header container with same max-width as footer */
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  background: var(--color-primary); /* Primary color background */
-  padding: calc(var(--spacing-unit) * 2);
+  background: var(--color-primary);
+  padding: calc(var(--spacing-unit) * 1.5);  /* Same as footer padding */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,12 +34,8 @@
   }
 
   @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 
   &__logo-text {
@@ -68,67 +64,72 @@
   &__nav {
     display: flex;
     gap: calc(var(--spacing-unit) * 1);
-    justify-content: flex-end; /* Align nav items to the right */
+    justify-content: flex-end;
     align-items: center;
-    margin-right: calc(var(--spacing-unit) * 2);  /* Avoid flushing to the right edge */
+  }
 
-    a,
-    .header__nav-btn {
-      color: #fff;
-      text-decoration: none;
-      font-size: var(--font-size-base);
-      padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
-      border-radius: 4px;
-      @include mixins.transition(background-color);
-      &:hover,
-      &:focus {
-        background-color: var(--color-primary-light);
-      }
+  &__nav a,
+  &__nav .header__nav-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
+    border-radius: 4px;
+    @include mixins.transition(background-color);
+    &:hover,
+    &:focus {
+      background-color: var(--color-primary-light);
     }
+  }
 
-    .header__link.active {
-      border-bottom: 2px solid var(--color-primary-light);
-    }
+  .header__link.active {
+    border-bottom: 2px solid var(--color-primary-light);
+  }
 
-    .header__nav-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: var(--font-size-base);
-    }
+  .header__nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-base);
   }
 
   &__mobile-toggle {
     display: none;
     color: #fff; /* White hamburger icon */
-    font-size: 2rem;
+    font-size: 1.5rem; /* Smaller hamburger icon */
     cursor: pointer;
     position: absolute;
-    left: calc(var(--spacing-unit) * 1);
+    right: calc(var(--spacing-unit) * 1);
     top: 50%;
     transform: translateY(-50%);
   }
 
-  /* Responsive styling for mobile */
+  /* Mobile adjustments */
   @media (max-width: 768px) {
-    /* Ensure header container retains position for absolute toggles */
-    position: relative;
-    /* Hide nav by default on mobile */
+    padding: calc(var(--spacing-unit) * 1);  /* Slightly reduced padding */
+    
+    &__logo-image {
+      height: 35px;  /* Smaller logo on mobile */
+      margin-right: calc(var(--spacing-unit) * 0.5);
+    }
+    
+    /* Mobile navigation menu: full-width from left to right */
     &__nav {
       position: absolute;
       top: 100%;
-      left: 0;
+      left: 0;       /* Align to left */
       right: 0;
       flex-direction: column;
       background-color: var(--color-primary);
       padding: calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 1);
       display: none;
-      margin-right: 0;
     }
     &__nav.open {
       display: flex;
     }
+    
+    /* Hamburger toggle appears on the right */
     &__mobile-toggle {
       display: block;
     }

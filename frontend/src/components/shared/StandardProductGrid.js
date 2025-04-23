@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../../assets/styles/shared/_standardProductGrid.scss';
+import Button from '../../components/ui/Button';
+import '../../assets/styles/shared/_mergedProductGrid.scss';
 
 const StandardProductGrid = ({ onDetails }) => {
   const [products, setProducts] = useState([]);
@@ -10,7 +11,6 @@ const StandardProductGrid = ({ onDetails }) => {
     (async () => {
       try {
         const response = await axios.get('/api/products');
-        // If no products returned, use dummy data
         if (!response.data || response.data.length === 0) {
           const dummyProducts = [
             { _id: '1', name: 'Product A', price: '9.99', image: 'https://picsum.photos/300/200?random=1' },
@@ -23,7 +23,6 @@ const StandardProductGrid = ({ onDetails }) => {
         }
       } catch (error) {
         console.error('Error fetching products, using dummy data:', error);
-        // Fallback to dummy products if error occurs
         const dummyProducts = [
           { _id: '1', name: 'Product A', price: '9.99', image: 'https://picsum.photos/300/200?random=1' },
           { _id: '2', name: 'Product B', price: '14.99', image: 'https://picsum.photos/300/200?random=2' },
@@ -41,18 +40,20 @@ const StandardProductGrid = ({ onDetails }) => {
   return (
     <div className="standard-product-grid">
       {products.map((product) => (
-        <div key={product._id} className="standard-product-grid__card">
+        <div key={product._id} className="product-card">
           <img
             src={product.image}
             alt={product.name}
-            className="standard-product-grid__card__image"
+            className="product-card__image"
           />
-          <h3 className="standard-product-grid__card__title">{product.name}</h3>
-          <p className="standard-product-grid__card__price">${product.price}</p>
+          <div className="product-card__content">
+            <h3 className="product-card__content__title">{product.name}</h3>
+            <p className="product-card__content__price">${product.price}</p>
+          </div>
           {onDetails && (
-            <button className="button" onClick={() => onDetails(product)}>
+            <Button className="details-button" onClick={() => onDetails(product)}>
               Details
-            </button>
+            </Button>
           )}
         </div>
       ))}

@@ -1,0 +1,85 @@
+@use "../base" as base;
+@use "../mixins" as mixins;
+@use "sass:color";
+
+/* ---------- Responsive Grid Container ---------- */
+.standard-product-grid {
+  max-width: 1200px;
+  margin: 0 auto;  /* Center the grid container */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: calc(var(--spacing-unit) * 2.5);
+  padding: 0 calc(var(--spacing-unit) * 2);
+
+  /* On mobile, force one column so product cards span 100% width */
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Product Card ---------- */
+.product-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  display: flex;
+  flex-direction: column;  /* Vertical layout: image, then content, then button */
+  padding: calc(var(--spacing-unit) * 2);
+  @include mixins.transition(box-shadow);
+
+  &:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Product Image on top */
+  &__image {
+    width: 100%;           /* Full-width image */
+    height: 200px;         /* Fixed height; adjust as needed */
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+  
+  /* Product Details (Title and Price) */
+  &__content {
+    flex: 1;               /* Allow content to expand */
+    width: 100%;
+    text-align: left;
+    margin-bottom: calc(var(--spacing-unit) * 1);
+
+    &__title {
+      color: var(--color-dark-primary);
+      font-size: 1.2rem;
+      margin-bottom: var(--spacing-unit);
+    }
+    
+    &__price {
+      color: var(--color-primary);
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+  
+  /* Details Button */
+  .details-button {
+    align-self: flex-start;  /* Left-align the button */
+    margin-top: auto;        /* Push the button to the bottom of the card */
+  }
+}
+
+/* ---------- Mobile Adjustments ---------- */
+@media (max-width: 768px) {
+  .product-card {
+    /* In mobile view, the vertical layout is already set.
+       Ensure the image spans 100% width and appropriate margins are applied. */
+    &__image {
+      width: 100%;
+      height: auto;
+      margin-bottom: calc(var(--spacing-unit) * 1);
+    }
+    
+    &__content {
+      width: 100%;
+    }
+  }
+}

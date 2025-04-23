@@ -1,8 +1,9 @@
 import React from 'react';
 
-const Button = ({ children, onClick, ...props }) => {
+const Button = ({ children, onClick, className = '', ...props }) => {
   return (
-    <button className="button" onClick={onClick} {...props}>
+    // Merge the default "button" class with any additional classes passed in the props.
+    <button className={`button ${className}`} onClick={onClick} {...props}>
       {children}
     </button>
   );
