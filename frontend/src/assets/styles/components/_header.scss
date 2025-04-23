@@ -1,17 +1,26 @@
+// Irish-inspired header/footer, unified style, improved mobile nav
 @use "../mixins" as mixins;
 
+$irish-green: #17623e;
+$irish-green-light: #218c5a;
+$irish-green-dark: #11442b;
+$irish-green-gradient: linear-gradient(90deg, #17623e 0%, #218c5a 100%);
+
 .header {
-  /* Header container with same max-width as footer */
-  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  background: var(--color-primary);
-  padding: calc(var(--spacing-unit) * 1.5);  /* Same as footer padding */
+  background: $irish-green-gradient;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--spacing-unit) * 2);
+  padding: 18px 32px;
+  min-height: 64px;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 2px 14px rgba(23, 98, 62, 0.13);
+  position: relative;
+  z-index: 10;
 
   &__logo {
     display: flex;
@@ -21,117 +30,195 @@
       display: flex;
       align-items: center;
       text-decoration: none;
-      color: #fff;
-      transition: color var(--transition-default);
+      color: inherit;
+      transition: color 0.18s;
+      &:hover,
+      &:focus {
+        color: #b0ffd7;
+      }
     }
   }
 
   &__logo-image {
-    height: 50px;
+    height: 40px;
     width: auto;
-    margin-right: calc(var(--spacing-unit) * 1);
-    animation: rotate 20s linear infinite;
+    border-radius: 7px;
+    background: transparent;
+    margin-right: 9px;
+    transition: height 0.18s;
+    animation: logo-swing 2.8s cubic-bezier(0.68,-0.55,0.27,1.55) infinite alternate;
+    box-shadow: 0 2px 8px rgba(23, 98, 62, 0.12);
   }
 
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+  @keyframes logo-swing {
+    0% { transform: rotate(-4deg) scale(1); }
+    60% { transform: rotate(7deg) scale(1.06);}
+    100% { transform: rotate(-4deg) scale(1);}
   }
 
   &__logo-text {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    text-align: left;
-    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 0.08em;
   }
 
   &__logo-main {
     font-family: var(--font-family-heading);
-    font-size: var(--font-size-heading);
-    font-weight: var(--font-weight-bold);
-    line-height: 1;
+    font-size: 1.42rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
   }
 
   &__logo-slogan {
-    font-family: var(--font-family-signature);
-    font-size: 1.2rem;
-    font-weight: var(--font-weight-regular);
-    text-align: left;
-    line-height: 1;
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.93rem;
+    color: #b0ffd7;
+    margin-top: 0;
+    letter-spacing: 0.03em;
   }
 
   &__nav {
     display: flex;
-    gap: calc(var(--spacing-unit) * 1);
-    justify-content: flex-end;
+    gap: 18px;
     align-items: center;
-  }
+    font-size: 1.01rem;
+    font-family: var(--font-family-base);
 
-  &__nav a,
-  &__nav .header__nav-btn {
-    color: #fff;
-    text-decoration: none;
-    font-size: var(--font-size-base);
-    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
-    border-radius: 4px;
-    @include mixins.transition(background-color);
-    &:hover,
-    &:focus {
-      background-color: var(--color-primary-light);
+    a,
+    .header__nav-btn {
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      background: none;
+      border-radius: 20px;
+      padding: 7px 14px;
+      transition: background 0.13s, color 0.13s;
+      font-family: var(--font-family-base);
+
+      &:hover,
+      &:focus {
+        background: $irish-green-light;
+        color: #b0ffd7;
+      }
     }
-  }
-
-  .header__link.active {
-    border-bottom: 2px solid var(--color-primary-light);
-  }
-
-  .header__nav-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: var(--font-size-base);
+    .header__link.active {
+      background: $irish-green-dark;
+      color: #b0ffd7;
+      font-weight: 700;
+    }
+    .header__nav-btn {
+      cursor: pointer;
+      font-size: 1.01rem;
+      margin-left: 5px;
+    }
   }
 
   &__mobile-toggle {
     display: none;
-    color: #fff; /* White hamburger icon */
-    font-size: 1.5rem; /* Smaller hamburger icon */
     cursor: pointer;
-    position: absolute;
-    right: calc(var(--spacing-unit) * 1);
-    top: 50%;
-    transform: translateY(-50%);
+    background: rgba(23, 98, 62, 0.15);
+    border: none;
+    font-size: 1.35rem;
+    color: #fff;
+    margin-left: 8px;
+    z-index: 103;
+    padding: 3px 9px;
+    border-radius: 50%;
+    transition: background 0.18s;
+    &:hover,
+    &:focus {
+      background: $irish-green-light;
+      color: #b0ffd7;
+    }
   }
 
-  /* Mobile adjustments */
-  @media (max-width: 768px) {
-    padding: calc(var(--spacing-unit) * 1);  /* Slightly reduced padding */
-    
-    &__logo-image {
-      height: 35px;  /* Smaller logo on mobile */
-      margin-right: calc(var(--spacing-unit) * 0.5);
+  @media (max-width: 850px) {
+    flex-direction: row;
+    align-items: center;
+    padding: 0 5px;
+    min-height: 0;
+
+    &__logo {
+      padding: 8px 4px 8px 2px;
+      .header__logo-image {
+        height: 26px;
+        margin-right: 6px;
+      }
+      .header__logo-main {
+        font-size: 1rem;
+      }
+      .header__logo-slogan {
+        font-size: 0.7rem;
+      }
     }
-    
-    /* Mobile navigation menu: full-width from left to right */
-    &__nav {
-      position: absolute;
-      top: 100%;
-      left: 0;       /* Align to left */
-      right: 0;
-      flex-direction: column;
-      background-color: var(--color-primary);
-      padding: calc(var(--spacing-unit) * 1);
-      gap: calc(var(--spacing-unit) * 1);
-      display: none;
-    }
-    &__nav.open {
-      display: flex;
-    }
-    
-    /* Hamburger toggle appears on the right */
+
     &__mobile-toggle {
       display: block;
+      position: relative;
+      right: 0;
+      top: 0;
+      font-size: 1.18rem;
+      margin-left: auto;
+      box-shadow: none;
+      padding: 2px 7px;
+    }
+
+    &__nav {
+      // FULL SCREEN OVERLAY with Irish gradient, with a soft slide-down
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      background: $irish-green-gradient;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      padding: 80px 0 18px 0;
+      z-index: 102;
+      display: none;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 10px 32px 0 rgba(23, 98, 62, 0.13);
+      animation: navbar-slide-down 0.20s cubic-bezier(0.4,0,0.2,1);
+
+      &.open {
+        display: flex;
+        animation: navbar-slide-down 0.20s cubic-bezier(0.4,0,0.2,1);
+      }
+
+      a,
+      .header__nav-btn {
+        width: 100%;
+        text-align: left;
+        padding: 17px 28px;
+        margin: 0;
+        border-radius: 0;
+        background: none;
+        color: #fff;
+        font-size: 1.14rem;
+        font-family: var(--font-family-base);
+        border-left: 4px solid transparent;
+        transition: background 0.13s, color 0.13s, border-color 0.13s;
+        &:hover,
+        &:focus {
+          background: $irish-green-light;
+          color: #b0ffd7;
+          border-left: 4px solid #b0ffd7;
+        }
+      }
+
+      .header__link.active {
+        background: $irish-green-dark;
+        color: #b0ffd7;
+        border-left: 4px solid #b0ffd7;
+        font-weight: 700;
+      }
     }
   }
+}
+
+@keyframes navbar-slide-down {
+  0% { transform: translateY(-28px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
