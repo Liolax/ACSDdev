@@ -1,25 +1,25 @@
-@use 'base';
-@use 'mixins';
-@use 'utilities';
-@use 'overrides';
+@use 'base' as *;
+@use 'mixins' as *;
+@use 'utilities' as *;
+@use 'overrides' as *;
 
 // Component Partials
-@use 'components/header';
-@use 'components/footer';
-@use 'components/button';
-@use 'components/feedback-popup';
-@use 'components/role-selection';
-@use 'components/products';
+@use 'components/header' as *;
+@use 'components/footer' as *;
+@use 'components/button' as *;
+@use 'components/feedback-popup' as *;
+@use 'components/role-selection' as *;
+@use 'components/products' as *;
 
 // Page-Specific Styles
-@use 'pages/pageContainer';
-@use 'pages/seller-dashboard';
-@use 'pages/buyer-dashboard';
-@use 'pages/home';
-@use 'pages/shipping-details';
-@use 'pages/contact';
-@use 'pages/login';
-@use 'pages/market';
+@use 'pages/pageContainer' as *;
+@use 'pages/seller-dashboard' as *;
+@use 'pages/buyer-dashboard' as *;
+@use 'pages/home' as *;
+@use 'pages/shipping-details' as *;
+@use 'pages/contact' as *;
+@use 'pages/login' as *;
+@use 'pages/market' as *;
 
 // Shared Component Styles
-@use 'shared/mergedProductGrid';
+@use 'shared/mergedProductGrid' as *;

@@ -1,5 +1,5 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../../base' as *;
+@use '../../mixins' as *;
 
 .header {
   background: var(--color-primary);
