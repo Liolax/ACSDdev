@@ -1,3 +1,5 @@
+@use "../base" as base; // Import base.scss to access global variables
+
 /* Styles for the Login */
 .login-page {
   padding: calc(var(--spacing-unit) * 3);
@@ -89,7 +91,7 @@
       transition: background-color var(--transition-default);
 
       &:hover {
-        background-color: darken($secondary-color, 10%);
+        background-color: base.$hover-secondary-color; 
       }
     }
   }
