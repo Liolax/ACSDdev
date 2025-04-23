@@ -1,5 +1,5 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use '../base' as base;
+@use '../mixins' as mixins;
 
 .feedback-popup-overlay {
   position: fixed;
@@ -24,49 +24,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.feedback-popup__title {
-  font-size: var(--font-size-heading);
-  text-align: center;
-  margin-bottom: calc(var(--spacing-unit) * 1.5);
-  color: var(--color-primary);
-}
-
-.feedback-popup__form {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 1);
-}
-
-.feedback-popup__rating {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 0.5);
-  font-size: var(--font-size-base);
-  color: var(--color-dark-primary);
-}
-
-.feedback-popup__rating-label {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 0.25);
-  cursor: pointer;
-}
-
-.feedback-popup__input,
-.feedback-popup__textarea {
-  width: 100%;
-  padding: calc(var(--spacing-unit) * 0.75);
-  border: 1px solid var(--color-primary);
-  border-radius: 4px;
-  font-size: var(--font-size-base);
-  box-sizing: border-box;
-}
-
-.feedback-popup__textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
 .feedback-popup__button {
   padding: calc(var(--spacing-unit) * 1);
   background-color: var(--color-primary);
@@ -82,22 +39,4 @@
   &:focus {
     background-color: var(--color-primary-light);
   }
-}
-
-.feedback-popup__close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: var(--color-primary);
-  cursor: pointer;
-}
-
-.feedback-popup__thankyou {
-  font-size: var(--font-size-base);
-  text-align: center;
-  color: var(--color-primary);
-  padding: calc(var(--spacing-unit) * 1);
 }

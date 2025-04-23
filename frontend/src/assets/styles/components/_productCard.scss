@@ -1,5 +1,6 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use '../base' as base;
+@use '../mixins' as mixins;
+@use 'sass:color';
 
 .product-card {
   background: #fff;
@@ -9,7 +10,7 @@
   align-items: center;
   gap: calc(var(--spacing-unit) * 2); // Adds spacing between image and text
   padding: calc(var(--spacing-unit) * 2);
-  @include transition(box-shadow);
+  @include mixins.transition(box-shadow);
 
   &:hover {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
@@ -34,8 +35,8 @@
     }
     
     &__price {
-      color: var(--color-accent); // Use a distinctive accent color for emphasis
-      font-size: 1.4rem;         // Make the price stand out more
+      color: var(--color-primary);
+      font-size: 1.4rem;
       font-weight: bold;
       margin-bottom: calc(var(--spacing-unit) * 1);
     }

@@ -1,94 +1,22 @@
-@import '../base.scss';
-@import '../mixins.scss';
+@use '../base' as base;
+@use '../mixins' as mixins;
+@use 'sass:color';
 
 /* Styles for the Contact Page */
 .contact-page {
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
-
-  &__header {
-    margin-bottom: calc(var(--spacing-unit) * 3);
-  }
-
-  &__content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: calc(var(--spacing-unit) * 2);
-    background-color: #fff;
-  }
-
-  &__title {
-    font-size: var(--font-size-heading);
-    text-align: center;
-    color: var(--color-primary);
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
-  }
-
-  &__description {
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-    text-align: center;
-    line-height: var(--line-height-base);
-    margin-bottom: calc(var(--spacing-unit) * 2);
-  }
-
-  /* The form wrapper gets extra vertical spacing */
-  .contact-form-wrapper {
-    margin-top: calc(var(--spacing-unit) * 3);
-    margin-bottom: calc(var(--spacing-unit) * 3);
-  }
-
-  &__privacy {
-    font-size: var(--font-size-small);
-    color: var(--color-text);
-    text-align: center;
-    margin-top: calc(var(--spacing-unit) * 2);
-  }
-
-  &__footer {
-    margin-top: calc(var(--spacing-unit) * 3);
-  }
 }
 
-/* Styles for the Contact Form */
 .contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 2);
   background-color: #fff;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
 
-  &__label {
-    font-weight: bold;
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
-    color: var(--color-dark-primary);
-  }
-
-  /* Updated input and textarea styles to use #f0f9f1 for background */
-  &__input,
-  &__textarea {
-    width: 100%;
-    padding: calc(var(--spacing-unit) * 0.75);
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-    background-color: #f0f9f1; 
-    border: 1px solid var(--color-primary);
-    border-radius: 4px;
-    box-sizing: border-box;
-
-    &:focus {
-      outline: none;
-      border-color: var(--color-primary-light);
-      box-shadow: 0 0 6px rgba(0, 128, 0, 0.2);
-    }
-  }
-
   &__button {
     padding: calc(var(--spacing-unit) * 1);
-    background-color: $secondary-color;
+    background-color: base.$secondary-color;
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
@@ -96,25 +24,9 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color var(--transition-default);
-    margin-top: calc(var(--spacing-unit) * 1);
 
     &:hover {
-      background-color: darken($secondary-color, 10%);
+      background-color: color.adjust(base.$secondary-color, $lightness: -10%);
     }
   }
-}
-
-/* Success Message Styling */
-.contact-success {
-  display: block;
-  text-align: center;
-  color: #fff;
-  font-size: calc(var(--font-size-heading) * 1.2);
-  font-weight: 600;
-  letter-spacing: 0.05rem;
-  padding: calc(var(--spacing-unit) * 5);
-  background-color: $secondary-color;
-  margin-top: calc(var(--spacing-unit) * 26);
-  margin-bottom: calc(var(--spacing-unit) * 26);
-  border-radius: 8px;
 }
