@@ -1,4 +1,4 @@
-@use "../base" as base; // Import base.scss to access global variables
+@use "../base" as base; // Import base.scss
 
 /* Styles for the Login */
 .login-page {
@@ -112,3 +112,4 @@
   margin-bottom: calc(var(--spacing-unit) * 0.5);
   text-align: center;
 }
+
