@@ -4,4 +4,6 @@
   background-color: var(--color-bg);
   font-family: var(--font-family-base);
   padding: calc(var(--spacing-unit) * 2);
+  max-width: 1200px;
+  margin: 0 auto; // Center the global container
 }

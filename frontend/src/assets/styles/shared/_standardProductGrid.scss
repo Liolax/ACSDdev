@@ -3,24 +3,25 @@
 @use 'sass:color';
 
 .standard-product-grid {
+  max-width: 1200px;
+  margin: 0 auto; // Center the grid container horizontally
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: calc(var(--spacing-unit) * 2.5);
   padding: 0 calc(var(--spacing-unit) * 2);
-  
+
   &__card {
     background: #fff;
     border-radius: 8px;
     box-shadow: var(--shadow-light);
     padding: calc(var(--spacing-unit) * 2);
-    /* Ensure cards have a consistent minimum height */
-    min-height: 350px;
+    min-height: 350px; // Ensures a consistent card height
     transition: box-shadow var(--transition-default);
-    
+
     &:hover {
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
     }
-    
+
     .button {
       background-color: base.$secondary-color;
       color: #fff;
@@ -31,7 +32,7 @@
       font-weight: var(--font-weight-bold);
       font-size: var(--font-size-small);
       @include mixins.transition(background-color);
-      
+
       &:hover,
       &:focus {
         background-color: color.adjust(base.$secondary-color, $lightness: -10%);

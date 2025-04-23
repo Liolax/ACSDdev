@@ -2,8 +2,8 @@
 @use '../mixins' as mixins;
 
 .home-page__products {
-  margin-top: calc(var(--spacing-unit) * 3);
-  margin-bottom: calc(var(--spacing-unit) * 4);
+  max-width: 1200px;
+  margin: calc(var(--spacing-unit) * 3) auto calc(var(--spacing-unit) * 4);
 
   h2 {
     font-size: var(--font-size-heading);

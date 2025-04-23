@@ -1,5 +1,5 @@
+// src/pages/Home.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import OurCommunity from '../components/OurCommunity';
@@ -10,15 +10,12 @@ import '../assets/styles/pages/_home.scss';
 
 const Home = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const navigate = useNavigate();
-  const userRole = localStorage.getItem('userRole') || null;
-
   const openLoginPopup = () => setShowLoginPopup(true);
   const closeLoginPopup = () => setShowLoginPopup(false);
 
   return (
     <div className="page-container home-page">
-      <Header userRole={userRole} onLoginClick={openLoginPopup} />
+      <Header />
       <main className="home-page__main-content">
         <OurCommunity />
         <OurProducts openLoginPopup={openLoginPopup} />
@@ -27,9 +24,7 @@ const Home = () => {
       {showLoginPopup && (
         <LoginPopup 
           closePopup={closeLoginPopup} 
-          handleLogin={(email, password, rememberMe, role) =>
-            handleLogin(navigate, email, password, rememberMe, role)
-          } 
+          handleLogin={handleLogin} 
         />
       )}
     </div>

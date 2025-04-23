@@ -1,10 +1,9 @@
 .footer {
+  max-width: 1200px;
+  margin: 0 auto; // Center footer horizontally
   width: 100%;
   background-color: var(--color-primary);
   color: #fff;
   text-align: center;
   padding: calc(var(--spacing-unit) * 1.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
