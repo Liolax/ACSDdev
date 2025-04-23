@@ -1,8 +1,10 @@
-@use '../base' as base;
-@use '../mixins' as mixins;
-@use 'sass:color';
+@use '../base' as *;
 
 /* Styles for the Contact Page */
+
+.contact-section {
+  background-color: $irish-gold-light;
+  
 .contact-page {
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
@@ -29,4 +31,5 @@
       background-color: color.adjust(base.$secondary-color, $lightness: -10%);
     }
   }
+}
 }

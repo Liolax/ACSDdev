@@ -38,7 +38,11 @@ const Header = ({ userRole, onLoginClick }) => {
         </NavLink>
       </div>
       {/* Hamburger for mobile */}
-      <button className="header__mobile-toggle" onClick={toggleMenu} aria-label="Open navigation">
+      <button
+        className={`header__mobile-toggle${menuOpen ? ' hide-when-nav-open' : ''}`}
+        onClick={toggleMenu}
+        aria-label="Open navigation"
+      >
         &#9776;
       </button>
       {/* Desktop/Mobile Navigation */}

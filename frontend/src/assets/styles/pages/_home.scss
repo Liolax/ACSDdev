@@ -1,233 +1,54 @@
-// Irish modern Home page styling using unified green palette
-$irish-green: #17623e;
-$irish-green-light: #218c5a;
-$irish-green-dark: #11442b;
-$irish-cream: #fbfbe6;
-$irish-shadow: 0 6px 36px rgba(23,98,62,0.10);
+@use '../base' as *;
+@use '../mixins' as *;
 
-.home {
-  background: $irish-cream;
-  min-height: 100vh;
-  padding: 0;
-  font-family: var(--font-family-base);
-
-  &__hero {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 64px 32px 32px 32px;
-    gap: 36px;
-
-    @media (max-width: 900px) {
-      flex-direction: column;
-      gap: 32px;
-      padding: 38px 12px 22px 12px;
-    }
-  }
-
-  &__hero-content {
-    flex: 1 1 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 20px;
-
-    h1 {
-      font-family: var(--font-family-heading);
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: $irish-green-dark;
-      margin-bottom: 6px;
-      letter-spacing: 0.01em;
-    }
-
-    .home__hero-description {
-      font-size: 1.22rem;
-      color: $irish-green;
-      margin-bottom: 20px;
-      line-height: 1.5;
-      max-width: 560px;
-    }
-
-    .home__cta-group {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-  }
-
-  &__hero-image {
-    flex: 1 1 38%;
-    min-width: 240px;
-    max-width: 340px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      width: 100%;
-      max-width: 340px;
-      border-radius: 18px;
-      box-shadow: $irish-shadow;
-      background: $irish-green-light;
-      object-fit: cover;
-      object-position: center;
-    }
-  }
-}
-
-// Call-To-Action button
-.cta-btn {
-  display: inline-block;
-  padding: 12px 32px;
-  background: $irish-green;
-  color: #fff;
-  font-family: var(--font-family-base);
-  font-size: 1.12rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 9px;
-  box-shadow: 0 2px 8px rgba(23,98,62,0.10);
-  cursor: pointer;
-  transition: background 0.16s, color 0.16s, box-shadow 0.18s;
-
-  &:hover,
-  &:focus {
-    background: $irish-green-light;
-    color: #fbfbe6;
-    box-shadow: 0 5px 18px rgba(23,98,62,0.16);
-  }
-}
-
-.cta-btn--outline {
-  background: transparent;
-  color: $irish-green;
-  border: 2px solid $irish-green;
-  &:hover,
-  &:focus {
-    background: $irish-green;
-    color: #fbfbe6;
-  }
-}
-
-// Features Section
-.home__features {
-  background: #fff;
-  border-radius: 20px;
+.home-page__hero {
+  @include card(18px);
   max-width: 1200px;
-  margin: 48px auto 0 auto;
-  box-shadow: $irish-shadow;
+  margin: 32px auto 0 auto;
+  text-align: center;
   padding: 38px 32px 32px 32px;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 32px;
-
-  @media (max-width: 900px) {
-    padding: 22px 9px 20px 9px;
-    gap: 16px;
-    border-radius: 14px;
-  }
-}
-
-.feature-card {
-  background: $irish-green;
-  color: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(23,98,62,0.06);
-  padding: 26px 22px 20px 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: transform 0.18s, box-shadow 0.18s, background 0.14s;
-
-  &:hover,
-  &:focus-within {
-    background: $irish-green-light;
-    transform: translateY(-7px) scale(1.02);
-    box-shadow: 0 8px 34px rgba(23,98,62,0.14);
-  }
-
-  .feature-card__icon {
-    font-size: 2.2rem;
+  h1 {
+    @include heading;
+    font-size: 2.5rem;
     margin-bottom: 16px;
-    color: #fbfbe6;
-    filter: drop-shadow(0 1px 2px $irish-green-dark);
   }
-
-  .feature-card__title {
-    font-family: var(--font-family-heading);
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-
-  .feature-card__text {
-    font-size: 1.07rem;
-    color: #eaffd7;
-    line-height: 1.5;
+  p {
+    color: $irish-green-dark;
+    font-size: 1.18rem;
+    margin-bottom: 16px;
   }
 }
 
-// Testimonials Section
-.home__testimonials {
-  max-width: 1100px;
-  margin: 68px auto 0 auto;
-  padding: 0 18px 48px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+.home-page__community {
+  @include card(18px);
+  margin: 22px auto 0 auto;
+  max-width: 1000px;
+  padding: 38px 32px 32px 32px;
 
   h2 {
-    font-family: var(--font-family-heading);
+    @include heading;
     font-size: 2rem;
+    margin-bottom: 18px;
+  }
+  p {
     color: $irish-green-dark;
-    margin-bottom: 20px;
-    font-weight: 800;
+    font-size: 1.13rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    &:last-child { margin-bottom: 0; }
   }
 }
 
-.testimonial-list {
-  display: flex;
-  gap: 26px;
-  flex-wrap: wrap;
-  justify-content: center;
+.home-page__products {
+  @include card(18px);
+  max-width: 1200px;
+  margin: 30px auto 0 auto;
+  padding: 38px 32px 32px 32px;
 
-  @media (max-width: 900px) {
-    flex-direction: column;
-    gap: 18px;
-    align-items: center;
-  }
-}
-
-.testimonial-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(23,98,62,0.11);
-  padding: 22px 16px 20px 16px;
-  max-width: 320px;
-  min-width: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: left;
-  border-left: 7px solid $irish-green;
-
-  .testimonial-card__text {
-    font-size: 1.08rem;
-    color: $irish-green-dark;
-    margin-bottom: 16px;
-  }
-  .testimonial-card__author {
-    font-size: 1.01rem;
-    font-weight: 700;
-    color: $irish-green;
-    align-self: flex-end;
+  h2 {
+    @include heading;
+    font-size: 2rem;
+    margin-bottom: 24px;
   }
 }

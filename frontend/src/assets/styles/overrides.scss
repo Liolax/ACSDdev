@@ -1,14 +1,17 @@
-@use 'base' as *; // Bring all variables from base.scss into the global namespace
+@use './base' as *;
 
-// Override for Ant Design primary button styles
-.ant-btn-primary {
-  background-color: $primary-color !important;
-  border-color: $primary-color !important;
-  
-  &:hover {
-    background-color: $hover-primary-color !important;
-    border-color: $hover-primary-color !important;
-  }
+input, button, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  box-sizing: border-box;
 }
 
-// Additional overrides will be added here...
+a {
+  color: $irish-green;
+  text-decoration: none;
+  transition: color 0.15s;
+  &:hover, &:focus {
+    color: $irish-gold-dark;
+    text-decoration: underline;
+  }
+}

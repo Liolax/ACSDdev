@@ -1,100 +1,33 @@
-@use "sass:color"; // Load Sass color functions
-
-:root {
-  /* Colors */
-  --color-primary: #17623e;                 /* Irish green */
-  --color-primary-light: #218c5a;           /* Lighter Irish green */
-  --color-secondary: #f7b237;               /* Irish gold/yellow */
-  --color-bg: #fbfbe6;                      /* Irish cream background */
-  --color-text: #11442b;                    /* Irish green dark */
-  --color-dark-primary: #11442b;            /* Dark Irish green */
-
-  /* Typography */
-  --font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
-  --font-family-heading: 'Merriweather', serif;
-  --font-family-signature: 'Pacifico', cursive;
-  --font-size-base: 16px;
-  --font-size-heading: 2.4rem;
-  --font-size-subheading: 1.8rem;
-  --font-weight-regular: 400;
-  --font-weight-bold: 700;
-  --line-height-base: 1.5;
-
-  /* Spacing */
-  --spacing-unit: 8px;
-
-  /* Shadows */
-  --shadow-light: 0px 2px 4px rgba(23, 98, 62, 0.10);
-
-  /* Transitions */
-  --transition-default: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Sass variables for internal use */
+// Irish color palette & variables
 $irish-green: #17623e;
 $irish-green-light: #218c5a;
 $irish-green-dark: #11442b;
 $irish-cream: #fbfbe6;
-$irish-secondary: #f7b237; // Irish gold/yellow for secondary actions
+$irish-gold: #f7b237;
+$irish-gold-dark: #b58319;
+$irish-gold-light: #ffe4a1;
+$irish-gold-text: #664200;
 
-$primary-color: $irish-green;
-$primary-light-color: $irish-green-light;
-$secondary-color: $irish-secondary;
-$background-color: $irish-cream;
-$text-color: $irish-green-dark;
-$dark-primary-color: $irish-green-dark;
+:root {
+  --color-primary: #17623e;
+  --color-primary-light: #218c5a;
+  --color-secondary: #f7b237;
+  --color-gold-dark: #b58319;
+  --color-gold-light: #ffe4a1;
+  --color-gold-text: #664200;
+  --color-bg: #fbfbe6;
+  --color-text: #11442b;
+  --color-dark-primary: #11442b;
 
-$hover-primary-color: color.adjust($primary-color, $lightness: -10%);
-$hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
-
-/* Login popup styles (unchanged) */
-.login-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.login-popup {
-  background-color: #fff;
-  padding: calc(var(--spacing-unit) * 2);
-  border-radius: 8px;
-  box-shadow: var(--shadow-light);
-  position: relative;
-  width: 90%;
-  max-width: 400px;
-}
-
-.login-popup__close {
-  position: absolute;
-  top: calc(var(--spacing-unit) * 0.5);
-  right: calc(var(--spacing-unit) * 0.5);
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* Full-width wrappers for header and footer backgrounds */
-.header-bg {
-  width: 100%;
-  background-color: var(--color-primary);
-}
-
-.footer-bg {
-  width: 100%;
-  background-color: var(--color-primary);
-}
-
-/* Wrapper for centering product grids (if needed) */
-.product-grid-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 calc(var(--spacing-unit) * 2);
+  --font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --font-family-heading: 'Merriweather', serif;
+  --font-size-base: 16px;
+  --font-size-heading: 2.2rem;
+  --font-size-subheading: 1.32rem;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --line-height-base: 1.5;
+  --spacing-unit: 8px;
+  --shadow-light: 0px 2px 6px rgba(23, 98, 62, 0.10);
+  --transition-default: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
