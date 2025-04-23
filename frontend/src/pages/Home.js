@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import OurCommunity from '../components/OurCommunity';
@@ -11,7 +11,7 @@ import '../assets/styles/pages/_pageContainer.scss';
 
 const Home = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const navigate = useNavigate(); // Get the navigate function from React Router
+  const navigate = useNavigate();
 
   const openLoginPopup = () => setShowLoginPopup(true);
   const closeLoginPopup = () => setShowLoginPopup(false);

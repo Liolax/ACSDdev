@@ -1,30 +1,42 @@
 $irish-green: #17623e;
 $irish-green-light: #218c5a;
+$irish-green-dark: #11442b;
 $irish-cream: #fbfbe6;
 
-.home-page__products {
+.home-page__community {
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 2px 16px rgba(23,98,62,0.10);
   padding: 38px 32px 32px 32px;
   margin: 38px auto 0 auto;
-  max-width: 1200px;
+  max-width: 1000px;
 
   h2 {
     font-family: var(--font-family-heading);
     font-size: 2rem;
     color: $irish-green;
     font-weight: 900;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     letter-spacing: 0.01em;
+  }
+
+  p {
+    color: $irish-green-dark;
+    font-size: 1.13rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
 @media (max-width: 900px) {
-  .home-page__products {
-    padding: 22px 6px 20px 6px;
+  .home-page__community {
+    padding: 22px 10px 20px 10px;
     border-radius: 12px;
-    margin: 20px 2px 0 2px;
-    h2 { font-size: 1.28rem; }
+    margin: 20px 4px 0 4px;
+    h2 { font-size: 1.35rem; }
+    p { font-size: 1.01rem; }
   }
 }

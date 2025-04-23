@@ -1,8 +1,10 @@
+// Section wrapper with Irish style
+
 $irish-green: #17623e;
-$irish-green-light: #218c5a;
 $irish-cream: #fbfbe6;
 
-.home-page__products {
+.section {
+  width: 100%;
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 2px 16px rgba(23,98,62,0.10);
@@ -10,21 +12,17 @@ $irish-cream: #fbfbe6;
   margin: 38px auto 0 auto;
   max-width: 1200px;
 
-  h2 {
+  @media (max-width: 900px) {
+    padding: 22px 9px 20px 9px;
+    border-radius: 13px;
+  }
+
+  &__title {
     font-family: var(--font-family-heading);
     font-size: 2rem;
     color: $irish-green;
     font-weight: 900;
     margin-bottom: 24px;
     letter-spacing: 0.01em;
-  }
-}
-
-@media (max-width: 900px) {
-  .home-page__products {
-    padding: 22px 6px 20px 6px;
-    border-radius: 12px;
-    margin: 20px 2px 0 2px;
-    h2 { font-size: 1.28rem; }
   }
 }
