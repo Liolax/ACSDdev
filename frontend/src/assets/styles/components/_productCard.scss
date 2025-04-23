@@ -8,8 +8,9 @@
   box-shadow: var(--shadow-light);
   display: flex;
   align-items: center;
-  gap: calc(var(--spacing-unit) * 2); // Adds spacing between image and text
+  gap: calc(var(--spacing-unit) * 2); // Spacing between image and text
   padding: calc(var(--spacing-unit) * 2);
+  min-height: 180px; // Ensure consistent height among cards
   @include mixins.transition(box-shadow);
 
   &:hover {

@@ -3,5 +3,8 @@
   background-color: var(--color-primary);
   color: #fff;
   text-align: center;
-  padding: calc(var(--spacing-unit) * 1.5); 
+  padding: calc(var(--spacing-unit) * 1.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
