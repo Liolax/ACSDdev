@@ -1,4 +1,5 @@
-@use '../../base' as base; // Import base.scss
+@use '../base' as *;
+@use '../mixins' as *;
 
 /* Styles for the Login */
 .login-page {

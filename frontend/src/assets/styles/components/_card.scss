@@ -1,4 +1,5 @@
-@use '../../base'	as *; // Import base styles and variables
+@use '../base' as *;
+@use '../mixins' as *;
 
 // Modern Irish-styled product or info card
 

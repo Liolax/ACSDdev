@@ -1,4 +1,5 @@
-@use '../../base'	as *; // Import base styles and variables
+@use '../base' as *;
+@use '../mixins' as *;
 
 $irish-green: #17623e;
 $irish-green-light: #218c5a;

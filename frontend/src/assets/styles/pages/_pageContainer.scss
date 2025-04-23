@@ -1,3 +1,6 @@
+@use '../base' as *;
+@use '../mixins' as *;
+
 .page-container {
   min-height: 100vh;
   background-color: var(--color-bg);

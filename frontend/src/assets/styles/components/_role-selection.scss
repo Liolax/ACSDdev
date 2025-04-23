@@ -1,4 +1,5 @@
-@use '../../mixins' as mixins; // Import mixins file
+@use '../base' as *;
+@use '../mixins' as *;
 
 /* Styles for the Role Selection component */
 .role-selection {

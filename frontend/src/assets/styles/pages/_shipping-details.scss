@@ -1,3 +1,6 @@
+@use '../base' as *;
+@use '../mixins' as *;
+
 /* Styles for the Shipping Details page */
    .shipping-details {
     padding: calc(var(--spacing-unit) * 3);
