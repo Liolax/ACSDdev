@@ -39,12 +39,7 @@ const Header = ({ userRole, onLoginClick }) => {
             </div>
           </NavLink>
         </div>
-        {!menuOpen && (
-          <div className="header__mobile-toggle" onClick={toggleMenu}>
-            <span className="header__mobile-icon">&#9776;</span>
-          </div>
-        )}
-        <nav className={`header__nav ${menuOpen ? 'open' : ''}`}>
+        <nav className="header__nav">
           {userRole === ROLES.SELLER ? (
             <>
               <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>

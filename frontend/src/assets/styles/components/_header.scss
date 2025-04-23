@@ -1,21 +1,20 @@
-// Header content (without full-width background)
 @use "../mixins" as mixins;
 
 .header {
   max-width: 1200px;
-  margin: 0 auto; // Center header content
+  margin: 0 auto;
   width: 100%;
+  background-color: transparent; /* Background is provided by .header-bg */
   padding: calc(var(--spacing-unit) * 2);
-  /* Remove background-color from here */
-  color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  min-height: 70px; // Ensures sufficient height
+  justify-content: center;  /* Center entire header block */
+  gap: calc(var(--spacing-unit) * 2);
 
   &__logo {
     display: flex;
     align-items: center;
+    margin-right: calc(var(--spacing-unit) * 2);
 
     a {
       display: flex;
@@ -26,7 +25,6 @@
     }
   }
 
-  /* Logo image with rotation animation */
   &__logo-image {
     height: 50px;
     width: auto;
@@ -43,12 +41,11 @@
     }
   }
 
-  /* Logo text container */
   &__logo-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: left;
+    text-align: center; /* Center-align the logo text and slogan */
   }
 
   &__logo-main {
@@ -58,13 +55,12 @@
     line-height: 1;
   }
 
-  /* Slogan styled in a signature font */
   &__logo-slogan {
     font-family: var(--font-family-signature);
     font-size: 1.2rem;
     font-weight: var(--font-weight-regular);
     color: inherit;
-    text-align: left;
+    text-align: center;
     line-height: 1;
   }
 
@@ -76,9 +72,10 @@
   &__nav {
     display: flex;
     gap: calc(var(--spacing-unit) * 2);
-    margin-left: calc(var(--spacing-unit) * 2);
     align-items: center;
-
+    /* Remove any extra margin that pushed nav items far right */
+    /* Now the header group will be centered inside its container */
+    
     a,
     .header__nav-btn {
       color: #fff;

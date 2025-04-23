@@ -76,7 +76,7 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   cursor: pointer;
 }
 
-/* Wrapper classes for full-width background with centered content */
+/* Wrapper classes */
 
 /* Header wrapper: spans full width, background remains for header */
 .header-bg {
@@ -90,7 +90,7 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   background-color: var(--color-primary);
 }
 
-/* Wrapper class for centered product grids if needed */
+/* Wrapper for product grids */
 .product-grid-wrapper {
   max-width: 1200px;
   margin: 0 auto;

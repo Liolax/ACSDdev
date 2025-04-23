@@ -15,21 +15,12 @@ const Home = () => {
 
   return (
     <div className="page-container home-page">
-      {/* Wrap Header inside a full-width header-bg */}
-      <div className="header-bg">
-        <Header />
-      </div>
+      <Header onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />
-        {/* Optionally wrap the product grid if you need extra centering */}
-        <div className="product-grid-wrapper">
-          <OurProducts openLoginPopup={openLoginPopup} />
-        </div>
+        <OurProducts openLoginPopup={openLoginPopup} />
       </main>
-      {/* Wrap Footer inside a full-width footer-bg */}
-      <div className="footer-bg">
-        <Footer />
-      </div>
+      <Footer />
       {showLoginPopup && (
         <LoginPopup 
           closePopup={closeLoginPopup} 

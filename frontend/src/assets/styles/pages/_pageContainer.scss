@@ -1,8 +1,8 @@
 .page-container {
   min-height: 100vh;
-  background-color: var(--color-bg); /* var(--color-bg) is now white (#ffffff) */
+  background-color: var(--color-bg); /* White page background */
   font-family: var(--font-family-base);
   padding: calc(var(--spacing-unit) * 2);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto; /* Center page content */
 }
