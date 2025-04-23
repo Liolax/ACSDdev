@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '../../components/ui/Button';
-import '../../assets/styles/shared/_mergedProductGrid.scss';
+import '../../assets/styles/shared/_mergedProductGrid.scss'; // Style import for product grid
 
 const StandardProductGrid = ({ onDetails }) => {
   const [products, setProducts] = useState([]);

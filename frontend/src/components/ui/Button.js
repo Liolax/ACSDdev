@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../assets/styles/components/_button.scss'; // Style import for buttons
 
 const Button = ({ children, onClick, className = '', ...props }) => {
   return (

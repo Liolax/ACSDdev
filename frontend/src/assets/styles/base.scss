@@ -2,16 +2,16 @@
 
 :root {
   /* Colors */
-  --color-primary: #228B22;
-  --color-primary-light: #42ba96;
-  --color-secondary: #ff9800;
-  --color-bg: #ffffff;            /* White background for pages */
-  --color-text: #222;
-  --color-dark-primary: #004d00;
+  --color-primary: #17623e;                 /* Irish green */
+  --color-primary-light: #218c5a;           /* Lighter Irish green */
+  --color-secondary: #f7b237;               /* Irish gold/yellow */
+  --color-bg: #fbfbe6;                      /* Irish cream background */
+  --color-text: #11442b;                    /* Irish green dark */
+  --color-dark-primary: #11442b;            /* Dark Irish green */
 
   /* Typography */
-  --font-family-base: 'Helvetica Neue', Arial, sans-serif;
-  --font-family-heading: 'Georgia', serif;
+  --font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --font-family-heading: 'Merriweather', serif;
   --font-family-signature: 'Pacifico', cursive;
   --font-size-base: 16px;
   --font-size-heading: 2.4rem;
@@ -24,19 +24,25 @@
   --spacing-unit: 8px;
 
   /* Shadows */
-  --shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-light: 0px 2px 4px rgba(23, 98, 62, 0.10);
 
   /* Transitions */
   --transition-default: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Sass variables for internal use */
-$primary-color: #228B22;
-$primary-light-color: #42ba96;
-$secondary-color: #ff9800;
-$background-color: #ffffff;
-$text-color: #222;
-$dark-primary-color: #004d00;
+$irish-green: #17623e;
+$irish-green-light: #218c5a;
+$irish-green-dark: #11442b;
+$irish-cream: #fbfbe6;
+$irish-secondary: #f7b237; // Irish gold/yellow for secondary actions
+
+$primary-color: $irish-green;
+$primary-light-color: $irish-green-light;
+$secondary-color: $irish-secondary;
+$background-color: $irish-cream;
+$text-color: $irish-green-dark;
+$dark-primary-color: $irish-green-dark;
 
 $hover-primary-color: color.adjust($primary-color, $lightness: -10%);
 $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);

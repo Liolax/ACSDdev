@@ -1,6 +1,6 @@
 import React from 'react';
 import StandardProductGrid from './shared/StandardProductGrid';
-import '../assets/styles/components/_products.scss';
+import '../assets/styles/components/_products.scss'; // Style import for products section
 
 const OurProducts = ({ openLoginPopup }) => {
   return (

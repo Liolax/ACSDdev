@@ -1,50 +1,65 @@
-// Modern Irish-styled button variants
+@use "sass:color";
+@import '../base';
 
-$irish-green: #17623e;
-$irish-green-light: #218c5a;
-$irish-cream: #fbfbe6;
+// Irish gold/yellow palette for buttons
+$irish-gold: #f7b237;
+$irish-gold-dark: #b58319;
+$irish-gold-light: #ffe4a1;
+$irish-gold-text: #664200;
 
 .button,
 .btn {
-  background: $irish-green;
-  color: #fff;
+  background: $irish-gold;
+  color: $irish-gold-text;
   font-family: var(--font-family-base);
   font-size: 1.06rem;
   font-weight: 700;
   border: none;
   border-radius: 9px;
   padding: 11px 28px;
-  box-shadow: 0 2px 8px rgba(23,98,62,0.09);
+  box-shadow: 0 2px 8px rgba(247, 178, 55, 0.10);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, box-shadow 0.18s;
 
   &:hover,
   &:focus {
-    background: $irish-green-light;
-    color: $irish-cream;
-    box-shadow: 0 7px 18px rgba(23,98,62,0.12);
+    background: $irish-gold-dark;
+    color: #fff;
+    box-shadow: 0 7px 18px rgba(247, 178, 55, 0.18);
   }
 }
 
 .button--outline,
 .btn--outline {
   background: transparent;
-  color: $irish-green;
-  border: 2px solid $irish-green;
+  color: $irish-gold;
+  border: 2px solid $irish-gold;
   &:hover,
   &:focus {
-    background: $irish-green;
-    color: $irish-cream;
+    background: $irish-gold;
+    color: #fff;
   }
 }
 
-.button--alt,
-.btn--alt {
-  background: $irish-green-light;
+.button--light,
+.btn--light {
+  background: $irish-gold-light;
+  color: $irish-gold-text;
+  &:hover,
+  &:focus {
+    background: $irish-gold;
+    color: #fff;
+  }
+}
+
+// For accessibility, allow .button--dark for strong contrast
+.button--dark,
+.btn--dark {
+  background: $irish-gold-dark;
   color: #fff;
   &:hover,
   &:focus {
-    background: $irish-green;
-    color: $irish-cream;
+    background: $irish-gold;
+    color: $irish-gold-text;
   }
 }
