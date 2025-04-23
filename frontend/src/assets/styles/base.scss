@@ -5,7 +5,7 @@
   --color-primary: #228B22;
   --color-primary-light: #42ba96;
   --color-secondary: #ff9800;
-  --color-bg: #ffffff;            /* White background for pages */
+  --color-bg: #ffffff;  /* White background for pages */
   --color-text: #222;
   --color-dark-primary: #004d00;
 
@@ -76,21 +76,20 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   cursor: pointer;
 }
 
-/* Wrapper classes */
+/* Global Wrapper Classes */
 
-/* Header wrapper: spans full width, background remains for header */
+/* .header-bg & .footer-bg ensure full-width backgrounds for header and footer */
 .header-bg {
   width: 100%;
   background-color: var(--color-primary);
 }
 
-/* Footer wrapper: spans full width, background remains for footer */
 .footer-bg {
   width: 100%;
   background-color: var(--color-primary);
 }
 
-/* Wrapper for product grids */
+/* Wrapper class for centering product grids */
 .product-grid-wrapper {
   max-width: 1200px;
   margin: 0 auto;

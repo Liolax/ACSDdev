@@ -4,11 +4,11 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  background-color: transparent; /* Background is provided by .header-bg */
+  /* No background here—background is on the .header-bg wrapper */
   padding: calc(var(--spacing-unit) * 2);
   display: flex;
   align-items: center;
-  justify-content: center;  /* Center entire header block */
+  justify-content: space-between;
   gap: calc(var(--spacing-unit) * 2);
 
   &__logo {
@@ -33,19 +33,15 @@
   }
 
   @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 
   &__logo-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center; /* Center-align the logo text and slogan */
+    text-align: center; /* Center-align the logo main and slogan */
   }
 
   &__logo-main {
@@ -73,9 +69,7 @@
     display: flex;
     gap: calc(var(--spacing-unit) * 2);
     align-items: center;
-    /* Remove any extra margin that pushed nav items far right */
-    /* Now the header group will be centered inside its container */
-    
+
     a,
     .header__nav-btn {
       color: #fff;
