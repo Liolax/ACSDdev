@@ -22,8 +22,8 @@ const Home = () => {
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup 
-          closePopup={closeLoginPopup} 
+        <LoginPopup
+          closePopup={closeLoginPopup}
           handleLogin={(email, password, rememberMe, role) =>
             handleLogin(email, password, rememberMe, role)
           }

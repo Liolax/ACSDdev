@@ -1,9 +1,14 @@
 @use "../mixins" as mixins;
 
 .header {
+  /* Full width header background is applied directly on .header */
   width: 100%;
-  background: var(--color-primary); // Use primary color as background
+  background: var(--color-primary);
   padding: calc(var(--spacing-unit) * 2);
+  
+  /* Inner container to center content */
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,7 +17,7 @@
   &__logo {
     display: flex;
     align-items: center;
-
+    
     a {
       display: flex;
       align-items: center;
@@ -31,14 +36,14 @@
 
   @keyframes rotate {
     from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    to   { transform: rotate(360deg); }
   }
 
   &__logo-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;  /* Center logo text and slogan */
+    text-align: center;  /* Center the logo main and slogan */
   }
 
   &__logo-main {
@@ -58,9 +63,9 @@
   }
 
   &__nav {
-    flex: 1;  // Take full available space in the header
+    flex: 1; /* Allow nav to take available space */
     display: flex;
-    justify-content: center;  // Center the nav items
+    justify-content: center; /* Center nav items */
     gap: calc(var(--spacing-unit) * 2);
     align-items: center;
     
@@ -72,6 +77,7 @@
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border-radius: 4px;
       @include mixins.transition(background-color);
+      
       &:hover,
       &:focus {
         background-color: var(--color-primary-light);
@@ -105,7 +111,7 @@
       background-color: var(--color-primary);
       padding: calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 1);
-      display: none; // Hidden by default on mobile
+      display: none;  /* Hidden by default on mobile */
     }
     &__nav.open {
       display: flex;

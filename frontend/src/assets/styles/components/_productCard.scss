@@ -1,44 +1,53 @@
-@use '../base' as base;
-@use '../mixins' as mixins;
-@use 'sass:color';
+@use "../base" as base;
+@use "../mixins" as mixins;
+@use "sass:color";
 
 .product-card {
   background: #fff;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
   display: flex;
-  flex-direction: column; // Display image above content
-  padding: calc(var(--spacing-unit) * 2);
-  min-height: 250px; // Increase card height for better proportions
-  @include mixins.transition(box-shadow);
-
+  flex-direction: column;
+  padding: calc(var(--spacing-unit) * 1.5);
+  transition: box-shadow var(--transition-default);
+  
   &:hover {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
   }
 
   &__image {
-    width: 100%;         // Full width image
-    height: 200px;       // Fixed height for uniformity
+    width: 100%;
+    height: 200px;
     object-fit: cover;
     border-radius: 6px;
-    margin-bottom: calc(var(--spacing-unit) * 1);
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
   }
   
-  &__content {
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Product name and price on one row */
     width: 100%;
-    text-align: left; // Left-align text in the content section
+    margin-bottom: calc(var(--spacing-unit) * 0.25); /* Reduced spacing */
     
     &__title {
+      font-size: 1.2rem;
       color: var(--color-dark-primary);
-      font-size: 1.4rem;
-      margin: 0 0 calc(var(--spacing-unit) * 0.5) 0;
+      margin: 0;
     }
     
     &__price {
+      font-size: 1.2rem;
       color: var(--color-primary);
-      font-size: 1.6rem;
-      font-weight: bold;
-      margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+      font-weight: var(--font-weight-bold);
+      margin: 0;
     }
+  }
+  
+  /* Details button, left-aligned */
+  .details-button {
+    display: block;
+    margin-top: calc(var(--spacing-unit) * 0.25); /* Less gap */
+    text-align: left;
   }
 }
