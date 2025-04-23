@@ -1,16 +1,17 @@
+// Header content (without full-width background)
 @use "../mixins" as mixins;
 
 .header {
   max-width: 1200px;
-  margin: 0 auto; // Center header horizontally
+  margin: 0 auto; // Center header content
   width: 100%;
-  background-color: var(--color-primary);
   padding: calc(var(--spacing-unit) * 2);
+  /* Remove background-color from here */
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 70px; // Ensures adequate header height
+  min-height: 70px; // Ensures sufficient height
 
   &__logo {
     display: flex;
@@ -27,15 +28,19 @@
 
   /* Logo image with rotation animation */
   &__logo-image {
-    height: 50px; 
+    height: 50px;
     width: auto;
     margin-right: calc(var(--spacing-unit) * 1);
     animation: rotate 20s linear infinite;
   }
 
   @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* Logo text container */
@@ -53,9 +58,10 @@
     line-height: 1;
   }
 
+  /* Slogan styled in a signature font */
   &__logo-slogan {
     font-family: var(--font-family-signature);
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
     font-weight: var(--font-weight-regular);
     color: inherit;
     text-align: left;

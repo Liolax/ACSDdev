@@ -4,24 +4,29 @@
 
 .standard-product-grid {
   max-width: 1200px;
-  margin: 0 auto; // Center the grid container horizontally
+  margin: 0 auto; // Center the grid container
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: calc(var(--spacing-unit) * 2.5);
-  padding: 0 calc(var(--spacing-unit) * 2);
+  /* Remove extra horizontal padding if the wrapper already handles it */
+  padding: 0;
 
   &__card {
     background: #fff;
     border-radius: 8px;
     box-shadow: var(--shadow-light);
     padding: calc(var(--spacing-unit) * 2);
-    min-height: 350px; // Ensures a consistent card height
+    min-height: 350px; // Ensures consistent card height
     transition: box-shadow var(--transition-default);
+    display: flex;
+    flex-direction: column;
+    align-items: center;  // Center image and text vertically
 
     &:hover {
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
     }
 
+    /* Optionally, if you need to style a button inside the card */
     .button {
       background-color: base.$secondary-color;
       color: #fff;

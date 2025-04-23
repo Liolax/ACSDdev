@@ -5,7 +5,7 @@
   --color-primary: #228B22;
   --color-primary-light: #42ba96;
   --color-secondary: #ff9800;
-  --color-bg: #f0f9f1;
+  --color-bg: #ffffff;            /* White background for pages */
   --color-text: #222;
   --color-dark-primary: #004d00;
 
@@ -34,13 +34,13 @@
 $primary-color: #228B22;
 $primary-light-color: #42ba96;
 $secondary-color: #ff9800;
-$background-color: #f0f9f1;
+$background-color: #ffffff;
 $text-color: #222;
 $dark-primary-color: #004d00;
 
 /* Using the new sass:color functions for computed colors */
 $hover-primary-color: color.adjust($primary-color, $lightness: -10%);
-$hover-secondary-color: color.adjust($secondary-color, $lightness: -10%); 
+$hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
 
 /* Popup Overlay styles for the login modal */
 .login-popup-overlay {
@@ -74,4 +74,25 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+/* Wrapper classes for full-width background with centered content */
+
+/* Header wrapper: spans full width, background remains for header */
+.header-bg {
+  width: 100%;
+  background-color: var(--color-primary);
+}
+
+/* Footer wrapper: spans full width, background remains for footer */
+.footer-bg {
+  width: 100%;
+  background-color: var(--color-primary);
+}
+
+/* Wrapper class for centered product grids if needed */
+.product-grid-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(var(--spacing-unit) * 2);
 }

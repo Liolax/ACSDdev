@@ -1,8 +1,8 @@
 .footer {
   max-width: 1200px;
-  margin: 0 auto; // Center footer horizontally
+  margin: 0 auto; // Center footer content
   width: 100%;
-  background-color: var(--color-primary);
+  /* Remove background-color from here */
   color: #fff;
   text-align: center;
   padding: calc(var(--spacing-unit) * 1.5);

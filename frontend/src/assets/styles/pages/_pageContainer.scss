@@ -1,9 +1,8 @@
-/* Common container styles for all pages */
 .page-container {
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg); /* var(--color-bg) is now white (#ffffff) */
   font-family: var(--font-family-base);
   padding: calc(var(--spacing-unit) * 2);
   max-width: 1200px;
-  margin: 0 auto; // Center the global container
+  margin: 0 auto;
 }
