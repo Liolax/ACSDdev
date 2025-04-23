@@ -1,14 +1,12 @@
 @use "../mixins" as mixins;
 
 .header {
-  /* Full width header background is applied directly on .header */
-  width: 100%;
-  background: var(--color-primary);
-  padding: calc(var(--spacing-unit) * 2);
-  
-  /* Inner container to center content */
+  /* Header container with max-width and centered content */
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  /* The header background is applied externally (e.g. via a .header-bg wrapper) */
+  padding: calc(var(--spacing-unit) * 2);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,7 +15,7 @@
   &__logo {
     display: flex;
     align-items: center;
-    
+
     a {
       display: flex;
       align-items: center;
@@ -43,7 +41,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;  /* Center the logo main and slogan */
+    text-align: center;
   }
 
   &__logo-main {
@@ -63,11 +61,12 @@
   }
 
   &__nav {
-    flex: 1; /* Allow nav to take available space */
+    flex: 1;
     display: flex;
-    justify-content: center; /* Center nav items */
     gap: calc(var(--spacing-unit) * 2);
     align-items: center;
+    justify-content: flex-start;  /* Left-align nav items */
+    text-align: left;
     
     a,
     .header__nav-btn {
@@ -99,15 +98,22 @@
   &__mobile-toggle {
     display: none;
     cursor: pointer;
+    color: #fff; /* White hamburger icon */
+    font-size: 1.8rem;
+    position: absolute;
+    left: calc(var(--spacing-unit) * 1);
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   /* Responsive styling */
   @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
+    position: relative;  /* For absolute positioning of hamburger */
+    flex-wrap: nowrap;  /* Keep horizontal layout */
     &__nav {
       width: 100%;
       flex-direction: column;
+      align-items: flex-start;
       background-color: var(--color-primary);
       padding: calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 1);

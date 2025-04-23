@@ -5,7 +5,7 @@
   --color-primary: #228B22;
   --color-primary-light: #42ba96;
   --color-secondary: #ff9800;
-  --color-bg: #ffffff;            /* White background for content pages */
+  --color-bg: #ffffff;            /* White background for pages */
   --color-text: #222;
   --color-dark-primary: #004d00;
 
@@ -38,11 +38,10 @@ $background-color: #ffffff;
 $text-color: #222;
 $dark-primary-color: #004d00;
 
-/* Computed colors using Sass:color functions */
 $hover-primary-color: color.adjust($primary-color, $lightness: -10%);
 $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
 
-/* Login Popup Styles */
+/* Login popup styles (unchanged) */
 .login-popup-overlay {
   position: fixed;
   top: 0;
@@ -76,7 +75,7 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   cursor: pointer;
 }
 
-/* Wrapper classes for full-width backgrounds */
+/* Full-width wrappers for header and footer backgrounds */
 .header-bg {
   width: 100%;
   background-color: var(--color-primary);
@@ -87,7 +86,7 @@ $hover-secondary-color: color.adjust($secondary-color, $lightness: -10%);
   background-color: var(--color-primary);
 }
 
-/* Wrapper class for centering product grids (if needed) */
+/* Wrapper for centering product grids (if needed) */
 .product-grid-wrapper {
   max-width: 1200px;
   margin: 0 auto;
