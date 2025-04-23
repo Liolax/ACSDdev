@@ -1,4 +1,4 @@
-@import './mixins/functions.scss';
+@use "./mixins/functions" as functions;
 
 /* Flexbox utility mixin */
 @mixin flexbox($justify: flex-start, $align: stretch, $direction: row) {
