@@ -1,11 +1,12 @@
 @use "../mixins" as mixins;
 
 .header {
-  /* Header container with max-width and centered content */
+  /* Centered container with a max-width */
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  /* The header background is applied externally (e.g. via a .header-bg wrapper) */
+  background: var(--color-primary); /* Primary color background */
   padding: calc(var(--spacing-unit) * 2);
   display: flex;
   align-items: center;
@@ -33,15 +34,20 @@
   }
 
   @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   &__logo-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
+    text-align: left;
+    color: #fff;
   }
 
   &__logo-main {
@@ -55,19 +61,17 @@
     font-family: var(--font-family-signature);
     font-size: 1.2rem;
     font-weight: var(--font-weight-regular);
-    color: inherit;
-    text-align: center;
+    text-align: left;
     line-height: 1;
   }
 
   &__nav {
-    flex: 1;
     display: flex;
-    gap: calc(var(--spacing-unit) * 2);
+    gap: calc(var(--spacing-unit) * 1);
+    justify-content: flex-end; /* Align nav items to the right */
     align-items: center;
-    justify-content: flex-start;  /* Left-align nav items */
-    text-align: left;
-    
+    margin-right: calc(var(--spacing-unit) * 2);  /* Avoid flushing to the right edge */
+
     a,
     .header__nav-btn {
       color: #fff;
@@ -76,17 +80,16 @@
       padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.5);
       border-radius: 4px;
       @include mixins.transition(background-color);
-      
       &:hover,
       &:focus {
         background-color: var(--color-primary-light);
       }
     }
-    
+
     .header__link.active {
       border-bottom: 2px solid var(--color-primary-light);
     }
-    
+
     .header__nav-btn {
       background: none;
       border: none;
@@ -97,27 +100,31 @@
 
   &__mobile-toggle {
     display: none;
-    cursor: pointer;
     color: #fff; /* White hamburger icon */
-    font-size: 1.8rem;
+    font-size: 2rem;
+    cursor: pointer;
     position: absolute;
     left: calc(var(--spacing-unit) * 1);
     top: 50%;
     transform: translateY(-50%);
   }
 
-  /* Responsive styling */
+  /* Responsive styling for mobile */
   @media (max-width: 768px) {
-    position: relative;  /* For absolute positioning of hamburger */
-    flex-wrap: nowrap;  /* Keep horizontal layout */
+    /* Ensure header container retains position for absolute toggles */
+    position: relative;
+    /* Hide nav by default on mobile */
     &__nav {
-      width: 100%;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
       flex-direction: column;
-      align-items: flex-start;
       background-color: var(--color-primary);
       padding: calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 1);
-      display: none;  /* Hidden by default on mobile */
+      display: none;
+      margin-right: 0;
     }
     &__nav.open {
       display: flex;

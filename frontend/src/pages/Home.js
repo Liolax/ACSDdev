@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import OurCommunity from '../components/OurCommunity';
@@ -10,6 +11,8 @@ import '../assets/styles/pages/_pageContainer.scss';
 
 const Home = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const navigate = useNavigate(); // Get the navigate function from React Router
+
   const openLoginPopup = () => setShowLoginPopup(true);
   const closeLoginPopup = () => setShowLoginPopup(false);
 
@@ -23,9 +26,9 @@ const Home = () => {
       <Footer />
       {showLoginPopup && (
         <LoginPopup 
-          closePopup={closeLoginPopup} 
+          closePopup={closeLoginPopup}
           handleLogin={(email, password, rememberMe, role) =>
-            handleLogin(email, password, rememberMe, role)
+            handleLogin(navigate, email, password, rememberMe, role)
           }
         />
       )}
