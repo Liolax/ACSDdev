@@ -120,12 +120,9 @@
   }
 }
 
-/* Enforce uniform size for Wishlist action buttons (Desktop) */
+/* Ensure Wishlist actions use the same small button style */
 .buyer-dashboard__wishlist-actions .button {
-  height: 36px;
-  min-width: 110px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
+  @extend .buyer-dashboard__button--sm;
 }
 
 /* ORDER CARD */
@@ -175,7 +172,7 @@
   }
   &__actions {
     display: flex;
-    flex-direction: row;  // Place buttons in a row.
+    flex-direction: row; // Place buttons in a row.
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
@@ -375,7 +372,7 @@
   }
 }
 
-/* Mobile override for Wishlist actions: arrange inline and keep buttons compact */
+/* Mobile specific override for the Wishlist actions */
 @media (max-width: 600px) {
   .buyer-dashboard__wishlist-actions {
     flex-direction: row;
@@ -383,12 +380,8 @@
     gap: 4px;
   }
   .buyer-dashboard__wishlist-actions .button {
-    width: auto;
-    min-width: 90px;
-    max-width: 120px;
-    box-sizing: border-box;
-    font-size: 0.82rem;
-    padding: 4px 8px;
+    @extend .buyer-dashboard__button--sm;
+    max-width: 100px;
   }
 }
 
