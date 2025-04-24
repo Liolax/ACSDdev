@@ -1,38 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
-import FeedbackPopup from '../../ui/FeedbackPopup'; // New FeedbackPopup component
+import FeedbackPopup from '../../ui/FeedbackPopup';
 
 // Helper to determine collage container size and grid layout based on item count
 const getCollageStyle = (count) => {
-  let containerSize, gridTemplateColumns;
+  let containerSize = 120;
+  let gridTemplateColumns = '1fr'; // default for 1 item
   if (count === 1) {
-    containerSize = 120;
     gridTemplateColumns = '1fr';
   } else if (count === 2) {
-    containerSize = 120;
     gridTemplateColumns = 'repeat(2, 1fr)';
   } else if (count === 3 || count === 4) {
-    containerSize = 120;
     gridTemplateColumns = 'repeat(2, 1fr)';
   } else {
-    containerSize = 120;
     gridTemplateColumns = 'repeat(3, 1fr)';
   }
   return { containerSize, gridTemplateColumns };
 };
 
 const BuyerDashboard = () => {
-  // Orders state for "My Purchases"
+  // Orders state
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  
-  // Feedback storage: key = order id, value = feedback data
+  // Feedback state: key = order id, value = feedback data
   const [feedbackByOrder, setFeedbackByOrder] = useState({});
-  // The orderId for which the Feedback popup is open
   const [feedbackOrderId, setFeedbackOrderId] = useState(null);
 
-  // Dummy order data updated to support multiple items per order
+  // Wishlist and Cart state
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [wishlistVisible, setWishlistVisible] = useState(5);
+  const [cartVisible, setCartVisible] = useState(5);
+
+  // Dummy orders data
   useEffect(() => {
     const dummyOrders = [
       {
@@ -46,7 +47,7 @@ const BuyerDashboard = () => {
       },
       {
         id: 'A1002',
-        status: 'Delivered', // Delivered → feedback may be given
+        status: 'Delivered',
         date: '2023-04-25',
         items: [
           { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
@@ -67,12 +68,7 @@ const BuyerDashboard = () => {
     setLoadingOrders(false);
   }, []);
 
-  // Wishlist and Cart state (dummy simulation)
-  const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [wishlistVisible, setWishlistVisible] = useState(5);
-  const [cartVisible, setCartVisible] = useState(5);
-
+  // Dummy wishlist and cart data setup
   useEffect(() => {
     const dummyWishlist = Array.from({ length: 10 }).map((_, index) => ({
       id: index + 1,
@@ -91,35 +87,37 @@ const BuyerDashboard = () => {
     setCart(dummyCart);
   }, []);
 
-  // Wishlist handlers – including "Move to Cart"
-  const handleRemoveWishlist = (id) =>
-    setWishlist(wishlist.filter(item => item.id !== id));
+  // Wishlist handlers
+  const handleRemoveWishlist = (id) => {
+    setWishlist(wishlist.filter((item) => item.id !== id));
+  };
+
   const handleMoveToCart = (item) => {
-    setWishlist(wishlist.filter(w => w.id !== item.id));
-    const existingCartItem = cart.find(c => c.id === item.id);
+    setWishlist(wishlist.filter((w) => w.id !== item.id));
+    const existingCartItem = cart.find((c) => c.id === item.id);
     if (existingCartItem) {
-      setCart(cart.map(c => c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c));
+      setCart(cart.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
-  // Cart handlers
-  const handleRemoveCart = (id) => setCart(cart.filter(item => item.id !== id));
-  const handlePay = () => alert('Proceed to payment and shipping selection.');
   const handleWishlistSeeLess = () => setWishlistVisible(5);
-  const handleCartSeeLess = () => setCartVisible(5);
 
-  // Feedback submission handler (simulate CRUD)
+  // Cart handlers
+  const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
+  const handleCartSeeLess = () => setCartVisible(5);
+  const handlePay = () => alert('Proceed to payment and shipping selection.');
+
+  // Feedback handlers
   const handleFeedbackSubmit = (feedbackData) => {
     console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
-    setFeedbackByOrder(prev => ({ ...prev, [feedbackData.orderId]: feedbackData }));
+    setFeedbackByOrder((prev) => ({ ...prev, [feedbackData.orderId]: feedbackData }));
     setFeedbackOrderId(null);
   };
 
-  // Delete feedback handler
   const handleFeedbackDelete = (orderId) => {
-    setFeedbackByOrder(prev => {
+    setFeedbackByOrder((prev) => {
       const newFeedback = { ...prev };
       delete newFeedback[orderId];
       return newFeedback;
@@ -129,19 +127,19 @@ const BuyerDashboard = () => {
   return (
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
-      
-      {/* Quick Links: Wishlist and Cart icons */}
+
+      {/* Quick Links */}
       <div className="buyer-dashboard__quick-links">
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
       </div>
-      
-      {/* Render orders with collage style */}
+
+      {/* Orders Section */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
         ) : (
-          orders.map(order => {
+          orders.map((order) => {
             const { containerSize, gridTemplateColumns } = getCollageStyle(order.items.length);
             return (
               <div key={order.id} className="order-card">
@@ -150,7 +148,7 @@ const BuyerDashboard = () => {
                   style={{
                     width: `${containerSize}px`,
                     height: `${containerSize}px`,
-                    gridTemplateColumns: gridTemplateColumns
+                    gridTemplateColumns: gridTemplateColumns,
                   }}
                 >
                   {order.items.map((item, idx) => (
@@ -164,13 +162,11 @@ const BuyerDashboard = () => {
                 </div>
                 <div className="order-card__details">
                   <h3 className="order-card__id">Order {order.id}</h3>
-                  <p className="order-card__items-names">
-                    {order.items.map(item => item.name).join(', ')}
-                  </p>
+                  <p className="order-card__items-names">{order.items.map(item => item.name).join(', ')}</p>
                   <p className="order-card__status">Status: {order.status}</p>
                   <p className="order-card__date">Date: {order.date}</p>
                 </div>
-                <div>
+                <div className="order-card__actions">
                   <button
                     className="button order-card__track"
                     onClick={() => alert(`Tracking order ${order.id}`)}
@@ -211,7 +207,7 @@ const BuyerDashboard = () => {
         )}
       </div>
 
-      {/* Feedback Popup for Delivered Orders */}
+      {/* Feedback Popup */}
       {feedbackOrderId && (
         <FeedbackPopup
           orderId={feedbackOrderId}

@@ -15,7 +15,6 @@ const ContactPage = () => {
   const closeLoginPopup = () => setShowLoginPopup(false);
 
   const handleLogin = (email, password, rememberMe, role) => {
-    console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
     if (role === 'buyer') {
       navigate('/buyer-dashboard');
     } else {
@@ -27,28 +26,29 @@ const ContactPage = () => {
     setFormSubmitted(true);
   };
 
-  // Retrieve the user's role from localStorage if set
   const userRole = localStorage.getItem('userRole');
 
   return (
-    <div className="page-container contact-page">
+    <div className="page-container contact-page-bg">
       <Header userRole={userRole} onLoginClick={openLoginPopup} />
-      <div className="contact-page__content">
-        {!formSubmitted && (
-          <>
-            <h2 className="contact-page__title">Contact Us</h2>
-            <p className="contact-page__description">
-              Share your feedback or inquiries below. We value your input and will respond promptly.
+      <main className="contact-page__main">
+        <section className="contact-page__content">
+          {!formSubmitted && (
+            <>
+              <h2 className="contact-page__title">Contact Us</h2>
+              <p className="contact-page__description">
+                Share your feedback or inquiries below. We value your input and will respond promptly.
+              </p>
+            </>
+          )}
+          <ContactForm onSuccess={handleFormSuccess} />
+          {!formSubmitted && (
+            <p className="contact-page__privacy">
+              By clicking "Send Message", you agree to our Privacy Policy and the processing of your message.
             </p>
-          </>
-        )}
-        <ContactForm onSuccess={handleFormSuccess} />
-        {!formSubmitted && (
-          <p className="contact-page__privacy">
-            By clicking "Send Message", you agree to our Privacy Policy and the processing of your message.
-          </p>
-        )}
-      </div>
+          )}
+        </section>
+      </main>
       <Footer />
       {showLoginPopup && (
         <LoginPopup closePopup={closeLoginPopup} handleLogin={handleLogin} />

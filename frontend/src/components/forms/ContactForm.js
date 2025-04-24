@@ -36,7 +36,12 @@ const ContactForm = ({ onSuccess }) => {
         <textarea id="message" name="message" className="contact-form__textarea" required></textarea>
         <ValidationError prefix="Message" field="message" errors={state.errors} />
 
-        <button type="submit" disabled={state.submitting} className="contact-form__button">
+        {/* Use both classes for consistent Irish styling */}
+        <button
+          type="submit"
+          disabled={state.submitting}
+          className="button contact-form__button"
+        >
           Send Message
         </button>
       </form>

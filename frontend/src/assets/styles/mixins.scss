@@ -1,3 +1,5 @@
+// Irish-themed, modern, and reusable SCSS mixins & functions
+
 // Darken alternative
 @function custom-darken($color, $percentage) {
   @return mix(black, $color, $percentage);
@@ -14,10 +16,12 @@
 }
 
 // Card mixin for common card styles
-@mixin card($radius, $box-shadow: none) {
+@mixin card($radius: 16px, $box-shadow: var(--shadow-light), $bg: var(--color-bg)) {
   border-radius: $radius;
   box-shadow: $box-shadow;
+  background: $bg;
   background-clip: padding-box;
+  padding: 1.5rem;
 }
 
 // Transition mixin accepts one or more properties
@@ -26,7 +30,37 @@
 }
 
 // Heading mixin for title styles
-@mixin heading {
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-bold);
+@mixin heading(
+  $size: var(--font-size-heading),
+  $color: var(--color-primary),
+  $weight: var(--font-weight-bold),
+  $family: var(--font-family-heading)
+) {
+  font-family: $family;
+  font-size: $size;
+  color: $color;
+  font-weight: $weight;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+@mixin card($radius: 14px, $shadow: var(--shadow-light), $bg: #fff) {
+  border-radius: $radius;
+  box-shadow: $shadow;
+  background: $bg;
+}
+
+@mixin flex-center($direction: row, $gap: 1rem) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
 }

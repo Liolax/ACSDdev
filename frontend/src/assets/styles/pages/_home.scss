@@ -1,21 +1,31 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
 
+// Irish-styled home hero section
 .home-page__hero {
-  @include mixins.card(18px);
+  @include mixins.card(18px, var(--shadow-light), base.$irish-cream);
   max-width: 1200px;
-  margin: 32px auto 0 auto;
+  margin: 40px auto 0 auto;
   text-align: center;
-  padding: 38px 32px 32px 32px;
+  padding: 48px 36px 36px 36px;
+  border: 2px solid base.$irish-gold;
 
   h1 {
-    @include mixins.heading;
-    font-size: 2.5rem;
-    margin-bottom: 16px;
+    @include mixins.heading; // uses base font-size-heading, font-family-heading, font-weight-bold
+    margin-bottom: 20px;
+    letter-spacing: 1px;
   }
   p {
     color: base.$irish-green-dark;
     font-size: 1.18rem;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    font-family: var(--font-family-base);
   }
+}
+
+.home-page__main-content {
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 12px 36px 12px;
 }

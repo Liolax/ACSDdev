@@ -8,10 +8,8 @@ $irish-gold-dark: #b58319;
 $irish-gold-light: #ffe4a1;
 $irish-gold-text: #664200;
 
-// Define a gradient using your green variables.
+// Gradient
 $irish-green-gradient: linear-gradient(90deg, $irish-green 0%, $irish-green-light 100%);
-
-// Define a hover secondary color for buttons, etc.
 $hover-secondary-color: $irish-gold-dark;
 
 :root {
@@ -27,7 +25,8 @@ $hover-secondary-color: $irish-gold-dark;
 
   --font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
   --font-family-heading: 'Merriweather', serif;
-  --font-size-base: 16px;
+
+  // Use the "Contact Us" title size for all main headings (h1/h2 as needed)
   --font-size-heading: 2.2rem;
   --font-size-subheading: 1.32rem;
   --font-weight-regular: 400;

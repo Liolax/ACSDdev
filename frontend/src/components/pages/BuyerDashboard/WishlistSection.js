@@ -1,21 +1,39 @@
 import React from 'react';
 
 const WishlistSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onMoveToCart }) => {
+  // Only the first `visibleCount` wishlist items will be shown.
   const visibleItems = items.slice(0, visibleCount);
-  
+
   return (
-    <div>
+    // Ensure the wrapping container uses the proper BEM block class.
+    <div className="buyer-dashboard__wishlist">
       <ul className="buyer-dashboard__wishlist-list">
-        {visibleItems.map(item => (
+        {visibleItems.map((item) => (
           <li key={item.id} className="buyer-dashboard__wishlist-item">
-            <img src={item.image} alt={item.name} className="buyer-dashboard__wishlist-image" />
-            <span>
-              {item.name} - 
-              <span className="buyer-dashboard__wishlist-price"> ${item.price.toFixed(2)}</span>
+            <img
+              src={item.image}
+              alt={item.name}
+              className="buyer-dashboard__wishlist-image"
+            />
+            <span className="buyer-dashboard__wishlist-item-info">
+              {item.name} – 
+              <span className="buyer-dashboard__wishlist-price">
+                ${item.price.toFixed(2)}
+              </span>
             </span>
             <div className="buyer-dashboard__wishlist-actions">
-              <button onClick={() => onMoveToCart(item)} className="button">Move to Cart</button>
-              <button onClick={() => onRemove(item.id)} className="button">Delete</button>
+              <button 
+                onClick={() => onMoveToCart(item)} 
+                className="button"
+              >
+                Move to Cart
+              </button>
+              <button 
+                onClick={() => onRemove(item.id)} 
+                className="button"
+              >
+                Delete
+              </button>
             </div>
           </li>
         ))}

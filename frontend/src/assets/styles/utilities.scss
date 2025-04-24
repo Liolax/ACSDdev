@@ -1,8 +1,21 @@
-// Utility classes for spacing, text, etc.
+// Utility classes for spacing, text, and Irish design system
 
 .u-mt-0 { margin-top: 0 !important; }
 .u-mb-0 { margin-bottom: 0 !important; }
+
+.u-mt-1 { margin-top: var(--spacing-unit) !important; }
+.u-mb-1 { margin-bottom: var(--spacing-unit) !important; }
+
 .u-mt-2 { margin-top: calc(var(--spacing-unit) * 2) !important; }
 .u-mb-2 { margin-bottom: calc(var(--spacing-unit) * 2) !important; }
+
+.u-mt-3 { margin-top: calc(var(--spacing-unit) * 3) !important; }
+.u-mb-3 { margin-bottom: calc(var(--spacing-unit) * 3) !important; }
+
 .u-center { text-align: center !important; }
 .u-bold { font-weight: var(--font-weight-bold) !important; }
+.u-text-gold { color: var(--color-gold-text) !important; }
+.u-text-green { color: var(--color-primary) !important; }
+
+.u-radius { border-radius: 12px !important; }
+.u-shadow { box-shadow: var(--shadow-light) !important; }
