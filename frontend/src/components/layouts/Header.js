@@ -40,14 +40,17 @@ const Header = ({ userRole, onLoginClick }) => {
       </div>
       {/* Hamburger for mobile */}
       <button
-        className={`header__mobile-toggle${menuOpen ? ' hide-when-nav-open' : ''}`}
+        className="header__mobile-toggle"
         onClick={toggleMenu}
-        aria-label="Open navigation"
+        aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+        aria-expanded={menuOpen}
+        aria-controls="main-navigation"
+        tabIndex={0}
       >
         &#9776;
       </button>
       {/* Desktop/Mobile Navigation */}
-      <nav className={`header__nav${menuOpen ? ' open' : ''}`}>
+      <nav className={`header__nav${menuOpen ? ' open' : ''}`} id="main-navigation">
         {userRole === ROLES.SELLER ? (
           <>
             <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
@@ -117,7 +120,7 @@ const Header = ({ userRole, onLoginClick }) => {
             left: 0,
             bottom: 0,
             background: 'rgba(0,0,0,0.25)',
-            zIndex: 10
+            zIndex: 9
           }}
           onClick={toggleMenu}
           aria-label="Close navigation overlay"

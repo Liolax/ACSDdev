@@ -3,7 +3,10 @@ import React from 'react';
 const Footer = () => (
   <div className="footer-bg">
     <footer className="footer">
-      <p>© 2025 ÉireCraft. All rights reserved.</p>
+      <div className="footer__content">
+        <span className="footer__icon" aria-label="shamrock" role="img">☘️</span>
+        © 2025 ÉireCraft. All rights reserved.
+      </div>
     </footer>
   </div>
 );
