@@ -4,6 +4,7 @@ import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import ContactForm from '../components/forms/ContactForm';
 import LoginPopup from '../components/LoginPopup';
+import '../assets/styles/pages/_contact.scss';
 import '../assets/styles/components/_contact-form.scss';
 
 const ContactPage = () => {

@@ -1,50 +1,10 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
 
-.contact-page-bg {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-bg, #fcfcf7);
-}
-
-.contact-page__main {
-  flex: 1 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0 0 40px 0;
-}
-
-.contact-page__content {
-  width: 100%;
-  max-width: 520px;
-  margin: 40px 0 0 0;
-  padding: 32px 28px 24px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.contact-page__title {
-  @include mixins.heading;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  letter-spacing: 0.5px;
-}
-
-.contact-page__description,
-.contact-page__privacy {
-  font-size: 1.1rem;
-  color: base.$irish-green-dark;
-  text-align: center;
-  margin-bottom: 1rem;
-  font-family: var(--font-family-base);
-}
-
 .contact-form-wrapper {
   width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
 }
 
 .contact-form {
@@ -142,17 +102,6 @@
     font-size: 1.01rem;
     text-align: center;
     font-weight: 600;
-  }
-}
-
-@media (max-width: 650px) {
-  .contact-page__content {
-    margin: 24px 0 0 0;
-    padding: 16px 6px 14px 6px;
-    border-radius: 11px;
-  }
-  .contact-page__title {
-    font-size: 1.45rem;
   }
 }
 
