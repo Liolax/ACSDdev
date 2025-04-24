@@ -48,7 +48,8 @@
     box-shadow: 0 2px 6px rgba(247, 178, 55, 0.12);
     transition: background 0.16s, color 0.16s, box-shadow 0.16s;
     text-decoration: none;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: base.$irish-gold;
       color: #fff;
       box-shadow: 0 3px 10px rgba(247, 178, 55, 0.18);
@@ -73,42 +74,58 @@
   box-shadow: 0 2px 6px rgba(247, 178, 55, 0.10);
   cursor: pointer;
   transition: background 0.16s, color 0.16s, box-shadow 0.16s;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: base.$irish-gold-dark;
     color: #fff;
     box-shadow: 0 3px 12px rgba(247, 178, 55, 0.14);
   }
 }
+
 .buyer-dashboard__button--secondary {
   background: base.$irish-gold-light;
   color: base.$irish-gold-dark;
   font-weight: 500;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: base.$irish-gold;
     color: #fff;
   }
 }
+
 .buyer-dashboard__button--sm {
   font-size: 0.82rem;
   padding: 4px 8px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(247, 178, 55, 0.07);
 }
+
 /* New Green variant for Give Feedback */
 .button--green {
   background: base.$irish-green;
   color: #fff;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: base.$irish-green-dark;
   }
 }
+
 /* See More Buttons - slightly transparent */
 .see-more-btn {
   opacity: 0.8;
   transition: opacity 0.16s;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     opacity: 1;
   }
+}
+
+/* Enforce uniform size for Wishlist action buttons (Desktop) */
+.buyer-dashboard__wishlist-actions .button {
+  height: 36px;
+  min-width: 110px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
 }
 
 /* ORDER CARD */
@@ -158,8 +175,10 @@
   }
   &__actions {
     display: flex;
-    flex-direction: row;  // Changed from column to row.
-    gap: 6px;
+    flex-direction: row;  // Place buttons in a row.
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
   }
   &__track,
   &__feedback {
@@ -353,6 +372,23 @@
   .buyer-dashboard__pay-button {
     font-size: 1rem;
     padding: 8px 22px;
+  }
+}
+
+/* Mobile override for Wishlist actions: arrange inline and keep buttons compact */
+@media (max-width: 600px) {
+  .buyer-dashboard__wishlist-actions {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+  .buyer-dashboard__wishlist-actions .button {
+    width: auto;
+    min-width: 90px;
+    max-width: 120px;
+    box-sizing: border-box;
+    font-size: 0.82rem;
+    padding: 4px 8px;
   }
 }
 

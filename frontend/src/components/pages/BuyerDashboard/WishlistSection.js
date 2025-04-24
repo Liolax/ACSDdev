@@ -8,7 +8,7 @@ const WishlistSection = ({
   onRemove,
   onMoveToCart,
 }) => {
-  // Only the first `visibleCount` wishlist items will be shown.
+  // Only display the first `visibleCount` wishlist items.
   const visibleItems = items.slice(0, visibleCount);
   return (
     <div className="buyer-dashboard__wishlist">
@@ -45,12 +45,18 @@ const WishlistSection = ({
       </ul>
       <div className="buyer-dashboard__wishlist-controls">
         {visibleCount > 5 && onSeeLess && (
-          <button onClick={onSeeLess} className="button buyer-dashboard__button--sm see-more-btn">
+          <button
+            onClick={onSeeLess}
+            className="button buyer-dashboard__button--sm see-more-btn"
+          >
             See Less...
           </button>
         )}
         {visibleCount < items.length && (
-          <button onClick={onSeeMore} className="button buyer-dashboard__button--sm see-more-btn">
+          <button
+            onClick={onSeeMore}
+            className="button buyer-dashboard__button--sm see-more-btn"
+          >
             See More...
           </button>
         )}
