@@ -1,168 +1,194 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
+@use 'sass:color';
 
 .header {
-  background: var(--color-primary);
-  color: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  max-width: 1200px;
+  margin: 0 auto;
   width: 100%;
-  box-shadow: 0 2px 8px rgba(23,98,62,0.08);
+  background: base.$irish-green-gradient;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 2px 14px rgba(23, 98, 62, 0.13);
+  position: relative;
+  z-index: 10;
 
   &__logo {
     display: flex;
     align-items: center;
-    gap: 13px;
 
     a {
       display: flex;
       align-items: center;
       text-decoration: none;
       color: inherit;
-    }
-
-    &-image {
-      width: 46px;
-      height: 46px;
-      border-radius: 10px;
-      background: #fff;
-      object-fit: cover;
-      margin-right: 11px;
-      box-shadow: 0 0 8px rgba(23,98,62,0.13);
-    }
-
-    &-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-
-    &-main {
-      font-family: var(--font-family-heading);
-      font-weight: 900;
-      font-size: 1.45rem;
-      letter-spacing: 0.02em;
-      color: var(--color-secondary);
-    }
-    &-slogan {
-      font-size: 0.95rem;
-      color: #e7e2cd;
-      letter-spacing: 0.02em;
-      font-family: var(--font-family-base);
+      transition: color 0.18s;
+      &:hover,
+      &:focus {
+        color: #b0ffd7;
+      }
     }
   }
 
-  &__content {
+  &__logo-image {
+    height: 50px;
+    width: auto;
+    margin-right: 12px;
+    /* Add a fun swing animation on the logo */
+    animation: logo-swing 2.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite alternate;
+  }
+
+  &__logo-text {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 70px;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  &__logo-main {
+    font-family: var(--font-family-heading);
+    font-size: 1.42rem;
+    font-weight: 900;
+  }
+
+  &__logo-slogan {
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.93rem;
+    color: #b0ffd7;
+    margin-top: 0;
   }
 
   &__nav {
     display: flex;
     align-items: center;
     gap: 18px;
-
-    &.open {
-      @media (max-width: 900px) {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        background: var(--color-primary);
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 240px;
-        height: 100vh;
-        padding: 65px 24px 18px 24px;
-        z-index: 15;
-        box-shadow: -2px 0 16px rgba(23,98,62,0.11);
-        animation: nav-slide-in 0.25s;
+    font-size: 1.01rem;
+    a,
+    .header__nav-btn {
+      color: #fff;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 20px;
+      @include mixins.transition(background-color);
+      &:hover,
+      &:focus {
+        background: base.$irish-green-light;
+        color: #b0ffd7;
       }
     }
-  }
-
-  &__link, &__nav-btn {
-    color: #fff;
-    font-size: 1.07rem;
-    font-weight: 600;
-    padding: 5px 16px;
-    border: none;
-    background: none;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.13s, color 0.13s;
-    font-family: var(--font-family-base);
-
-    &:hover, &:focus {
-      background: var(--color-secondary);
-      color: var(--color-gold-text);
+    .header__link.active {
+      background: base.$irish-green-dark;
+      color: #b0ffd7;
+      font-weight: 700;
     }
-  }
-
-  &__nav-btn {
-    background: var(--color-secondary);
-    color: var(--color-gold-text);
-    margin-left: 8px;
-    font-weight: 700;
-
-    &:hover, &:focus {
-      background: var(--color-gold-dark);
-      color: #fff;
+    .header__nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
     }
   }
 
   &__mobile-toggle {
     display: none;
-    background: none;
-    border: none;
-    color: var(--color-secondary);
-    font-size: 2.1rem;
-    padding: 4px 12px;
     cursor: pointer;
-    border-radius: 8px;
-    margin-left: 16px;
-    transition: background 0.15s;
+    background: rgba(23, 98, 62, 0.15);
+    border: none;
+    font-size: 1.35rem;
+    color: #fff;
+    margin-left: 8px;
+    z-index: 103;
+    padding: 3px 9px;
+    border-radius: 50%;
+    transition: background 0.18s;
+    &:hover,
+    &:focus {
+      background: base.$irish-green-light;
+      color: #b0ffd7;
+    }
+  }
 
-    &:hover, &:focus {
-      background: rgba(255,255,255,0.18);
+  @media (max-width: 850px) {
+    flex-direction: row;
+    padding: 0 5px;
+    min-height: 0;
+
+    &__logo {
+      padding: 8px 4px 8px 2px;
+      .header__logo-image {
+        height: 26px;
+        margin-right: 6px;
+      }
+      .header__logo-main {
+        font-size: 1rem;
+      }
+      .header__logo-slogan {
+        font-size: 0.7rem;
+      }
     }
 
-    @media (max-width: 900px) {
+    &__mobile-toggle {
       display: block;
+      font-size: 1.18rem;
+      margin-left: auto;
+      box-shadow: none;
+      padding: 2px 7px;
     }
-  }
 
-  // Hide hamburger when nav is open on mobile
-  &__nav.open ~ .header__mobile-toggle,
-  &__mobile-toggle.hide-when-nav-open {
-    display: none !important;
+    &__nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      background: base.$irish-green-gradient;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 80px 0 18px 0;
+      z-index: 102;
+      display: none;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 10px 32px 0 rgba(23, 98, 62, 0.13);
+
+      &.open {
+        display: flex;
+        animation: navbar-slide-down 0.20s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      a,
+      .header__nav-btn {
+        width: 100%;
+        text-align: left;
+        padding: 17px 28px;
+        border-left: 4px solid transparent;
+        transition: background 0.13s, color 0.13s, border-color 0.13s;
+        &:hover,
+        &:focus {
+          background: base.$irish-green-light;
+          color: #b0ffd7;
+          border-left: 4px solid #b0ffd7;
+        }
+      }
+
+      .header__link.active {
+        background: base.$irish-green-dark;
+        color: #b0ffd7;
+        border-left: 4px solid #b0ffd7;
+        font-weight: 700;
+      }
+    }
   }
 }
 
-@media (max-width: 900px) {
-  .header__content {
-    padding: 0 9px;
-    height: 58px;
-  }
-  .header__nav {
-    display: none;
-    &.open {
-      display: flex !important;
-    }
-  }
-  // Hamburger hide logic: when nav is open, hide the toggle
-  .header__nav.open ~ .header__mobile-toggle {
-    display: none !important;
-  }
+@keyframes logo-swing {
+  0% { transform: rotate(-5deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.05); }
+  100% { transform: rotate(-5deg) scale(1); }
 }
-@keyframes nav-slide-in {
-  from { right: -270px; opacity: 0.4; }
-  to { right: 0; opacity: 1; }
+
+@keyframes navbar-slide-down {
+  0% { transform: translateY(-28px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }

@@ -8,6 +8,9 @@ $irish-gold-dark: #b58319;
 $irish-gold-light: #ffe4a1;
 $irish-gold-text: #664200;
 
+// Define a gradient using your green variables.
+$irish-green-gradient: linear-gradient(90deg, $irish-green 0%, $irish-green-light 100%);
+
 // Define a hover secondary color for buttons, etc.
 $hover-secondary-color: $irish-gold-dark;
 

@@ -1,20 +1,16 @@
-@use '../base' as *;
-@use '../mixins' as *;
-
-$irish-green: #17623e;
-$irish-green-light: #218c5a;
-$irish-green-gradient: linear-gradient(90deg, #17623e 0%, #218c5a 100%);
+@use '../base' as base;
+@use '../mixins' as mixins;
 
 .footer {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  background: $irish-green-gradient;
+  background: base.$irish-green-gradient;
   color: #e7fff3;
   text-align: center;
   padding: 18px 32px 14px 32px;
   border-radius: 14px 14px 0 0;
-  box-shadow: 0 -2px 14px rgba(23,98,62,0.13);
+  box-shadow: 0 -2px 14px rgba(23, 98, 62, 0.13);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,6 +42,5 @@ $irish-green-gradient: linear-gradient(90deg, #17623e 0%, #218c5a 100%);
     padding: 12px 7px 8px 7px;
     font-size: 0.97rem;
     border-radius: 9px 9px 0 0;
-    // Responsive: keep style similar to header
   }
 }

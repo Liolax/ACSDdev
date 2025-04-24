@@ -25,7 +25,7 @@
   transition: $properties var(--transition-default);
 }
 
-// Heading mixin for titles
+// Heading mixin for title styles
 @mixin heading {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-bold);

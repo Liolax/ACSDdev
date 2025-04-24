@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROLES } from '../../constants/roles';
 import logo from '../../assets/images/logo.svg';
+import '../../assets/styles/components/_header.scss';
 
 const Header = ({ userRole, onLoginClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,28 +50,60 @@ const Header = ({ userRole, onLoginClick }) => {
       <nav className={`header__nav${menuOpen ? ' open' : ''}`}>
         {userRole === ROLES.SELLER ? (
           <>
-            <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>My Products</NavLink>
-            <NavLink to="/add-product" className="header__link" onClick={handleLinkClick}>Add Product</NavLink>
-            <NavLink to="/feedback" className="header__link" onClick={handleLinkClick}>Feedback</NavLink>
-            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>Contact</NavLink>
-            <button className="header__nav-btn" onClick={handleLogout}>Logout</button>
+            <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
+              My Products
+            </NavLink>
+            <NavLink to="/add-product" className="header__link" onClick={handleLinkClick}>
+              Add Product
+            </NavLink>
+            <NavLink to="/feedback" className="header__link" onClick={handleLinkClick}>
+              Feedback
+            </NavLink>
+            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+              Contact
+            </NavLink>
+            <button className="header__nav-btn" onClick={handleLogout}>
+              Logout
+            </button>
           </>
         ) : userRole === ROLES.BUYER ? (
           <>
-            <NavLink to="/buyer-dashboard" className="header__link" onClick={handleLinkClick}>My Purchases</NavLink>
-            <NavLink to="/market" className="header__link" onClick={handleLinkClick}>Market</NavLink>
-            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>Contact</NavLink>
-            <button className="header__nav-btn" onClick={handleLogout}>Logout</button>
+            <NavLink to="/buyer-dashboard" className="header__link" onClick={handleLinkClick}>
+              My Purchases
+            </NavLink>
+            <NavLink to="/market" className="header__link" onClick={handleLinkClick}>
+              Market
+            </NavLink>
+            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+              Contact
+            </NavLink>
+            <button className="header__nav-btn" onClick={handleLogout}>
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <NavLink to="/" end className="header__link" onClick={handleLinkClick}>Home</NavLink>
+            <NavLink to="/" end className="header__link" onClick={handleLinkClick}>
+              Home
+            </NavLink>
             {onLoginClick ? (
-              <button className="header__nav-btn" onClick={() => { onLoginClick(); handleLinkClick(); }}>Login</button>
+              <button
+                className="header__nav-btn"
+                onClick={() => {
+                  onLoginClick();
+                  handleLinkClick();
+                }}
+              >
+                Login
+              </button>
             ) : (
-              <NavLink to="/login" className="header__link" onClick={handleLinkClick}>Login</NavLink>
+              <NavLink to="/login" className="header__link" onClick={handleLinkClick}>
+                Login
+              </NavLink>
             )}
-            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>Contact</NavLink>
+            <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
+              Contact
+            </NavLink>
           </>
         )}
       </nav>
@@ -79,7 +112,10 @@ const Header = ({ userRole, onLoginClick }) => {
         <div
           style={{
             position: 'fixed',
-            top: 0, right: 0, left: 0, bottom: 0,
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
             background: 'rgba(0,0,0,0.25)',
             zIndex: 10
           }}

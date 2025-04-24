@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
+import '../assets/styles/components/_login-popup.scss';
 
 const LoginPopup = ({ closePopup, handleLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [role, setRole] = useState('buyer'); // Default role is "buyer"
+  const [role, setRole] = useState('buyer'); // Default role is buyer
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // Call handleLogin with proper arguments and then close the popup
     handleLogin(email, password, rememberMe, role);
     closePopup();
   };

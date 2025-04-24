@@ -1,0 +1,132 @@
+@use '../base' as base;
+@use '../mixins' as mixins;
+
+.login-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.login-popup {
+  background-color: #fff;
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: popup-appear 0.3s ease-out;
+}
+
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.login-popup__title {
+  font-size: var(--font-size-heading);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  text-align: center;
+  color: var(--color-dark-primary);
+}
+
+.login-popup__instruction {
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+  margin-bottom: calc(var(--spacing-unit) * 0.5);
+  text-align: center;
+}
+
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1.5);
+  input {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 0.75);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    font-size: 1rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    box-sizing: border-box;
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary-light);
+      box-shadow: 0 0 4px rgba(0, 128, 0, 0.2);
+    }
+  }
+  .login-page__remember-me {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    font-size: var(--font-size-small);
+    input { width: auto; }
+  }
+  .login-page__role-toggle {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 1);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    .toggle-option {
+      flex: 1;
+      text-align: center;
+      padding: calc(var(--spacing-unit) * 0.75);
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--color-dark-primary);
+      transition: all var(--transition-default);
+      &:hover { background-color: var(--color-primary-light); color: #fff; }
+      &.active { background-color: var(--color-primary); color: #fff; }
+    }
+  }
+}
+
+.login-button {
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 1);
+  background-color: base.$irish-gold;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  @include mixins.transition(background-color);
+  &:hover,
+  &:focus {
+    background-color: base.$irish-gold-dark;
+  }
+}
+
+.login-popup__close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-dark-primary);
+  cursor: pointer;
+  @include mixins.transition(color);
+  &:hover,
+  &:focus {
+    color: base.$irish-gold-dark;
+  }
+}
