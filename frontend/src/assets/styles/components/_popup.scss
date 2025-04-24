@@ -1,0 +1,180 @@
+@use '../base' as base;
+@use '../mixins' as mixins;
+
+.popup-overlay {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgba(23, 98, 62, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.popup {
+  background: linear-gradient(135deg, #faf9f6 0%, #e6efe1 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 36px 0 rgba(23, 98, 62, 0.15);
+  min-width: 340px;
+  max-width: 95vw;
+  padding: 36px 32px 28px 32px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  animation: popup-fade-in 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid base.$irish-gold-light;
+}
+
+.popup__close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 1.65rem;
+  color: base.$irish-green-dark;
+  cursor: pointer;
+  transition: color 0.17s;
+  z-index: 10;
+  &:hover,
+  &:focus {
+    color: base.$irish-gold-dark;
+    outline: none;
+  }
+}
+
+.popup__title {
+  font-family: var(--font-family-heading);
+  font-weight: 800;
+  font-size: 1.55rem;
+  margin-bottom: 26px;
+  color: base.$irish-green-dark;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff, 0 2px 14px rgba(23,98,62,0.06);
+}
+
+.popup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.popup__label {
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+  color: base.$irish-green-dark;
+  font-size: 1.03rem;
+  margin-bottom: 5px;
+  letter-spacing: 0.01em;
+}
+
+.popup__input,
+.popup__textarea {
+  font-family: var(--font-family-base);
+  font-size: 1.08rem;
+  border-radius: 11px;
+  border: 1.4px solid base.$irish-gold-light;
+  padding: 9px 14px;
+  margin-bottom: 0;
+  background: #fff;
+  color: base.$irish-green-dark;
+  box-shadow: 0 1px 7px rgba(23,98,62,0.06);
+  transition: border-color 0.14s, box-shadow 0.14s;
+  &:focus {
+    border-color: base.$irish-gold;
+    box-shadow: 0 2px 12px rgba(247,178,55,0.14);
+    outline: none;
+  }
+}
+.popup__textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.popup__actions {
+  display: flex;
+  gap: 13px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.popup__button {
+  font-family: var(--font-family-heading);
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 9px;
+  padding: 9px 28px;
+  background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-light 100%);
+  border: none;
+  color: base.$irish-gold-text;
+  box-shadow: 0 2px 14px rgba(247,178,55,0.13);
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s, box-shadow 0.14s;
+  &:hover,
+  &:focus {
+    background: linear-gradient(90deg, base.$irish-gold-dark 0%, base.$irish-gold 100%);
+    color: #fff;
+    outline: none;
+  }
+  &--secondary {
+    background: base.$irish-gold-light;
+    color: base.$irish-gold-dark;
+    &:hover, &:focus {
+      background: base.$irish-gold;
+      color: #fff;
+    }
+  }
+  &--success {
+    background: linear-gradient(90deg, #177e48 0%, #1caf68 100%);
+    color: #fff !important;
+    &:hover, &:focus {
+      background: linear-gradient(90deg, #155e38 0%, #1caf68 90%);
+    }
+  }
+}
+.popup__error {
+  color: #b10e0e;
+  background: #fff0f0;
+  border-radius: 7px;
+  padding: 8px 12px;
+  margin-bottom: 7px;
+  font-size: 0.97rem;
+  text-align: center;
+}
+.popup__thankyou {
+  color: base.$irish-green-dark;
+  background: #eafff3;
+  border-radius: 7px;
+  padding: 10px 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.07rem;
+}
+
+@media (max-width: 600px) {
+  .popup {
+    min-width: 0;
+    width: 97vw;
+    padding: 18px 4vw 18px 4vw;
+    border-radius: 12px;
+  }
+  .popup__title {
+    font-size: 1.12rem;
+    margin-bottom: 16px;
+  }
+  .popup__form {
+    gap: 11px;
+  }
+  .popup__button {
+    font-size: 0.97rem;
+    padding: 7px 16px;
+    border-radius: 7px;
+  }
+}
+
+@keyframes popup-fade-in {
+  0% { opacity: 0; transform: scale(0.97) translateY(18px);}
+  100% { opacity: 1; transform: scale(1) translateY(0);}
+}

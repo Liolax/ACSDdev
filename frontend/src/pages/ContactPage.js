@@ -22,9 +22,7 @@ const ContactPage = () => {
     }
   };
 
-  const handleFormSuccess = () => {
-    setFormSubmitted(true);
-  };
+  const handleFormSuccess = () => setFormSubmitted(true);
 
   const userRole = localStorage.getItem('userRole');
 

@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
+import '../../assets/styles/components/_contact-form.scss';
 
 const ContactForm = ({ onSuccess }) => {
   const [state, handleSubmit] = useForm("mjkydqyo");
-  
-  // When form submission succeeds, notify the parent
+
   useEffect(() => {
     if (state.succeeded && onSuccess) {
       onSuccess();
     }
   }, [state.succeeded, onSuccess]);
 
-  // If succeeded, render only the success message
   if (state.succeeded) {
-    return <p className="contact-success">Thanks for contacting us!</p>;
+    return <p className="contact-form__success">Thanks for contacting us!</p>;
   }
 
   return (
@@ -36,11 +35,10 @@ const ContactForm = ({ onSuccess }) => {
         <textarea id="message" name="message" className="contact-form__textarea" required></textarea>
         <ValidationError prefix="Message" field="message" errors={state.errors} />
 
-        {/* Use both classes for consistent Irish styling */}
         <button
           type="submit"
           disabled={state.submitting}
-          className="button contact-form__button"
+          className="contact-form__button"
         >
           Send Message
         </button>
