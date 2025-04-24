@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../assets/styles/components/_popup.scss';
+import '../../assets/styles/components/_popup.scss';
 
 const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback }) => {
   const [rating, setRating] = useState(initialFeedback ? initialFeedback.rating : 5);

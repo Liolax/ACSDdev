@@ -7,10 +7,11 @@
 @use './components/header' as header;
 @use './components/footer' as footer;
 @use './components/button' as button;
-@use './components/feedback-popup' as feedbackPopup;
 @use './components/role-selection' as roleSelection;
 @use './components/products' as products;
 @use './components/community' as community;
+@use './components/popup' as popup;
+@use './components/contact-form' as contactForm;
 
 // Page-Specific Styles
 @use './pages/pageContainer' as pageContainer;
@@ -18,7 +19,6 @@
 @use './pages/buyer-dashboard' as buyerDashboard;
 @use './pages/home' as home;
 @use './pages/shipping-details' as shippingDetails;
-@use './pages/contact' as contact;
 @use './pages/market' as market;
 
 // Shared Component Styles
