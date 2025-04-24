@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
 import FeedbackPopup from '../../ui/FeedbackPopup';
+import Button from '../../ui/Button';
 
-// Helper to determine collage container size and grid layout based on item count
+// Helper to determine collage container size and grid layout based on the number of items.
 const getCollageStyle = (count) => {
   let containerSize = 120;
   let gridTemplateColumns = '1fr'; // default for 1 item
+  
   if (count === 1) {
     gridTemplateColumns = '1fr';
   } else if (count === 2) {
@@ -16,24 +18,25 @@ const getCollageStyle = (count) => {
   } else {
     gridTemplateColumns = 'repeat(3, 1fr)';
   }
+  
   return { containerSize, gridTemplateColumns };
 };
 
 const BuyerDashboard = () => {
-  // Orders state
+  // Orders state.
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  // Feedback state: key = order id, value = feedback data
+  // Feedback state: keyed by order id.
   const [feedbackByOrder, setFeedbackByOrder] = useState({});
   const [feedbackOrderId, setFeedbackOrderId] = useState(null);
-
-  // Wishlist and Cart state
+  
+  // Wishlist and Cart state.
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const [wishlistVisible, setWishlistVisible] = useState(5);
   const [cartVisible, setCartVisible] = useState(5);
 
-  // Dummy orders data
+  // Dummy orders data.
   useEffect(() => {
     const dummyOrders = [
       {
@@ -68,7 +71,7 @@ const BuyerDashboard = () => {
     setLoadingOrders(false);
   }, []);
 
-  // Dummy wishlist and cart data setup
+  // Dummy wishlist and cart data.
   useEffect(() => {
     const dummyWishlist = Array.from({ length: 10 }).map((_, index) => ({
       id: index + 1,
@@ -87,7 +90,7 @@ const BuyerDashboard = () => {
     setCart(dummyCart);
   }, []);
 
-  // Wishlist handlers
+  // Wishlist handlers.
   const handleRemoveWishlist = (id) => {
     setWishlist(wishlist.filter((item) => item.id !== id));
   };
@@ -104,12 +107,12 @@ const BuyerDashboard = () => {
 
   const handleWishlistSeeLess = () => setWishlistVisible(5);
 
-  // Cart handlers
+  // Cart handlers.
   const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
   const handleCartSeeLess = () => setCartVisible(5);
   const handlePay = () => alert('Proceed to payment and shipping selection.');
 
-  // Feedback handlers
+  // Feedback handlers.
   const handleFeedbackSubmit = (feedbackData) => {
     console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
     setFeedbackByOrder((prev) => ({ ...prev, [feedbackData.orderId]: feedbackData }));
@@ -162,41 +165,31 @@ const BuyerDashboard = () => {
                 </div>
                 <div className="order-card__details">
                   <h3 className="order-card__id">Order {order.id}</h3>
-                  <p className="order-card__items-names">{order.items.map(item => item.name).join(', ')}</p>
+                  <p className="order-card__items-names">
+                    {order.items.map(item => item.name).join(', ')}
+                  </p>
                   <p className="order-card__status">Status: {order.status}</p>
                   <p className="order-card__date">Date: {order.date}</p>
                 </div>
                 <div className="order-card__actions">
-                  <button
-                    className="button order-card__track"
-                    onClick={() => alert(`Tracking order ${order.id}`)}
-                  >
+                  <Button className="button--sm" onClick={() => alert(`Tracking order ${order.id}`)}>
                     Track Order
-                  </button>
+                  </Button>
                   {order.status === 'Delivered' && (
                     <>
                       {feedbackByOrder[order.id] ? (
                         <>
-                          <button
-                            className="button order-card__feedback"
-                            onClick={() => setFeedbackOrderId(order.id)}
-                          >
+                          <Button className="button--sm" onClick={() => setFeedbackOrderId(order.id)}>
                             Edit Feedback
-                          </button>
-                          <button
-                            className="button order-card__feedback"
-                            onClick={() => handleFeedbackDelete(order.id)}
-                          >
+                          </Button>
+                          <Button className="button--sm" onClick={() => handleFeedbackDelete(order.id)}>
                             Delete Feedback
-                          </button>
+                          </Button>
                         </>
                       ) : (
-                        <button
-                          className="button order-card__feedback"
-                          onClick={() => setFeedbackOrderId(order.id)}
-                        >
+                        <Button className="button--sm button--green" onClick={() => setFeedbackOrderId(order.id)}>
                           Give Feedback
-                        </button>
+                        </Button>
                       )}
                     </>
                   )}

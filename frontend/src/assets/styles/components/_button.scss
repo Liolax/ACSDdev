@@ -43,7 +43,7 @@
   }
 }
 
-// Outline variant
+// Outline variant (Thin Border)
 .button--outline, .btn--outline {
   background: transparent;
   color: base.$irish-gold;
@@ -62,7 +62,7 @@
   }
 }
 
-// Light variant
+// Light variant (Soft Background)
 .button--light, .btn--light {
   background: base.$irish-gold-light;
   color: base.$irish-gold-text;
@@ -76,4 +76,33 @@
   &:active {
     background: base.$irish-gold-dark;
   }
+}
+
+// Small button modifier
+.button--sm, .btn--sm {
+  font-size: 0.89rem;
+  padding: 6px 18px;
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(247, 178, 55, 0.12);
+}
+
+// Large button modifier (For emphasis, e.g., Track Order & Give Feedback)
+.button--lg, .btn--lg {
+  font-size: 1.12rem;
+  padding: 14px 32px;
+  font-weight: 800;
+  border-radius: 10px;
+  box-shadow: 0 5px 12px rgba(247, 178, 55, 0.16);
+  transition: all 0.18s ease-in-out;
+
+  &:hover,
+  &:focus {
+    background: base.$irish-gold-dark;
+    box-shadow: 0 8px 20px rgba(247, 178, 55, 0.20);
+  }
+}
+
+// Button Alignment Utility
+.button-right {
+  margin-left: auto;
 }

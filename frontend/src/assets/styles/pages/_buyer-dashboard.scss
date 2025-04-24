@@ -1,107 +1,366 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
 
-/* Buyer Dashboard Page Styling */
+/* --- Artisanal Irish-Style Buyer Dashboard --- */
+.buyer-dashboard-page {
+  min-height: 100vh;
+  padding-bottom: 28px;
+}
+
+/* MAIN CONTAINER */
 .buyer-dashboard {
-  padding: calc(var(--spacing-unit) * 3);
-  background-color: $irish-cream;
+  max-width: 1100px;
+  margin: 32px auto 0;
+  padding: 28px 16px;
   color: var(--color-dark-primary);
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(23, 98, 62, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 
-  &__header {
-    font-size: var(--font-size-heading);
-    text-align: center;
-    margin-bottom: calc(var(--spacing-unit) * 2);
-    color: $irish-green;
-    @include heading(var(--font-size-heading), $irish-green);
-  }
+/* HEADER & SECTION TITLES */
+.buyer-dashboard__header,
+.buyer-dashboard__section-header {
+  @include mixins.heading;
+  text-align: center;
+  margin-bottom: 8px;
+  color: base.$irish-green-dark;
+  letter-spacing: 0.5px;
+}
 
-  &__quick-links {
-    display: flex;
-    justify-content: flex-end;
-    gap: calc(var(--spacing-unit) * 2);
-    margin-bottom: calc(var(--spacing-unit) * 2);
+/* QUICK LINKS */
+.buyer-dashboard__quick-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 
-    .buyer-dashboard__quick-link {
-      font-size: var(--font-size-base);
-      color: $irish-green;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-unit) * 0.5);
-      transition: color var(--transition-default);
-
-      &:hover {
-        color: $irish-gold;
-        text-decoration: underline;
-      }
+  .buyer-dashboard__quick-link {
+    font-size: 1.03rem;
+    color: base.$irish-gold-dark;
+    font-family: var(--font-family-heading);
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, base.$irish-gold-light 0%, #fffbe6 100%);
+    box-shadow: 0 2px 6px rgba(247, 178, 55, 0.12);
+    transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+    text-decoration: none;
+    &:hover, &:focus {
+      background: base.$irish-gold;
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(247, 178, 55, 0.18);
     }
   }
+}
 
-  &__orders {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 2);
+/* --- BUTTONS --- */
+.buyer-dashboard__button,
+.order-card__track,
+.order-card__feedback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 8px 16px;
+  background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-light 100%);
+  color: base.$irish-gold-text;
+  box-shadow: 0 2px 6px rgba(247, 178, 55, 0.10);
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+  &:hover, &:focus {
+    background: base.$irish-gold-dark;
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(247, 178, 55, 0.14);
   }
-
-  &__wishlist,
-  &__cart {
-    margin-top: calc(var(--spacing-unit) * 4);
+}
+.buyer-dashboard__button--secondary {
+  background: base.$irish-gold-light;
+  color: base.$irish-gold-dark;
+  font-weight: 500;
+  &:hover, &:focus {
+    background: base.$irish-gold;
+    color: #fff;
+  }
+}
+.buyer-dashboard__button--sm {
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(247, 178, 55, 0.07);
+}
+/* New Green variant for Give Feedback */
+.button--green {
+  background: base.$irish-green;
+  color: #fff;
+  &:hover, &:focus {
+    background: base.$irish-green-dark;
+  }
+}
+/* See More Buttons - slightly transparent */
+.see-more-btn {
+  opacity: 0.8;
+  transition: opacity 0.16s;
+  &:hover, &:focus {
+    opacity: 1;
   }
 }
 
-/* Order Card Styling */
+/* ORDER CARD */
 .order-card {
   display: flex;
-  align-items: center;
-  padding: calc(var(--spacing-unit) * 1.5);
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: var(--shadow-light);
-  gap: calc(var(--spacing-unit) * 1.5);
-  border: 2px solid $irish-gold-light;
-  transition: border-color var(--transition-default), box-shadow var(--transition-default);
-
+  align-items: flex-start;
+  padding: 20px 18px;
+  margin-bottom: 20px; // Space between order cards.
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(23, 98, 62, 0.15);
+  gap: 18px;
+  transition: box-shadow 0.2s;
   &:hover {
-    border-color: $irish-gold;
-    box-shadow: 0 4px 16px rgba(23, 98, 62, 0.14);
+    box-shadow: 0 8px 24px rgba(247, 178, 55, 0.18);
   }
-
   &__collage {
     display: grid;
-    gap: 2px;
+    gap: 4px;
     border-radius: 8px;
     overflow: hidden;
+    background: base.$irish-gold-light;
+    min-width: 54px;
+    min-height: 54px;
   }
-
   &__mini-image {
-    width: 100%;
-    height: 100%;
+    width: 54px;
+    height: 54px;
     object-fit: cover;
-    display: block;
+    border-radius: 7px;
+    background: #fffbe6;
+    border: 1px solid base.$irish-gold-light;
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(1.1);
+    }
   }
-
   &__details {
-    flex: 1;
-    min-width: 200px;
-    padding: 0 calc(var(--spacing-unit) * 1);
-  }
-
-  &__actions {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing-unit) * 1);
+    gap: 5px;
+    min-width: 170px;
+    flex: 1;
+    .order-detail {
+      margin-bottom: 2px;
+    }
+  }
+  &__actions {
+    display: flex;
+    flex-direction: row;  // Changed from column to row.
+    gap: 6px;
+  }
+  &__track,
+  &__feedback {
+    @extend .buyer-dashboard__button;
+    font-size: 1.05rem;
+    padding: 10px 18px;
+    min-width: 100px;
+  }
+  &__track {
+    background: base.$irish-green-light;
+    color: #fff;
+    &:hover {
+      background: base.$irish-green-dark;
+    }
   }
 }
 
-/* Responsive adjustments for Order Card Collage */
-@media (max-width: 600px) {
+/* WISHLIST SECTION */
+.buyer-dashboard__wishlist {
+  margin-top: 24px;
+  padding: 0;
+  background: none;
+  border-radius: 8px;
+}
+.buyer-dashboard__wishlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.buyer-dashboard__wishlist-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 7px;
+  background: #f5ecd4;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(23, 98, 62, 0.06);
+  transition: box-shadow 0.12s;
+  margin-bottom: 6px;
+  &:hover {
+    box-shadow: 0 3px 12px rgba(247, 178, 55, 0.10);
+  }
+}
+.buyer-dashboard__wishlist-image {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid base.$irish-gold;
+  background: base.$irish-gold-light;
+}
+.buyer-dashboard__wishlist-price {
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  color: base.$irish-gold-dark;
+  font-family: var(--font-family-heading);
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-left: 6px;
+}
+.buyer-dashboard__wishlist-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
+.buyer-dashboard__wishlist-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.buyer-dashboard__wishlist-controls .button {
+  @extend .buyer-dashboard__button;
+  @extend .buyer-dashboard__button--secondary;
+}
+
+/* CART SECTION */
+.buyer-dashboard__cart {
+  margin-top: 24px;
+  padding: 0;
+  background: none;
+  border-radius: 8px;
+}
+.buyer-dashboard__cart-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.buyer-dashboard__cart-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 7px;
+  background: #f5ecd4;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(23, 98, 62, 0.06);
+  transition: box-shadow 0.12s;
+  margin-bottom: 6px;
+  &:hover {
+    box-shadow: 0 3px 12px rgba(247, 178, 55, 0.10);
+  }
+  .buyer-dashboard__cart-item-details {
+    flex: 1;
+  }
+}
+.buyer-dashboard__cart-image {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid base.$irish-gold;
+  background: base.$irish-gold-light;
+}
+.buyer-dashboard__cart-price {
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  color: base.$irish-gold-dark;
+  font-family: var(--font-family-heading);
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-left: 8px;
+}
+.buyer-dashboard__cart-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
+.buyer-dashboard__cart-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.buyer-dashboard__cart-controls .button {
+  @extend .buyer-dashboard__button;
+  @extend .buyer-dashboard__button--secondary;
+}
+
+/* CART SUMMARY */
+.buyer-dashboard__cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-top: 13px;
+  font-size: 1.01rem;
+  font-family: var(--font-family-base);
+}
+.buyer-dashboard__pay-button {
+  @extend .buyer-dashboard__button;
+  font-size: 1.12rem;
+  padding: 10px 38px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 800px) {
+  .buyer-dashboard {
+    padding: 20px 10px;
+  }
   .order-card {
     flex-direction: column;
     align-items: stretch;
+    padding: 12px 6px;
   }
-  .order-card__collage {
-    width: 100%;
-    height: auto;
-    grid-template-columns: 1fr;
+  .buyer-dashboard__wishlist-item,
+  .buyer-dashboard__cart-item {
+    padding: 7px 6px;
+    gap: 8px;
+  }
+  .buyer-dashboard__wishlist-image,
+  .buyer-dashboard__cart-image {
+    width: 36px;
+    height: 36px;
+  }
+  .buyer-dashboard__wishlist-actions .button,
+  .buyer-dashboard__cart-actions .button {
+    font-size: 0.82rem;
+    padding: 4px 8px;
+  }
+  .buyer-dashboard__wishlist-controls .button,
+  .buyer-dashboard__cart-controls .button {
+    font-size: 0.90rem;
+    padding: 5px 12px;
+  }
+  .buyer-dashboard__cart-total {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+  .buyer-dashboard__pay-button {
+    font-size: 1rem;
+    padding: 8px 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .buyer-dashboard {
+    padding: 12px 6px;
+  }
+  .order-card {
+    padding: 8px 4px;
   }
 }

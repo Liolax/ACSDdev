@@ -5,7 +5,6 @@ import BuyerDashboard from '../components/pages/BuyerDashboard/BuyerDashboard';
 import '../assets/styles/pages/_buyer-dashboard.scss';
 
 const BuyerDashboardPage = () => {
-  // Retrieve the user's role; default to "buyer" if not set.
   const userRole = localStorage.getItem('userRole') || 'buyer';
 
   return (
