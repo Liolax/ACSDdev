@@ -1,16 +1,9 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
+@use 'sass:color';
 
-.standard-product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
 .product-card {
-  @include card(15px, 0 4px 22px rgba(23,98,62,0.09));
+  @include mixins.card(15px, 0 4px 22px rgba(23, 98, 62, 0.09));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,9 +11,10 @@
   overflow: hidden;
   border: 1.5px solid transparent;
 
-  &:hover, &:focus-within {
-    box-shadow: 0 10px 38px rgba(247,178,55,0.14);
-    border: 1.5px solid $irish-gold;
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 10px 38px rgba(247, 178, 55, 0.14);
+    border: 1.5px solid base.$irish-gold;
     transform: translateY(-4px) scale(1.012);
   }
 
@@ -30,8 +24,9 @@
     object-fit: cover;
     object-position: center;
     border-radius: 14px 14px 0 0;
-    background: $irish-gold-light;
+    background: base.$irish-gold-light;
   }
+
   &__content {
     width: 100%;
     padding: 16px 14px 8px 14px;
@@ -40,12 +35,12 @@
     align-items: flex-start;
 
     &__title {
-      @include heading;
+      @include mixins.heading;
       font-size: 1.13rem;
       margin-bottom: 4px;
     }
     &__price {
-      color: $irish-gold;
+      color: base.$irish-gold;
       font-size: 1.01rem;
       font-weight: 600;
       margin-bottom: 2px;

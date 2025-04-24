@@ -1,11 +1,6 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
 
-/* Styles for the Contact Page */
-
-.contact-section {
-  background-color: $irish-gold-light;
-  
 .contact-page {
   padding: calc(var(--spacing-unit) * 3);
   background-color: var(--color-bg);
@@ -19,18 +14,17 @@
 
   &__button {
     padding: calc(var(--spacing-unit) * 1);
-    background-color: base.$secondary-color;
+    background-color: base.$irish-gold;  // using base variables via namespace
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color var(--transition-default);
+    @include mixins.transition(background-color);
 
     &:hover {
-      background-color: color.adjust(base.$secondary-color, $lightness: -10%);
+      background-color: base.$irish-gold-dark;
     }
   }
-}
 }

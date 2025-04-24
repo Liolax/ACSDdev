@@ -1,7 +1,6 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
 
-/* Styles for the Role Selection component */
 .role-selection {
   padding: calc(var(--spacing-unit) * 2.5);
   text-align: center;
@@ -32,7 +31,7 @@
     cursor: pointer;
     font-weight: bold;
     font-size: var(--font-size-small);
-    @include mixins.transition(background-color); 
+    @include mixins.transition(background-color);
 
     &:hover,
     &:focus {

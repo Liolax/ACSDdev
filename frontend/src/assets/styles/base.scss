@@ -8,6 +8,9 @@ $irish-gold-dark: #b58319;
 $irish-gold-light: #ffe4a1;
 $irish-gold-text: #664200;
 
+// Define a hover secondary color for buttons, etc.
+$hover-secondary-color: $irish-gold-dark;
+
 :root {
   --color-primary: #17623e;
   --color-primary-light: #218c5a;

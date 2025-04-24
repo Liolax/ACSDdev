@@ -1,15 +1,13 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
 
 $irish-green: #17623e;
-$irish-green-light: #218c5a;
 $irish-green-dark: #11442b;
-$irish-cream: #fbfbe6;
 
 .home-page__community {
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 2px 16px rgba(23,98,62,0.10);
+  box-shadow: 0 2px 16px rgba(23, 98, 62, 0.10);
   padding: 38px 32px 32px 32px;
   margin: 38px auto 0 auto;
   max-width: 1000px;
@@ -39,7 +37,11 @@ $irish-cream: #fbfbe6;
     padding: 22px 10px 20px 10px;
     border-radius: 12px;
     margin: 20px 4px 0 4px;
-    h2 { font-size: 1.35rem; }
-    p { font-size: 1.01rem; }
+    h2 {
+      font-size: 1.35rem;
+    }
+    p {
+      font-size: 1.01rem;
+    }
   }
 }

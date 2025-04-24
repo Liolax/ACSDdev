@@ -1,9 +1,10 @@
-@use '../base' as *;
-@use '../mixins' as *;
+@use '../base' as base;
+@use '../mixins' as mixins;
+@use 'sass:color';
 
 .button, .btn {
-  background: $irish-gold;
-  color: $irish-gold-text;
+  background: base.$irish-gold;
+  color: base.$irish-gold-text;
   font-family: var(--font-family-base);
   font-size: 1.06rem;
   font-weight: 700;
@@ -16,27 +17,29 @@
 
   &:hover,
   &:focus {
-    background: $irish-gold-dark;
+    background: base.$irish-gold-dark;
     color: #fff;
     box-shadow: 0 7px 18px rgba(247, 178, 55, 0.18);
   }
 }
+
 .button--outline, .btn--outline {
   background: transparent;
-  color: $irish-gold;
-  border: 2px solid $irish-gold;
+  color: base.$irish-gold;
+  border: 2px solid base.$irish-gold;
   &:hover,
   &:focus {
-    background: $irish-gold;
+    background: base.$irish-gold;
     color: #fff;
   }
 }
+
 .button--light, .btn--light {
-  background: $irish-gold-light;
-  color: $irish-gold-text;
+  background: base.$irish-gold-light;
+  color: base.$irish-gold-text;
   &:hover,
   &:focus {
-    background: $irish-gold;
+    background: base.$irish-gold;
     color: #fff;
   }
 }

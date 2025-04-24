@@ -1,26 +1,26 @@
-@use './base' as *;
-@use './mixins' as *;
-@use './utilities' as *;
-@use './overrides' as *;
+@use './base' as base;
+@use './mixins' as mixins;
+@use './utilities' as utilities;
+@use './overrides' as overrides;
 
 // Component Partials
-@use './components/header' as *;
-@use './components/footer' as *;
-@use './components/button' as *;
-@use './components/feedback-popup' as *;
-@use './components/role-selection' as *;
-@use './components/products' as *;
-@use './components/community' as *;
+@use './components/header' as header;
+@use './components/footer' as footer;
+@use './components/button' as button;
+@use './components/feedback-popup' as feedbackPopup;
+@use './components/role-selection' as roleSelection;
+@use './components/products' as products;
+@use './components/community' as community;
 
 // Page-Specific Styles
-@use './pages/pageContainer' as *;
-@use './pages/seller-dashboard' as *;
-@use './pages/buyer-dashboard' as *;
-@use './pages/home' as *;
-@use './pages/shipping-details' as *;
-@use './pages/contact' as *;
-@use './pages/login' as *;
-@use './pages/market' as *;
+@use './pages/pageContainer' as pageContainer;
+@use './pages/seller-dashboard' as sellerDashboard;
+@use './pages/buyer-dashboard' as buyerDashboard;
+@use './pages/home' as home;
+@use './pages/shipping-details' as shippingDetails;
+@use './pages/contact' as contact;
+@use './pages/login' as login;
+@use './pages/market' as market;
 
 // Shared Component Styles
-@use './shared/mergedProductGrid' as *;
+@use './shared/mergedProductGrid' as mergedProductGrid;
