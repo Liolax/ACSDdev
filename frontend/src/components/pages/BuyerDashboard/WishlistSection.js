@@ -31,7 +31,7 @@ const WishlistSection = ({
                 onClick={() => onMoveToCart(item)}
                 className="button buyer-dashboard__button--sm"
               >
-                Move to Cart
+                To Cart
               </button>
               <button
                 onClick={() => onRemove(item.id)}

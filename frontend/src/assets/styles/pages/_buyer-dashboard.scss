@@ -98,6 +98,10 @@
   padding: 4px 8px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(247, 178, 55, 0.07);
+  height: auto !important;
+  min-width: 0 !important;
+  line-height: 1.2;
+  box-sizing: border-box;
 }
 
 /* New Green variant for Give Feedback */
@@ -120,9 +124,15 @@
   }
 }
 
-/* Ensure Wishlist actions use the same small button style */
-.buyer-dashboard__wishlist-actions .button {
+/* Ensure Wishlist and Cart actions use the same small button style */
+.buyer-dashboard__wishlist-actions .button,
+.buyer-dashboard__cart-actions .button {
   @extend .buyer-dashboard__button--sm;
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 4px 8px;
+  font-size: 0.82rem;
+  box-sizing: border-box;
 }
 
 /* ORDER CARD */
@@ -130,7 +140,7 @@
   display: flex;
   align-items: flex-start;
   padding: 20px 18px;
-  margin-bottom: 20px; // Space between order cards.
+  margin-bottom: 20px;
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 5px 20px rgba(23, 98, 62, 0.15);
@@ -172,7 +182,7 @@
   }
   &__actions {
     display: flex;
-    flex-direction: row; // Place buttons in a row.
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
@@ -372,16 +382,25 @@
   }
 }
 
-/* Mobile specific override for the Wishlist actions */
+/* Mobile specific override for the Wishlist and Cart actions: keep buttons compact, never taller */
 @media (max-width: 600px) {
-  .buyer-dashboard__wishlist-actions {
+  .buyer-dashboard__wishlist-actions,
+  .buyer-dashboard__cart-actions {
     flex-direction: row;
     justify-content: flex-start;
     gap: 4px;
   }
-  .buyer-dashboard__wishlist-actions .button {
+  .buyer-dashboard__wishlist-actions .button,
+  .buyer-dashboard__cart-actions .button {
     @extend .buyer-dashboard__button--sm;
+    width: auto;
+    min-width: 0 !important;
     max-width: 100px;
+    height: auto !important;
+    box-sizing: border-box;
+    font-size: 0.82rem;
+    padding: 4px 8px;
+    line-height: 1.2;
   }
 }
 
