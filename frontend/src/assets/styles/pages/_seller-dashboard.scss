@@ -206,6 +206,52 @@
   }
 }
 
+/* --- File Input Styling --- */
+.seller-dashboard__file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbe6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(247,178,55,0.08);
+  border: 1px solid base.$irish-gold;
+  cursor: pointer;
+  transition: background 0.14s, box-shadow 0.14s;
+  &:hover {
+    background: base.$irish-gold-light;
+    box-shadow: 0 2px 12px rgba(247,178,55,0.12);
+  }
+}
+
+/* Hide default file input */
+.seller-dashboard__file-input {
+  display: none;
+}
+
+/* Styled button */
+.seller-dashboard__file-label {
+  font-family: var(--font-family-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: base.$irish-gold-dark;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-light 100%);
+  transition: background 0.14s, color 0.14s;
+  &:hover {
+    background: linear-gradient(90deg, base.$irish-gold-dark 0%, base.$irish-gold 100%);
+    color: #fff;
+  }
+}
+
+/* Ensure file name displays next to button */
+.seller-dashboard__file-name {
+  font-size: 0.95rem;
+  color: base.$irish-green-dark;
+}
+
 @media (max-width: 650px) {
   .seller-dashboard__list {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
