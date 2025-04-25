@@ -42,6 +42,9 @@ const ContactForm = ({ onSuccess }) => {
         >
           Send Message
         </button>
+        <p className="contact-form__privacy" aria-label="privacy">
+          By clicking "Send Message", you agree to our Privacy Policy and the processing of your message.
+        </p>
       </form>
     </div>
   );

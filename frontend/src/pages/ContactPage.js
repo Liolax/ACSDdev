@@ -41,11 +41,6 @@ const ContactPage = () => {
             </>
           )}
           <ContactForm onSuccess={handleFormSuccess} />
-          {!formSubmitted && (
-            <p className="contact-page__privacy">
-              By clicking "Send Message", you agree to our Privacy Policy and the processing of your message.
-            </p>
-          )}
         </section>
       </main>
       <Footer />
