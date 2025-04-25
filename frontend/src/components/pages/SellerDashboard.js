@@ -6,32 +6,34 @@ const SellerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // State for new product form
+  // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
-    image: '',
     description: ''
   });
-  // Editing existing product
+  // Separate state for the image file
+  const [newImageFile, setNewImageFile] = useState(null);
+  
+  // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
   const [editProduct, setEditProduct] = useState({
     name: '',
     price: '',
-    image: '',
     description: ''
   });
-  // Search and Pagination
+  const [editImageFile, setEditImageFile] = useState(null);
+  
+  // For search & pagination
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-
+  
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line
   }, []);
-
+  
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -43,31 +45,49 @@ const SellerDashboard = () => {
       setLoading(false);
     }
   };
-
+  
+  // Create Product with image file upload
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
-      const data = await createProduct(newProduct);
+      const formData = new FormData();
+      formData.append('name', newProduct.name);
+      formData.append('price', newProduct.price);
+      formData.append('description', newProduct.description);
+      if (newImageFile) {
+        formData.append('image', newImageFile);
+      }
+      const data = await createProduct(formData);
       setProducts([...products, data]);
-      setNewProduct({ name: '', price: '', image: '', description: '' });
+      setNewProduct({ name: '', price: '', description: '' });
+      setNewImageFile(null);
       setShowAddForm(false);
     } catch (err) {
       setError('Failed to create product');
     }
   };
-
+  
+  // Update Product with potential new image file upload
   const handleEditProduct = async (e) => {
     e.preventDefault();
     try {
-      const data = await updateProduct(editProductId, editProduct);
+      const formData = new FormData();
+      formData.append('name', editProduct.name);
+      formData.append('price', editProduct.price);
+      formData.append('description', editProduct.description);
+      if (editImageFile) {
+        formData.append('image', editImageFile);
+      }
+      const data = await updateProduct(editProductId, formData);
       setProducts(products.map(p => p._id === editProductId ? data : p));
       setEditProductId(null);
-      setEditProduct({ name: '', price: '', image: '', description: '' });
+      setEditProduct({ name: '', price: '', description: '' });
+      setEditImageFile(null);
     } catch (err) {
       setError('Failed to update product');
     }
   };
-
+  
   const handleDeleteProduct = async (productId) => {
     try {
       await deleteProduct(productId);
@@ -76,7 +96,7 @@ const SellerDashboard = () => {
       setError('Failed to delete product');
     }
   };
-
+  
   // Filter and paginate products
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -85,12 +105,13 @@ const SellerDashboard = () => {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
+  
   return (
     <div className="seller-dashboard">
       <h2 className="seller-dashboard__header">Manage Your Products</h2>
       {error && <p className="seller-dashboard__error">{error}</p>}
       
+      {/* Search */}
       <div className="seller-dashboard__search">
         <input 
           type="text"
@@ -100,14 +121,14 @@ const SellerDashboard = () => {
           className="seller-dashboard__search-input"
         />
       </div>
-
+      
       <button 
         className="seller-dashboard__add-btn"
         onClick={() => setShowAddForm(!showAddForm)}
       >
         {showAddForm ? "Cancel" : "Add New Product"}
       </button>
-
+      
       {showAddForm && (
         <form className="seller-dashboard__form" onSubmit={handleAddProduct}>
           <input 
@@ -124,23 +145,22 @@ const SellerDashboard = () => {
             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
             required
           />
-          <input 
-            type="text"
-            placeholder="Image URL"
-            value={newProduct.image}
-            onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
-            required
-          />
           <textarea 
             placeholder="Description"
             value={newProduct.description}
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
+          ></textarea>
+          <input 
+            type="file"
+            accept="image/*"
+            onChange={(e) => setNewImageFile(e.target.files[0])}
+            required
           />
           <button type="submit">Create Product</button>
         </form>
       )}
-
+      
       {loading ? (
         <p>Loading products...</p>
       ) : (
@@ -167,17 +187,16 @@ const SellerDashboard = () => {
                       onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
                       required
                     />
-                    <input 
-                      type="text"
-                      value={editProduct.image}
-                      onChange={(e) => setEditProduct({ ...editProduct, image: e.target.value })}
-                      required
-                    />
                     <textarea 
                       value={editProduct.description}
                       onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}
                       required
                     ></textarea>
+                    <input 
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setEditImageFile(e.target.files[0])}
+                    />
                     <div className="seller-dashboard__edit-actions">
                       <button type="submit">Save</button>
                       <button type="button" onClick={() => setEditProductId(null)}>Cancel</button>
@@ -194,7 +213,6 @@ const SellerDashboard = () => {
                         setEditProduct({
                           name: product.name,
                           price: product.price,
-                          image: product.image,
                           description: product.description
                         });
                       }}>
@@ -211,7 +229,7 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-
+      
       {totalPages > 1 && (
         <div className="seller-dashboard__pagination">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -225,7 +243,7 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-
+      
       <div className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
         <p>Feedback and ratings from customers will appear here.</p>

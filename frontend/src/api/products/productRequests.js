@@ -11,20 +11,24 @@ export const getProducts = async () => {
   }
 };
 
-// Create a new product
+// Create a new product with file upload
 export const createProduct = async (productData) => {
   try {
-    const response = await axiosInstance.post(productEndpoints.create, productData);
+    const response = await axiosInstance.post(productEndpoints.create, productData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// Update a product by ID
+// Update a product by ID with file upload
 export const updateProduct = async (id, productData) => {
   try {
-    const response = await axiosInstance.put(productEndpoints.update(id), productData);
+    const response = await axiosInstance.put(productEndpoints.update(id), productData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return response.data;
   } catch (error) {
     throw error;
