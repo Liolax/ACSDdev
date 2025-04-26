@@ -16,10 +16,10 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// Rate Limiting Middleware
+// Set up rate limiting middleware (e.g., 100 requests per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 100, // max 100 requests per IP per windowMs
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use(limiter);
@@ -30,7 +30,6 @@ if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
   process.exit(1);
 }
-
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -49,7 +48,7 @@ mongoose.connect(mongoURI, {
 // Middleware Setup
 app.use(helmet());
 app.disable('x-powered-by');
-app.use(cors());
+app.use(cors({ origin: '*' })); // Allow all origins for API and static files
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -60,7 +59,7 @@ const __dirname = path.dirname(__filename);
 // Serve static files from the "uploads" directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Optional base route for API
+// Optional base API route for convenience
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the API' });
 });

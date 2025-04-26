@@ -19,12 +19,20 @@ const SellerDashboard = () => {
 
   // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', price: '', description: '' });
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    price: '',
+    description: ''
+  });
   const [newImageFile, setNewImageFile] = useState(null);
 
   // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
-  const [editProduct, setEditProduct] = useState({ name: '', price: '', description: '' });
+  const [editProduct, setEditProduct] = useState({
+    name: '',
+    price: '',
+    description: ''
+  });
   const [editImageFile, setEditImageFile] = useState(null);
 
   // For search & pagination
@@ -66,7 +74,7 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       if (newImageFile) {
-        // The name attribute ("image") from the file input is important for Multer.
+        // The file input with name="image" allows Multer to pick up the file correctly.
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
@@ -188,7 +196,7 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // Construct the image URL by replacing backslashes with forward slashes.
+            // Construct image URL: ensuring backslashes are replaced with forward slashes.
             const imageUrl = product.image
               ? (product.image.startsWith('http')
                   ? product.image
