@@ -16,6 +16,9 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
+// Trust the first proxy so that express-rate-limit reads X-Forwarded-For correctly.
+app.set('trust proxy', 1);
+
 // Set up rate limiting middleware (e.g., 100 requests per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -47,8 +50,7 @@ mongoose.connect(mongoURI, {
 
 // Middleware Setup
 app.use(helmet());
-// helmet.hidePoweredBy() is enabled by default, but you can also explicitly disable it:
-app.disable('x-powered-by');  
+app.disable('x-powered-by');
 app.use(cors({ origin: '*' })); // Allow all origins for API and static files
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,7 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "uploads" directory with proper CORS headers.
+// Serve static files from the "uploads" directory with explicit CORS headers.
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, filePath, stat) => {
     res.setHeader('Access-Control-Allow-Origin', '*');

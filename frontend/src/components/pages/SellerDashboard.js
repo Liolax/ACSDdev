@@ -9,16 +9,16 @@ import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
 // Use proxy for API and backend for images.
-// Fallback to http://localhost:5000 if REACT_APP_BACKEND_URL isn’t set.
+// If REACT_APP_BACKEND_URL isn't set, fallback to http://localhost:5000 when on localhost.
 const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
 
 // Helper to robustly build image URLs
 const getImageUrl = (image) => {
-  if (!image) return defaultImage;
-  const imgPath = image.replace(/\\/g, '/'); // convert Windows backslashes to forward slashes
-  if (/^https?:\/\//i.test(imgPath)) return imgPath;
+  if (!image || image.trim() === '') return defaultImage;
+  const imgPath = image.replace(/\\/g, '/'); // Convert backslashes to forward slashes.
+  if (/^https?:\/\//i.test(imgPath)) return imgPath; // Already absolute.
   if (imgPath.startsWith('uploads/')) {
     return `${backendUrl}/${imgPath}`;
   }
@@ -36,7 +36,7 @@ const SellerDashboard = () => {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
-    description: ''
+    description: '',
   });
   const [newImageFile, setNewImageFile] = useState(null);
 
@@ -45,7 +45,7 @@ const SellerDashboard = () => {
   const [editProduct, setEditProduct] = useState({
     name: '',
     price: '',
-    description: ''
+    description: '',
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
@@ -112,7 +112,7 @@ const SellerDashboard = () => {
         formData.append('image', editImageFile);
       }
       const data = await updateProduct(editProductId, formData);
-      setProducts(products.map(p => p._id === editProductId ? data : p));
+      setProducts(products.map(p => (p._id === editProductId ? data : p)));
       setEditProductId(null);
       setEditProduct({ name: '', price: '', description: '' });
       setEditImageFile(null);
@@ -131,7 +131,7 @@ const SellerDashboard = () => {
   };
 
   const filteredProducts = products.filter(
-    p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (p) => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
@@ -161,7 +161,7 @@ const SellerDashboard = () => {
         className="seller-dashboard__add-btn"
         onClick={() => setShowAddForm(!showAddForm)}
       >
-        {showAddForm ? "Cancel" : "Add New Product"}
+        {showAddForm ? 'Cancel' : 'Add New Product'}
       </button>
 
       {showAddForm && (
@@ -170,20 +170,26 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             required
           />
           <textarea
             placeholder="Description"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
             required
           ></textarea>
           <label className="seller-dashboard__file-label">
@@ -197,7 +203,7 @@ const SellerDashboard = () => {
                 onChange={(e) => setNewImageFile(e.target.files[0])}
               />
               <span className="seller-dashboard__file-name">
-                {newImageFile ? newImageFile.name : "No file chosen"}
+                {newImageFile ? newImageFile.name : 'No file chosen'}
               </span>
             </div>
           </label>
@@ -217,6 +223,7 @@ const SellerDashboard = () => {
                   src={imageUrl}
                   alt={product.name}
                   className="seller-dashboard__product-image"
+                  crossOrigin="anonymous"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
@@ -224,7 +231,10 @@ const SellerDashboard = () => {
                 />
                 <div className="seller-dashboard__product-info">
                   {editProductId === product._id ? (
-                    <form onSubmit={handleEditProduct} className="seller-dashboard__edit-form">
+                    <form
+                      onSubmit={handleEditProduct}
+                      className="seller-dashboard__edit-form"
+                    >
                       <input
                         type="text"
                         value={editProduct.name}
@@ -259,7 +269,7 @@ const SellerDashboard = () => {
                             onChange={(e) => setEditImageFile(e.target.files[0])}
                           />
                           <span className="seller-dashboard__file-name">
-                            {editImageFile ? editImageFile.name : "No file chosen"}
+                            {editImageFile ? editImageFile.name : 'No file chosen'}
                           </span>
                         </div>
                       </label>
@@ -306,7 +316,9 @@ const SellerDashboard = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
-              className={`seller-dashboard__page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+              className={`seller-dashboard__page-btn ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
               onClick={() => setCurrentPage(index + 1)}
             >
               {index + 1}
