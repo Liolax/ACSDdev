@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Use /api to take advantage of the proxy in development
+const baseURL = process.env.REACT_APP_API_URL || '/api';
 
 const axiosInstance = axios.create({
   baseURL,
   timeout: 5000,
-  // Default header for JSON requests.
   headers: {
     'Content-Type': 'application/json'
   },
