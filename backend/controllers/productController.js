@@ -61,7 +61,7 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path; // e.g. "uploads/image-XYZ.jpg"
+      imagePath = req.file.path; // Example: "uploads/image-XYZ.jpg"
     }
     
     const newProduct = new Product({
@@ -84,7 +84,7 @@ export async function createProduct(req, res) {
 // Update an existing product
 export async function updateProduct(req, res) {
   try {
-    if (!req.params.id) {
+    if (!req.params.id) {  
       return res.status(400).json({ error: 'Product id is required.' });
     }
     const existingProduct = await Product.findById(req.params.id);

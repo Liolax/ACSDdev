@@ -5,7 +5,6 @@ import {
   updateProduct,
   deleteProduct
 } from '../../api/products/productRequests';
-import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
 // Preinstalled categories – expanded list.
@@ -29,7 +28,7 @@ const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
 
-// Helper: Build image URL
+// Helper to build an image URL.
 const getImageUrl = (image) => {
   if (!image || image.trim() === '') return defaultImage;
   const imgPath = image.replace(/\\/g, '/');
@@ -42,11 +41,10 @@ const getImageUrl = (image) => {
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
-  const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // State for adding a new product
+  // State for adding a new product.
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -57,7 +55,7 @@ const SellerDashboard = () => {
   });
   const [newImageFile, setNewImageFile] = useState(null);
 
-  // State for editing a product
+  // State for editing a product.
   const [editProductId, setEditProductId] = useState(null);
   const [editProduct, setEditProduct] = useState({
     name: '',
@@ -68,14 +66,13 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
-  // For search & pagination
+  // For search & pagination.
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchProducts();
-    fetchFeedbacks();
   }, []);
 
   const fetchProducts = async () => {
@@ -87,15 +84,6 @@ const SellerDashboard = () => {
     } catch (err) {
       setError('Failed to fetch products');
       setLoading(false);
-    }
-  };
-
-  const fetchFeedbacks = async () => {
-    try {
-      const data = await getFeedbacks();
-      setFeedbacks(data);
-    } catch (err) {
-      console.error('Failed to fetch feedbacks:', err);
     }
   };
 
@@ -139,8 +127,10 @@ const SellerDashboard = () => {
       if (editImageFile) {
         formData.append('image', editImageFile);
       }
-      const data = await updateProduct(editProductId, formData);
-      setProducts(products.map(p => (p._id === editProductId ? data : p)));
+      // Use the product's virtual 'id' if available, otherwise fallback to _id
+      const updateId = editProductId || (products.find(p => p._id === editProductId) || {}).id;
+      const data = await updateProduct(updateId, formData);
+      setProducts(products.map(p => ((p._id || p.id) === updateId ? data : p)));
       setEditProductId(null);
       setEditProduct({
         name: '',
@@ -158,7 +148,7 @@ const SellerDashboard = () => {
   const handleDeleteProduct = async (productId) => {
     try {
       await deleteProduct(productId);
-      setProducts(products.filter(p => p._id !== productId));
+      setProducts(products.filter(p => (p._id || p.id) !== productId));
     } catch (err) {
       setError('Failed to delete product');
     }
@@ -220,7 +210,7 @@ const SellerDashboard = () => {
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
           ></textarea>
-          {/* Category: select input with preinstalled categories */}
+          {/* Category select input */}
           <label>
             Category:
             <select
@@ -264,9 +254,11 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
+            // Use product.id if available, else fallback to _id.
+            const productId = product.id || product._id;
             const imageUrl = getImageUrl(product.image);
             return (
-              <div key={product._id} className="seller-dashboard__product-card">
+              <div key={productId} className="seller-dashboard__product-card">
                 <img
                   src={imageUrl}
                   alt={product.name}
@@ -278,7 +270,7 @@ const SellerDashboard = () => {
                   }}
                 />
                 <div className="seller-dashboard__product-info">
-                  {editProductId === product._id ? (
+                  {editProductId === productId ? (
                     <form onSubmit={handleEditProduct} className="seller-dashboard__edit-form">
                       <input
                         type="text"
@@ -365,7 +357,7 @@ const SellerDashboard = () => {
                       <div className="seller-dashboard__product-actions">
                         <button
                           onClick={() => {
-                            setEditProductId(product._id);
+                            setEditProductId(productId);
                             setEditProduct({
                               name: product.name,
                               price: product.price,
@@ -377,7 +369,7 @@ const SellerDashboard = () => {
                         >
                           Edit
                         </button>
-                        <button onClick={() => handleDeleteProduct(product._id)}>
+                        <button onClick={() => handleDeleteProduct(productId)}>
                           Delete
                         </button>
                       </div>

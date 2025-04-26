@@ -15,7 +15,7 @@ const productSchema = new Schema(
     },
     image: { 
       type: String, 
-      default: ''  // Will store the file path
+      default: '' // Will store the file path  
     },
     description: { 
       type: String, 
@@ -25,7 +25,7 @@ const productSchema = new Schema(
     category: { 
       type: String,
       trim: true,
-      default: 'General'  // Default category
+      default: 'General' // Default category  
     },
     tags: [{ 
       type: String, 
@@ -33,13 +33,13 @@ const productSchema = new Schema(
     }]
   },
   { 
-    timestamps: true, 
-    toJSON: { virtuals: true }, 
-    toObject: { virtuals: true } 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
 
-// Create a text index over name, description, and category for search/filter.
+// Create a text index over name, description, and category for search/filtering.
 productSchema.index({ name: 'text', description: 'text', category: 'text' });
 
 export default model('Product', productSchema);
