@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import rateLimit from 'express-rate-limit';
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -16,7 +17,17 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// Set up MongoDB connection using Mongoose
+// Set up rate limiting middleware: limit each IP to 100 requests per 15 minutes for example
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+});
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
+
+// MongoDB connection
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");

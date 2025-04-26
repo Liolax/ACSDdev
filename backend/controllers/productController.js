@@ -2,6 +2,14 @@ import Product from '../models/ProductModel.js';
 import fs from 'fs';
 import path from 'path';
 
+const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
+
+// Helper: Validate that a file path is within the uploads directory
+function isWithinUploads(filePath) {
+  const normalizedPath = path.normalize(filePath);
+  return normalizedPath.startsWith(UPLOADS_DIR);
+}
+
 // Retrieve all products
 export async function getProducts(req, res) {
   try {
@@ -36,7 +44,7 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path;
+      imagePath = req.file.path; // This should be something like "uploads/image-XYZ.jpg"
     }
     
     const newProduct = new Product({
@@ -71,16 +79,19 @@ export async function updateProduct(req, res) {
     }
     if (req.file) {
       updateData.image = req.file.path;
-      // Delete the old image if it exists and is local (not starting with 'http')
+      // Delete the old image if it exists and is local
       if (existingProduct.image && !existingProduct.image.startsWith('http')) {
         const oldFilePath = path.join(process.cwd(), existingProduct.image);
-        fs.unlink(oldFilePath, (err) => {
-          if (err) {
-            console.error('Error deleting old image file:', err);
-          } else {
+        if (isWithinUploads(oldFilePath)) {
+          try {
+            await fs.promises.unlink(oldFilePath);
             console.log(`Deleted old image file: ${oldFilePath}`);
+          } catch (err) {
+            console.error('Error deleting old image file:', err);
           }
-        });
+        } else {
+          console.error('Attempt to delete file outside uploads directory:', oldFilePath);
+        }
       }
     }
   
@@ -105,13 +116,16 @@ export async function deleteProduct(req, res) {
     // Delete associated image file if it exists and is local
     if (deletedProduct.image && !deletedProduct.image.startsWith('http')) {
       const filePath = path.join(process.cwd(), deletedProduct.image);
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error('Error deleting image file:', err);
-        } else {
+      if (isWithinUploads(filePath)) {
+        try {
+          await fs.promises.unlink(filePath);
           console.log('Successfully deleted orphan image file:', filePath);
+        } catch (err) {
+          console.error('Error deleting image file:', err);
         }
-      });
+      } else {
+        console.error('Attempt to delete file outside uploads directory:', filePath);
+      }
     }
     res.status(200).json({ success: true, product: deletedProduct });
   } catch (error) {
