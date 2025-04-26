@@ -8,7 +8,7 @@ import {
 import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
-// Use environment variable or fallback for the backend base URL
+// Use the backend URL from environment variables or fallback
 const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 const SellerDashboard = () => {
@@ -35,7 +35,7 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
-  // State for search & pagination
+  // For search & pagination
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,6 +74,7 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       if (newImageFile) {
+        // The name attribute is important for Multer to pick up the file correctly
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
@@ -155,32 +156,27 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, name: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, price: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
             required
           />
           <textarea
             placeholder="Description"
             value={newProduct.description}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, description: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
           ></textarea>
           <label className="seller-dashboard__file-label">
             Upload Product Image (optional)
             <div className="seller-dashboard__file-input-wrapper">
               <input
+                name="image"
                 type="file"
                 accept="image/*"
                 className="seller-dashboard__file-input"
@@ -200,9 +196,9 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // If the product.image is relative, prepend backendUrl; otherwise, use it if absolute.
+            // Build image URL: if product.image is relative, prepend backendUrl; else use it directly.
             const imageUrl = product.image
-              ? (product.image.startsWith("http")
+              ? (product.image.startsWith('http')
                   ? product.image
                   : `${backendUrl}/${product.image}`)
               : defaultImage;
@@ -223,30 +219,25 @@ const SellerDashboard = () => {
                       <input
                         type="text"
                         value={editProduct.name}
-                        onChange={(e) =>
-                          setEditProduct({ ...editProduct, name: e.target.value })
-                        }
+                        onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
                         required
                       />
                       <input
                         type="number"
                         value={editProduct.price}
-                        onChange={(e) =>
-                          setEditProduct({ ...editProduct, price: e.target.value })
-                        }
+                        onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
                         required
                       />
                       <textarea
                         value={editProduct.description}
-                        onChange={(e) =>
-                          setEditProduct({ ...editProduct, description: e.target.value })
-                        }
+                        onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}
                         required
                       ></textarea>
                       <label className="seller-dashboard__file-label">
                         Update Product Image (optional)
                         <div className="seller-dashboard__file-input-wrapper">
                           <input
+                            name="image"
                             type="file"
                             accept="image/*"
                             className="seller-dashboard__file-input"
