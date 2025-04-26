@@ -11,6 +11,22 @@
   padding: 0;
 }
 
+/* Search Bar Styling */
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  input[type="text"],
+  select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+  }
+}
+
 .product-card {
   @include mixins.card(15px, 0 4px 22px rgba(23, 98, 62, 0.09));
   display: flex;
@@ -48,11 +64,39 @@
       font-size: 1.13rem;
       margin-bottom: 4px;
     }
+
     &__price {
       color: base.$irish-gold;
       font-size: 1.01rem;
       font-weight: 600;
       margin-bottom: 2px;
+    }
+
+    &__category,
+    &__tags {
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+      color: #555;
+    }
+  }
+
+  .product-card__actions {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    margin-top: auto;
+
+    .product-card__action-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: base.$irish-gold;
+      font-size: 1.4rem;
+      transition: color 0.2s;
+
+      &:hover {
+        color: base.$irish-gold-dark;
+      }
     }
   }
 }

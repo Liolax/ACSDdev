@@ -4,7 +4,7 @@ import Button from '../../components/ui/Button';
 import Icon from '../../components/ui/Icon';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
-// Preinstalled list of categories 
+// Expanded list of preinstalled categories
 const categories = [
   'All',
   'Home Decor',
@@ -24,7 +24,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search and filter states
+  // Search and filtering state
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTags, setSearchTags] = useState('');
@@ -35,7 +35,6 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
       try {
         const response = await axios.get('/api/products');
         if (!response.data || response.data.length === 0) {
-          // Dummy products if API returns empty.
           const dummyProducts = [
             { 
               _id: '1', 
@@ -101,18 +100,16 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     })();
   }, []);
 
-  // Function to filter and sort products
+  // Filtering and sorting function
   const getFilteredProducts = () => {
     let filtered = [...allProducts];
 
-    // Filter by product name (case insensitive)
     if (searchTerm.trim() !== '') {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
       );
     }
 
-    // Filter by category (if not "All")
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
         product.category &&
@@ -120,7 +117,6 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
       );
     }
 
-    // Filter by tags (split comma-separated searchTags)
     if (searchTags.trim() !== '') {
       const tagArray = searchTags
         .split(',')
@@ -129,12 +125,10 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
       filtered = filtered.filter(product => {
         if (!product.tags || product.tags.length === 0) return false;
         const productTags = product.tags.map(t => t.toLowerCase());
-        // Return true if any search tag matches
         return tagArray.some(tag => productTags.includes(tag));
       });
     }
 
-    // Sort by price if sortOrder is specified
     if (sortOrder === 'asc') {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sortOrder === 'desc') {
@@ -144,9 +138,10 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     return filtered;
   };
 
-  // Helper to build image URLs.
+  // Helper to build image URL
   const getImageUrl = (image) => {
-    if (!image || image.trim() === '') return 'https://via.placeholder.com/300x200?text=No+Image';
+    if (!image || image.trim() === '')
+      return 'https://via.placeholder.com/300x200?text=No+Image';
     const imgPath = image.replace(/\\/g, '/');
     if (/^https?:\/\//i.test(imgPath)) return imgPath;
     return `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/${imgPath}`;
@@ -158,7 +153,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
 
   return (
     <div>
-      {/* Search and Filter Bar */}
+      {/* Search Bar */}
       <div className="search-bar">
         <input 
           type="text" 
@@ -218,7 +213,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
               <div className="product-card__actions">
                 <button
                   className="product-card__action-button wishlist-button"
-                  onClick={() => 
+                  onClick={() =>
                     onAddToWishlist 
                       ? onAddToWishlist(product) 
                       : alert('Added to Wishlist')
@@ -229,7 +224,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
                 </button>
                 <button
                   className="product-card__action-button cart-button"
-                  onClick={() => 
+                  onClick={() =>
                     onAddToCart 
                       ? onAddToCart(product) 
                       : alert('Added to Cart')

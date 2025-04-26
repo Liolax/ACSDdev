@@ -2,7 +2,6 @@
 @use '../mixins' as mixins;
 @use 'sass:color';
 
-// Irish-style button, holistic and accessible
 .button, .btn {
   background: base.$irish-gold;
   color: base.$irish-gold-text;
@@ -43,7 +42,6 @@
   }
 }
 
-// Outline variant (Thin Border)
 .button--outline, .btn--outline {
   background: transparent;
   color: base.$irish-gold;
@@ -62,7 +60,6 @@
   }
 }
 
-// Light variant (Soft Background)
 .button--light, .btn--light {
   background: base.$irish-gold-light;
   color: base.$irish-gold-text;
@@ -78,7 +75,6 @@
   }
 }
 
-// Small button modifier
 .button--sm, .btn--sm {
   font-size: 0.89rem;
   padding: 6px 18px;
@@ -86,7 +82,6 @@
   box-shadow: 0 1px 3px rgba(247, 178, 55, 0.12);
 }
 
-// Large button modifier (For emphasis, e.g., Track Order & Give Feedback)
 .button--lg, .btn--lg {
   font-size: 1.12rem;
   padding: 14px 32px;
@@ -102,7 +97,6 @@
   }
 }
 
-// Button Alignment Utility
 .button-right {
   margin-left: auto;
 }
