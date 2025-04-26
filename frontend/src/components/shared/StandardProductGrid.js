@@ -4,7 +4,7 @@ import Button from '../../components/ui/Button';
 import Icon from '../../components/ui/Icon';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
-// Expanded list of preinstalled categories
+// Expanded list of preinstalled categories.
 const categories = [
   'All',
   'Home Decor',
@@ -24,7 +24,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search and filtering state
+  // Search and filtering state.
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTags, setSearchTags] = useState('');
@@ -100,7 +100,10 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     })();
   }, []);
 
-  // Filtering and sorting function
+  // Build a list of unique tags from all products for auto-suggestions.
+  const uniqueTags = Array.from(new Set(allProducts.flatMap(product => product.tags || [])));
+
+  // Filtering and sorting function.
   const getFilteredProducts = () => {
     let filtered = [...allProducts];
 
@@ -138,13 +141,16 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     return filtered;
   };
 
-  // Helper to build image URL
+  // Helper: Build image URL using the same logic as SellerDashboard.
   const getImageUrl = (image) => {
     if (!image || image.trim() === '')
       return 'https://via.placeholder.com/300x200?text=No+Image';
     const imgPath = image.replace(/\\/g, '/');
     if (/^https?:\/\//i.test(imgPath)) return imgPath;
-    return `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/${imgPath}`;
+    if (imgPath.startsWith('uploads/')) {
+      return `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/${imgPath}`;
+    }
+    return 'https://via.placeholder.com/300x200?text=No+Image';
   };
 
   const filteredProducts = getFilteredProducts();
@@ -153,7 +159,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
 
   return (
     <div>
-      {/* Search Bar */}
+      {/* Search & Filter Bar */}
       <div className="search-bar">
         <input 
           type="text" 
@@ -174,7 +180,13 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
           placeholder="Search by tags (comma separated)..." 
           value={searchTags}
           onChange={(e) => setSearchTags(e.target.value)}
+          list="tagSuggestions"
         />
+        <datalist id="tagSuggestions">
+          {uniqueTags.map((tag) => (
+            <option key={tag} value={tag} />
+          ))}
+        </datalist>
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
@@ -209,7 +221,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
                   </p>
                 )}
               </div>
-              {/* Action Icons */}
+              {/* Action Icons for buyers */}
               <div className="product-card__actions">
                 <button
                   className="product-card__action-button wishlist-button"

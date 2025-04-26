@@ -28,7 +28,7 @@ const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
 
-// Helper to build an image URL.
+// Helper: Build an image URL the same as in the Market grid.
 const getImageUrl = (image) => {
   if (!image || image.trim() === '') return defaultImage;
   const imgPath = image.replace(/\\/g, '/');
@@ -95,12 +95,13 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       formData.append('category', newProduct.category);
-      formData.append('tags', newProduct.tags);
+      formData.append('tags', newProduct.tags); // Comma-separated.
       if (newImageFile) {
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
       setProducts([...products, data]);
+      // Reset the add form.
       setNewProduct({
         name: '',
         price: '',
@@ -127,10 +128,9 @@ const SellerDashboard = () => {
       if (editImageFile) {
         formData.append('image', editImageFile);
       }
-      // Use the product's virtual 'id' if available, otherwise fallback to _id
-      const updateId = editProductId || (products.find(p => p._id === editProductId) || {}).id;
-      const data = await updateProduct(updateId, formData);
-      setProducts(products.map(p => ((p._id || p.id) === updateId ? data : p)));
+      // Directly use editProductId (should be a valid ID).
+      const data = await updateProduct(editProductId, formData);
+      setProducts(products.map(p => ((p._id || p.id) === editProductId ? data : p)));
       setEditProductId(null);
       setEditProduct({
         name: '',
@@ -148,12 +148,13 @@ const SellerDashboard = () => {
   const handleDeleteProduct = async (productId) => {
     try {
       await deleteProduct(productId);
-      setProducts(products.filter(p => (p._id || p.id) !== productId));
+      setProducts(products.filter(p => ((p._id || p.id) !== productId)));
     } catch (err) {
       setError('Failed to delete product');
     }
   };
 
+  // Filter products by name.
   const filteredProducts = products.filter(
     p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -166,7 +167,6 @@ const SellerDashboard = () => {
     <div className="seller-dashboard">
       <h2 className="seller-dashboard__header">Manage Products</h2>
       {error && <p className="seller-dashboard__error">{error}</p>}
-
       {/* Search Bar */}
       <div className="seller-dashboard__search">
         <input
@@ -180,34 +180,38 @@ const SellerDashboard = () => {
           className="seller-dashboard__search-input"
         />
       </div>
-
       <button
         className="seller-dashboard__add-btn"
         onClick={() => setShowAddForm(!showAddForm)}
       >
         {showAddForm ? 'Cancel' : 'Add New Product'}
       </button>
-
       {showAddForm && (
         <form className="seller-dashboard__form" onSubmit={handleAddProduct}>
           <input
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             required
           />
           <textarea
             placeholder="Description"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
             required
           ></textarea>
           {/* Category select input */}
@@ -215,11 +219,15 @@ const SellerDashboard = () => {
             Category:
             <select
               value={newProduct.category}
-              onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, category: e.target.value })
+              }
               required
             >
               {categories.map((cat, idx) => (
-                <option key={idx} value={cat}>{cat}</option>
+                <option key={idx} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </label>
@@ -228,7 +236,9 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Tags (comma separated)"
             value={newProduct.tags}
-            onChange={(e) => setNewProduct({ ...newProduct, tags: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, tags: e.target.value })
+            }
           />
           <label className="seller-dashboard__file-label">
             Upload Product Image (optional)
@@ -248,14 +258,12 @@ const SellerDashboard = () => {
           <button type="submit">Add Product</button>
         </form>
       )}
-
       {loading ? (
         <p>Loading products...</p>
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // Use product.id if available, else fallback to _id.
-            const productId = product.id || product._id;
+            const productId = product._id || product.id;
             const imageUrl = getImageUrl(product.image);
             return (
               <div key={productId} className="seller-dashboard__product-card">
@@ -306,7 +314,9 @@ const SellerDashboard = () => {
                           required
                         >
                           {categories.map((cat, idx) => (
-                            <option key={idx} value={cat}>{cat}</option>
+                            <option key={idx} value={cat}>
+                              {cat}
+                            </option>
                           ))}
                         </select>
                       </label>
@@ -381,7 +391,6 @@ const SellerDashboard = () => {
           })}
         </div>
       )}
-
       {totalPages > 1 && (
         <div className="seller-dashboard__pagination">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -395,7 +404,6 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-
       <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
         {/* Feedback rendering can be added here */}
