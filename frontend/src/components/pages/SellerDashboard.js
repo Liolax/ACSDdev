@@ -1,11 +1,25 @@
+// frontend/src/components/pages/SellerDashboard.js
+
 import React, { useState, useEffect } from 'react';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../../api/products/productRequests';
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct
+} from '../../api/products/productRequests';
+import { getFeedbacks } from '../../api/feedback/feedbackRequests'; // Updated import path
+import defaultImage from '../../assets/images/default-product.png';
+
+// Use the backend URL from environment variables or fallback
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 const SellerDashboard = () => {
+  // State for products, feedback, loading, and error
   const [products, setProducts] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]); // Feedbacks from buyers
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
@@ -13,9 +27,8 @@ const SellerDashboard = () => {
     price: '',
     description: ''
   });
-  // State for the image file
   const [newImageFile, setNewImageFile] = useState(null);
-  
+
   // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
   const [editProduct, setEditProduct] = useState({
@@ -24,16 +37,17 @@ const SellerDashboard = () => {
     description: ''
   });
   const [editImageFile, setEditImageFile] = useState(null);
-  
-  // Search & pagination states
+
+  // Search & pagination state
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   useEffect(() => {
     fetchProducts();
+    fetchFeedbacks();
   }, []);
-  
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -45,8 +59,17 @@ const SellerDashboard = () => {
       setLoading(false);
     }
   };
-  
-  // Create product with image upload
+
+  const fetchFeedbacks = async () => {
+    try {
+      const data = await getFeedbacks();
+      setFeedbacks(data);
+    } catch (err) {
+      console.error('Failed to fetch feedbacks:', err);
+    }
+  };
+
+  // Create product (Add Product)
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
@@ -63,11 +86,11 @@ const SellerDashboard = () => {
       setNewImageFile(null);
       setShowAddForm(false);
     } catch (err) {
-      setError('Failed to create product');
+      setError('Failed to add product');
     }
   };
-  
-  // Update product with new image file (optional)
+
+  // Update product
   const handleEditProduct = async (e) => {
     e.preventDefault();
     try {
@@ -87,7 +110,7 @@ const SellerDashboard = () => {
       setError('Failed to update product');
     }
   };
-  
+
   const handleDeleteProduct = async (productId) => {
     try {
       await deleteProduct(productId);
@@ -96,10 +119,10 @@ const SellerDashboard = () => {
       setError('Failed to delete product');
     }
   };
-  
-  // Filter and paginate products
-  const filteredProducts = products.filter(p =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+  // Apply filtering and pagination
+  const filteredProducts = products.filter(
+    p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
@@ -108,55 +131,56 @@ const SellerDashboard = () => {
 
   return (
     <div className="seller-dashboard">
-      <h2 className="seller-dashboard__header">Manage Your Products</h2>
+      <h2 className="seller-dashboard__header">Manage Products</h2>
       {error && <p className="seller-dashboard__error">{error}</p>}
-      
-      {/* Search */}
+
+      {/* Search Bar */}
       <div className="seller-dashboard__search">
-        <input 
+        <input
           type="text"
           placeholder="Search products..."
           value={searchTerm}
-          onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
           className="seller-dashboard__search-input"
         />
       </div>
-      
-      <button 
+
+      <button
         className="seller-dashboard__add-btn"
         onClick={() => setShowAddForm(!showAddForm)}
       >
         {showAddForm ? "Cancel" : "Add New Product"}
       </button>
-      
+
       {showAddForm && (
         <form className="seller-dashboard__form" onSubmit={handleAddProduct}>
-          <input 
+          <input
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
             onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
             required
           />
-          <input 
+          <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
             required
           />
-          <textarea 
+          <textarea
             placeholder="Description"
             value={newProduct.description}
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
           ></textarea>
-          
-          {/* Styled File Input */}
           <label className="seller-dashboard__file-label">
-            Upload Product Image
+            Upload Product Image (optional)
             <div className="seller-dashboard__file-input-wrapper">
-              <input 
+              <input
                 type="file"
                 accept="image/*"
                 className="seller-dashboard__file-input"
@@ -167,92 +191,110 @@ const SellerDashboard = () => {
               </span>
             </div>
           </label>
-          
-          <button type="submit">Create Product</button>
+          <button type="submit">Add Product</button>
         </form>
       )}
-      
+
       {loading ? (
         <p>Loading products...</p>
       ) : (
         <div className="seller-dashboard__list">
-          {currentProducts.map((product) => (
-            <div key={product._id} className="seller-dashboard__product-card">
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="seller-dashboard__product-image" 
-              />
-              <div className="seller-dashboard__product-info">
-                {editProductId === product._id ? (
-                  <form onSubmit={handleEditProduct} className="seller-dashboard__edit-form">
-                    <input 
-                      type="text"
-                      value={editProduct.name}
-                      onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
-                      required
-                    />
-                    <input 
-                      type="number"
-                      value={editProduct.price}
-                      onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
-                      required
-                    />
-                    <textarea 
-                      value={editProduct.description}
-                      onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}
-                      required
-                    ></textarea>
-                    
-                    {/* Styled File Input for Edit */}
-                    <label className="seller-dashboard__file-label">
-                      Update Product Image
-                      <div className="seller-dashboard__file-input-wrapper">
-                        <input 
-                          type="file"
-                          accept="image/*"
-                          className="seller-dashboard__file-input"
-                          onChange={(e) => setEditImageFile(e.target.files[0])}
-                        />
-                        <span className="seller-dashboard__file-name">
-                          {editImageFile ? editImageFile.name : "No file chosen"}
-                        </span>
+          {currentProducts.map((product) => {
+            // Construct image URL: if product.image is relative, prepend backendUrl; otherwise, use it directly. Fall back to default image.
+            const imageUrl = product.image
+              ? (product.image.startsWith("http")
+                  ? product.image
+                  : `${backendUrl}/${product.image}`)
+              : defaultImage;
+            return (
+              <div key={product._id} className="seller-dashboard__product-card">
+                <img
+                  src={imageUrl}
+                  alt={product.name}
+                  className="seller-dashboard__product-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
+                  }}
+                />
+                <div className="seller-dashboard__product-info">
+                  {editProductId === product._id ? (
+                    <form onSubmit={handleEditProduct} className="seller-dashboard__edit-form">
+                      <input
+                        type="text"
+                        value={editProduct.name}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, name: e.target.value })
+                        }
+                        required
+                      />
+                      <input
+                        type="number"
+                        value={editProduct.price}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, price: e.target.value })
+                        }
+                        required
+                      />
+                      <textarea
+                        value={editProduct.description}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, description: e.target.value })
+                        }
+                        required
+                      ></textarea>
+                      <label className="seller-dashboard__file-label">
+                        Update Product Image (optional)
+                        <div className="seller-dashboard__file-input-wrapper">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="seller-dashboard__file-input"
+                            onChange={(e) => setEditImageFile(e.target.files[0])}
+                          />
+                          <span className="seller-dashboard__file-name">
+                            {editImageFile ? editImageFile.name : "No file chosen"}
+                          </span>
+                        </div>
+                      </label>
+                      <div className="seller-dashboard__edit-actions">
+                        <button type="submit">Save</button>
+                        <button type="button" onClick={() => setEditProductId(null)}>
+                          Cancel
+                        </button>
                       </div>
-                    </label>
-                    
-                    <div className="seller-dashboard__edit-actions">
-                      <button type="submit">Save</button>
-                      <button type="button" onClick={() => setEditProductId(null)}>Cancel</button>
-                    </div>
-                  </form>
-                ) : (
-                  <>
-                    <h3>{product.name}</h3>
-                    <p>${product.price}</p>
-                    <p>{product.description}</p>
-                    <div className="seller-dashboard__product-actions">
-                      <button onClick={() => {
-                        setEditProductId(product._id);
-                        setEditProduct({
-                          name: product.name,
-                          price: product.price,
-                          description: product.description
-                        });
-                      }}>
-                        Edit
-                      </button>
-                      <button onClick={() => handleDeleteProduct(product._id)}>
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
+                    </form>
+                  ) : (
+                    <>
+                      <h3>{product.name}</h3>
+                      <p>${product.price}</p>
+                      <p>{product.description}</p>
+                      <div className="seller-dashboard__product-actions">
+                        <button
+                          onClick={() => {
+                            setEditProductId(product._id);
+                            setEditProduct({
+                              name: product.name,
+                              price: product.price,
+                              description: product.description,
+                            });
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button onClick={() => handleDeleteProduct(product._id)}>
+                          Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
-      
+
       {totalPages > 1 && (
         <div className="seller-dashboard__pagination">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -266,11 +308,26 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-      
-      <div className="seller-dashboard__feedback">
+
+      {/* Customer Feedback Section */}
+      <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
-        <p>Feedback and ratings from customers will appear here.</p>
-      </div>
+        {feedbacks.length === 0 ? (
+          <p>No feedback available.</p>
+        ) : (
+          feedbacks.map((fb) => (
+            <div key={fb._id} className="feedback-card">
+              <p>
+                <strong>Order:</strong> {fb.orderId}
+              </p>
+              <p>
+                <strong>Rating:</strong> {fb.rating}
+              </p>
+              <p>{fb.comment}</p>
+            </div>
+          ))
+        )}
+      </section>
     </div>
   );
 };

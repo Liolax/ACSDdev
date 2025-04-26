@@ -1,14 +1,18 @@
 import axios from 'axios';
 
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  baseURL,
   timeout: 5000,
-  headers: { 
-    'Content-Type': 'application/json',
+  headers: {
+    'Content-Type': 'application/json'
   },
 });
 
-// Request Interceptor: attach token if available
+console.log(`Using API base URL: ${baseURL}`);
+
+// Request Interceptor: Attach token if available
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
@@ -27,15 +31,14 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response Interceptor: merged duplicate branches for better error handling
+// Response Interceptor: Improved error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
+      console.error('Response error:', error.response.data);
       if (error.response.status === 401) {
         console.warn('Unauthorized access - consider redirecting to login page.');
-      } else {
-        console.error('Response error:', error.response.data);
       }
     } else if (error.request) {
       console.error('No response received:', error.request);

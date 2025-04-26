@@ -15,7 +15,7 @@ const productSchema = new Schema(
     },
     image: { 
       type: String, 
-      default: ''  // Will store file path
+      default: ''  // Will store the file path
     },
     description: { 
       type: String, 

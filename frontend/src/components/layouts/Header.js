@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROLES } from '../../constants/roles';
-// Importing the logo from assets so that Webpack processes and bundles it.
 import logo from '../../assets/images/logo.svg';
 import '../../assets/styles/components/_header.scss';
 
@@ -20,26 +19,20 @@ const Header = ({ userRole, onLoginClick }) => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  let logoLink = "/";
-  if (userRole === ROLES.SELLER) logoLink = "/seller-dashboard";
-  else if (userRole === ROLES.BUYER) logoLink = "/buyer-dashboard";
+  const logoLink = userRole === ROLES.SELLER ? "/seller-dashboard" : "/";
 
   return (
     <header className="header">
       <div className="header__logo">
         <NavLink to={logoLink} onClick={handleLinkClick}>
-          <img
-            src={logo}
-            alt="ÉireCraft Logo"
-            className="header__logo-image"
-          />
+          <img src={logo} alt="ÉireCraft Logo" className="header__logo-image" />
           <div className="header__logo-text">
             <span className="header__logo-main">ÉireCraft</span>
             <span className="header__logo-slogan">Artisan Market</span>
           </div>
         </NavLink>
       </div>
-      {/* Hamburger for mobile */}
+      {/* Mobile Hamburger Toggle */}
       <button
         className="header__mobile-toggle"
         onClick={toggleMenu}
@@ -50,7 +43,7 @@ const Header = ({ userRole, onLoginClick }) => {
       >
         &#9776;
       </button>
-      {/* Desktop/Mobile Navigation */}
+      {/* Navigation for Seller */}
       <nav className={`header__nav${menuOpen ? ' open' : ''}`} id="main-navigation">
         {userRole === ROLES.SELLER ? (
           <>
@@ -115,7 +108,7 @@ const Header = ({ userRole, onLoginClick }) => {
             left: 0,
             bottom: 0,
             background: 'rgba(0,0,0,0.25)',
-            zIndex: 9
+            zIndex: 9,
           }}
           onClick={toggleMenu}
           aria-label="Close navigation overlay"
