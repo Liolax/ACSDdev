@@ -8,7 +8,7 @@ import {
 import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
-// Preinstalled categories – extended list for seller to choose from.
+// Preinstalled categories – expanded list.
 const categories = [
   'General',
   'Home Decor',
@@ -29,10 +29,10 @@ const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
 
-// Helper: Build image URL from a stored image path.
+// Helper: Build image URL
 const getImageUrl = (image) => {
   if (!image || image.trim() === '') return defaultImage;
-  const imgPath = image.replace(/\\/g, '/'); // Convert Windows backslashes.
+  const imgPath = image.replace(/\\/g, '/');
   if (/^https?:\/\//i.test(imgPath)) return imgPath;
   if (imgPath.startsWith('uploads/')) {
     return `${backendUrl}/${imgPath}`;
@@ -46,7 +46,7 @@ const SellerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // State for add form (including category and tags)
+  // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -57,7 +57,7 @@ const SellerDashboard = () => {
   });
   const [newImageFile, setNewImageFile] = useState(null);
 
-  // State for edit form (including category and tags)
+  // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
   const [editProduct, setEditProduct] = useState({
     name: '',
@@ -68,7 +68,7 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
-  // Search & pagination
+  // For search & pagination
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +76,6 @@ const SellerDashboard = () => {
   useEffect(() => {
     fetchProducts();
     fetchFeedbacks();
-    // eslint-disable-next-line
   }, []);
 
   const fetchProducts = async () => {
@@ -108,13 +107,12 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       formData.append('category', newProduct.category);
-      formData.append('tags', newProduct.tags); // Comma-separated tags.
+      formData.append('tags', newProduct.tags);
       if (newImageFile) {
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
       setProducts([...products, data]);
-      // Reset add form
       setNewProduct({
         name: '',
         price: '',
@@ -143,7 +141,6 @@ const SellerDashboard = () => {
       }
       const data = await updateProduct(editProductId, formData);
       setProducts(products.map(p => (p._id === editProductId ? data : p)));
-      // Reset edit form
       setEditProductId(null);
       setEditProduct({
         name: '',
@@ -167,11 +164,9 @@ const SellerDashboard = () => {
     }
   };
 
-  // Filter products by search term (only by name in this component).
   const filteredProducts = products.filter(
-    (p) => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+    p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
@@ -209,42 +204,32 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, name: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, price: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
             required
           />
           <textarea
             placeholder="Description"
             value={newProduct.description}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, description: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
           ></textarea>
-          {/* Category select input */}
+          {/* Category: select input with preinstalled categories */}
           <label>
             Category:
             <select
               value={newProduct.category}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, category: e.target.value })
-              }
+              onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
               required
             >
               {categories.map((cat, idx) => (
-                <option key={idx} value={cat}>
-                  {cat}
-                </option>
+                <option key={idx} value={cat}>{cat}</option>
               ))}
             </select>
           </label>
@@ -253,9 +238,7 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Tags (comma separated)"
             value={newProduct.tags}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, tags: e.target.value })
-            }
+            onChange={(e) => setNewProduct({ ...newProduct, tags: e.target.value })}
           />
           <label className="seller-dashboard__file-label">
             Upload Product Image (optional)
@@ -331,9 +314,7 @@ const SellerDashboard = () => {
                           required
                         >
                           {categories.map((cat, idx) => (
-                            <option key={idx} value={cat}>
-                              {cat}
-                            </option>
+                            <option key={idx} value={cat}>{cat}</option>
                           ))}
                         </select>
                       </label>

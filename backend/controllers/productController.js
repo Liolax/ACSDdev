@@ -4,13 +4,13 @@ import path from 'path';
 
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
 
-// Helper: verifies that a file path is within the uploads directory.
+// Helper: Verify that a file path is within the uploads directory.
 function isWithinUploads(filePath) {
   const normalizedPath = path.normalize(filePath);
   return normalizedPath.startsWith(UPLOADS_DIR);
 }
 
-// Helper: Safely delete a file (only if inside uploads directory)
+// Helper: Safely delete a file (only if inside uploads/)
 async function safeDeleteFile(filePath) {
   try {
     if (isWithinUploads(filePath)) {
@@ -38,6 +38,9 @@ export async function getProducts(req, res) {
 // Retrieve a product by its ID
 export async function getProductById(req, res) {
   try {
+    if (!req.params.id) {
+      return res.status(400).json({ error: 'Product id is required.' });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found.' });
     res.status(200).json(product);
@@ -58,7 +61,7 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path; // Example: "uploads/image-XYZ.jpg"
+      imagePath = req.file.path; // e.g. "uploads/image-XYZ.jpg"
     }
     
     const newProduct = new Product({
@@ -67,7 +70,7 @@ export async function createProduct(req, res) {
       description,
       image: imagePath,
       category: category ? category.trim() : 'General',
-      tags: tags ? tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '') : []
+      tags: tags ? tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : []
     });
     
     const savedProduct = await newProduct.save();
@@ -81,6 +84,9 @@ export async function createProduct(req, res) {
 // Update an existing product
 export async function updateProduct(req, res) {
   try {
+    if (!req.params.id) {
+      return res.status(400).json({ error: 'Product id is required.' });
+    }
     const existingProduct = await Product.findById(req.params.id);
     if (!existingProduct) return res.status(404).json({ error: 'Product not found.' });
     
@@ -97,7 +103,7 @@ export async function updateProduct(req, res) {
     if (req.body.description) updateData.description = req.body.description.trim();
     if (req.body.category) updateData.category = req.body.category.trim();
     if (req.body.tags) {
-      updateData.tags = req.body.tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '');
+      updateData.tags = req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     }
     
     if (req.file) {
@@ -124,6 +130,9 @@ export async function updateProduct(req, res) {
 // Delete a product
 export async function deleteProduct(req, res) {
   try {
+    if (!req.params.id) {
+      return res.status(400).json({ error: 'Product id is required.' });
+    }
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct) return res.status(404).json({ error: 'Product not found.' });
     if (deletedProduct.image && !deletedProduct.image.startsWith('http')) {
