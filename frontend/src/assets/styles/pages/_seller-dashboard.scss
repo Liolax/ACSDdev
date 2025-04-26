@@ -72,7 +72,8 @@
   gap: 12px;
   margin: 16px 0;
   input,
-  textarea {
+  textarea,
+  select {
     padding: 8px 10px;
     font-size: 1rem;
     border: 1px solid base.$irish-gold-light;
@@ -146,7 +147,8 @@
   flex-direction: column;
   gap: 8px;
   input,
-  textarea {
+  textarea,
+  select {
     padding: 6px 8px;
     font-size: 0.95rem;
     border: 1px solid base.$irish-gold-light;
@@ -206,7 +208,7 @@
   }
 }
 
-/* --- File Input Custom Styling --- */
+/* --- File Input Styling --- */
 .seller-dashboard__file-input-wrapper {
   display: flex;
   align-items: center;
@@ -224,12 +226,10 @@
   }
 }
 
-/* Hide the default file input element */
 .seller-dashboard__file-input {
   display: none;
 }
 
-/* Styled label for file input */
 .seller-dashboard__file-label {
   font-family: var(--font-family-heading);
   font-size: 1rem;
@@ -246,7 +246,6 @@
   }
 }
 
-/* Display the selected file name */
 .seller-dashboard__file-name {
   font-size: 0.95rem;
   color: base.$irish-green-dark;
@@ -275,7 +274,8 @@
     font-size: 0.93rem;
   }
   .seller-dashboard__form input,
-  .seller-dashboard__form textarea {
+  .seller-dashboard__form textarea,
+  .seller-dashboard__form select {
     font-size: 0.93rem;
     padding: 6px 8px;
   }

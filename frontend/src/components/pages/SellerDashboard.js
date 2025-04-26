@@ -8,27 +8,32 @@ import {
 import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
-// Use proxy for API and backend for images.
-// If REACT_APP_BACKEND_URL isn't set, fallback to http://localhost:5000 on localhost.
-const backendUrl =
-  process.env.REACT_APP_BACKEND_URL ||
-  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
-
-// Preinstalled list of categories
+// Preinstalled categories – extended list for seller to choose from.
 const categories = [
+  'General',
   'Home Decor',
   'Jewelry',
   'Art',
   'Fashion',
   'Accessories',
-  'General'
+  'Toys',
+  'Pottery',
+  'Woodwork',
+  'Electronics',
+  'Books',
+  'Stationery'
 ];
 
-// Helper to robustly build image URLs
+// Use proxy for API and backend for images.
+const backendUrl =
+  process.env.REACT_APP_BACKEND_URL ||
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
+
+// Helper: Build image URL from a stored image path.
 const getImageUrl = (image) => {
   if (!image || image.trim() === '') return defaultImage;
-  const imgPath = image.replace(/\\/g, '/'); // Convert backslashes to forward slashes.
-  if (/^https?:\/\//i.test(imgPath)) return imgPath; // Already absolute.
+  const imgPath = image.replace(/\\/g, '/'); // Convert Windows backslashes.
+  if (/^https?:\/\//i.test(imgPath)) return imgPath;
   if (imgPath.startsWith('uploads/')) {
     return `${backendUrl}/${imgPath}`;
   }
@@ -41,7 +46,7 @@ const SellerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // State for adding a new product including category and tags.
+  // State for add form (including category and tags)
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -52,7 +57,7 @@ const SellerDashboard = () => {
   });
   const [newImageFile, setNewImageFile] = useState(null);
 
-  // State for editing a product (also including category and tags).
+  // State for edit form (including category and tags)
   const [editProductId, setEditProductId] = useState(null);
   const [editProduct, setEditProduct] = useState({
     name: '',
@@ -63,7 +68,7 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
-  // For search & pagination.
+  // Search & pagination
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -103,13 +108,13 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       formData.append('category', newProduct.category);
-      formData.append('tags', newProduct.tags); // Expect comma-separated value.
+      formData.append('tags', newProduct.tags); // Comma-separated tags.
       if (newImageFile) {
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
       setProducts([...products, data]);
-      // Reset the form fields.
+      // Reset add form
       setNewProduct({
         name: '',
         price: '',
@@ -138,7 +143,7 @@ const SellerDashboard = () => {
       }
       const data = await updateProduct(editProductId, formData);
       setProducts(products.map(p => (p._id === editProductId ? data : p)));
-      // Reset the edit fields.
+      // Reset edit form
       setEditProductId(null);
       setEditProduct({
         name: '',
@@ -162,9 +167,11 @@ const SellerDashboard = () => {
     }
   };
 
+  // Filter products by search term (only by name in this component).
   const filteredProducts = products.filter(
-    p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (p) => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
@@ -179,7 +186,7 @@ const SellerDashboard = () => {
       <div className="seller-dashboard__search">
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder="Search Products..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -224,8 +231,7 @@ const SellerDashboard = () => {
             }
             required
           ></textarea>
-          
-          {/* Category Field as a select input */}
+          {/* Category select input */}
           <label>
             Category:
             <select
@@ -242,8 +248,7 @@ const SellerDashboard = () => {
               ))}
             </select>
           </label>
-
-          {/* Tags Field (comma-separated) */}
+          {/* Tags input */}
           <input
             type="text"
             placeholder="Tags (comma separated)"
@@ -252,7 +257,6 @@ const SellerDashboard = () => {
               setNewProduct({ ...newProduct, tags: e.target.value })
             }
           />
-
           <label className="seller-dashboard__file-label">
             Upload Product Image (optional)
             <div className="seller-dashboard__file-input-wrapper">
@@ -421,7 +425,7 @@ const SellerDashboard = () => {
 
       <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
-        {/* Feedback rendering can be included here */}
+        {/* Feedback rendering can be added here */}
       </section>
     </div>
   );

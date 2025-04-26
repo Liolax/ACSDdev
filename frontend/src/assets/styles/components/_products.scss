@@ -17,7 +17,7 @@
 }
 
 .product-card {
-  @include mixins.card(15px, 0 4px 22px rgba(23, 98, 62, 0.09), base.$irish-cream); // Set same bg as Contact form
+  @include mixins.card(15px, 0 4px 22px rgba(23, 98, 62, 0.09), base.$irish-cream);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,13 +47,13 @@
     padding: 16px 14px 8px 14px;
     display: flex;
     flex-direction: column;
-    align-items: center; // Center align title and price
+    align-items: center;
 
     &__title {
       @include mixins.heading($size: 1.13rem);
       margin-bottom: 4px;
       width: 100%;
-      text-align: center; // Center title
+      text-align: center;
       font-weight: 700;
     }
   }
@@ -80,8 +80,6 @@
     transition: background 0.18s, color 0.18s;
     box-shadow: 0 3px 13px rgba(247, 178, 55, 0.14);
     display: block;
-
-    // Make price stand out like a badge
     border: 2px solid base.$irish-gold;
     margin-top: 18px;
     margin-bottom: 8px;
