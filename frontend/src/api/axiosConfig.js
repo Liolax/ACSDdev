@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Use /api to take advantage of the proxy in development
 const baseURL = process.env.REACT_APP_API_URL || '/api';
 
 const axiosInstance = axios.create({
@@ -11,9 +10,6 @@ const axiosInstance = axios.create({
   },
 });
 
-console.log(`Using API base URL: ${baseURL}`);
-
-// Request Interceptor: Attach token if available
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
@@ -32,7 +28,6 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response Interceptor: Improved error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

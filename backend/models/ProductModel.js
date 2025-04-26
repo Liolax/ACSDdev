@@ -1,7 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-import { Schema, model } from 'mongoose';
-
 const productSchema = new Schema(
   {
     name: { 
@@ -27,7 +25,7 @@ const productSchema = new Schema(
     category: { 
       type: String,
       trim: true,
-      default: 'General'  // New field: category
+      default: 'General'  // New field: category for search/filter
     },
     tags: [{ 
       type: String, 
@@ -41,8 +39,7 @@ const productSchema = new Schema(
   }
 );
 
-// Add text index on name, description, and category for search capabilities.
+// Create a text index over name, description, and category for search purposes.
 productSchema.index({ name: 'text', description: 'text', category: 'text' });
 
 export default model('Product', productSchema);
-

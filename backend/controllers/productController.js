@@ -4,13 +4,13 @@ import path from 'path';
 
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
 
-// Helper: Validate that a file path is within the uploads directory
+// Helper: verifies that a file path is within the uploads directory.
 function isWithinUploads(filePath) {
   const normalizedPath = path.normalize(filePath);
   return normalizedPath.startsWith(UPLOADS_DIR);
 }
 
-// Helper: Safely delete a file (only within uploads/)
+// Helper: Safely delete a file (only if inside uploads directory)
 async function safeDeleteFile(filePath) {
   try {
     if (isWithinUploads(filePath)) {
@@ -58,7 +58,7 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path; // e.g., "uploads/image-XYZ.jpg"
+      imagePath = req.file.path; // Example: "uploads/image-XYZ.jpg"
     }
     
     const newProduct = new Product({
@@ -67,9 +67,7 @@ export async function createProduct(req, res) {
       description,
       image: imagePath,
       category: category ? category.trim() : 'General',
-      tags: tags
-        ? tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '')
-        : []
+      tags: tags ? tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '') : []
     });
     
     const savedProduct = await newProduct.save();
@@ -85,7 +83,7 @@ export async function updateProduct(req, res) {
   try {
     const existingProduct = await Product.findById(req.params.id);
     if (!existingProduct) return res.status(404).json({ error: 'Product not found.' });
-  
+    
     let updateData = {};
     
     if (req.body.name) updateData.name = req.body.name.trim();
@@ -109,7 +107,7 @@ export async function updateProduct(req, res) {
         await safeDeleteFile(oldFilePath);
       }
     }
-  
+    
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       updateData,
@@ -128,7 +126,6 @@ export async function deleteProduct(req, res) {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct) return res.status(404).json({ error: 'Product not found.' });
-    // Delete associated image file if it exists and is local.
     if (deletedProduct.image && !deletedProduct.image.startsWith('http')) {
       const filePath = path.join(process.cwd(), deletedProduct.image);
       await safeDeleteFile(filePath);

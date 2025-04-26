@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// Filter to allow only image files (JPEG, PNG, WEBP)
+// File filter: Only allow JPEG, PNG, and WEBP image types.
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
   if (allowedMimeTypes.includes(file.mimetype)) {
@@ -34,7 +34,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ 
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }  // Limits file size to 5MB
+  limits: { fileSize: 5 * 1024 * 1024 } // Limit size to 5MB
 });
 
 const router = Router();
