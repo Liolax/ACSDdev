@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROLES } from '../../constants/roles';
+// Importing the logo from assets so that Webpack processes and bundles it.
 import logo from '../../assets/images/logo.svg';
 import '../../assets/styles/components/_header.scss';
 
@@ -55,12 +56,6 @@ const Header = ({ userRole, onLoginClick }) => {
           <>
             <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
               My Products
-            </NavLink>
-            <NavLink to="/add-product" className="header__link" onClick={handleLinkClick}>
-              Add Product
-            </NavLink>
-            <NavLink to="/feedback" className="header__link" onClick={handleLinkClick}>
-              Feedback
             </NavLink>
             <NavLink to="/contact" className="header__link" onClick={handleLinkClick}>
               Contact
