@@ -5,14 +5,14 @@ import feedbackEndpoints from './feedbackEndpoints';
 export const getFeedbacks = async () => {
   try {
     const response = await axiosInstance.get(feedbackEndpoints.getAll);
-    // Assuming the backend returns an object with a `feedbacks` array
+    // Assuming the backend returns { feedbacks: [...] }
     return response.data.feedbacks;
   } catch (error) {
     throw error;
   }
 };
 
-// (Optional) Submit feedback (if needed)
+// (Optional) Submit feedback, if needed in future.
 export const submitFeedback = async (feedbackData) => {
   try {
     const response = await axiosInstance.post(feedbackEndpoints.create, feedbackData);

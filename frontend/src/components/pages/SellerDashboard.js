@@ -1,5 +1,3 @@
-// frontend/src/components/pages/SellerDashboard.js
-
 import React, { useState, useEffect } from 'react';
 import {
   getProducts,
@@ -7,14 +5,13 @@ import {
   updateProduct,
   deleteProduct
 } from '../../api/products/productRequests';
-import { getFeedbacks } from '../../api/feedback/feedbackRequests'; // Updated import path
+import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
-// Use the backend URL from environment variables or fallback
+// Use environment variable or fallback for the backend base URL
 const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
 const SellerDashboard = () => {
-  // State for products, feedback, loading, and error
   const [products, setProducts] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]); // Feedbacks from buyers
   const [loading, setLoading] = useState(true);
@@ -38,7 +35,7 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
 
-  // Search & pagination state
+  // State for search & pagination
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +66,6 @@ const SellerDashboard = () => {
     }
   };
 
-  // Create product (Add Product)
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
@@ -90,7 +86,6 @@ const SellerDashboard = () => {
     }
   };
 
-  // Update product
   const handleEditProduct = async (e) => {
     e.preventDefault();
     try {
@@ -120,7 +115,6 @@ const SellerDashboard = () => {
     }
   };
 
-  // Apply filtering and pagination
   const filteredProducts = products.filter(
     p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -161,20 +155,26 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             required
           />
           <textarea
             placeholder="Description"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
             required
           ></textarea>
           <label className="seller-dashboard__file-label">
@@ -200,7 +200,7 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // Construct image URL: if product.image is relative, prepend backendUrl; otherwise, use it directly. Fall back to default image.
+            // If the product.image is relative, prepend backendUrl; otherwise, use it if absolute.
             const imageUrl = product.image
               ? (product.image.startsWith("http")
                   ? product.image
