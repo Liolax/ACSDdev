@@ -8,31 +8,41 @@ import {
 import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
-// Use the backend URL from environment variables or fallback
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+// Use proxy for API and backend for images.
+// If REACT_APP_BACKEND_URL is not set, and we're on localhost, fallback to http://localhost:5000.
+const backendUrl =
+  process.env.REACT_APP_BACKEND_URL ||
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
+
+// Helper to robustly build image URLs
+const getImageUrl = (image) => {
+  if (!image) return defaultImage;
+  // Convert Windows backslashes to forward slashes.
+  const imgPath = image.replace(/\\/g, '/');
+  // If image URL is already absolute, return it.
+  if (/^https?:\/\//i.test(imgPath)) return imgPath;
+  // If image is served from the backend uploads folder, prepend backendUrl.
+  if (imgPath.startsWith('uploads/')) {
+    return `${backendUrl}/${imgPath}`;
+  }
+  // Fallback to default image.
+  return defaultImage;
+};
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
-  const [feedbacks, setFeedbacks] = useState([]); // Feedbacks from buyers
+  const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: '',
-    description: ''
-  });
+  const [newProduct, setNewProduct] = useState({ name: '', price: '', description: '' });
   const [newImageFile, setNewImageFile] = useState(null);
 
   // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
-  const [editProduct, setEditProduct] = useState({
-    name: '',
-    price: '',
-    description: ''
-  });
+  const [editProduct, setEditProduct] = useState({ name: '', price: '', description: '' });
   const [editImageFile, setEditImageFile] = useState(null);
 
   // For search & pagination
@@ -43,6 +53,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     fetchProducts();
     fetchFeedbacks();
+    // eslint-disable-next-line
   }, []);
 
   const fetchProducts = async () => {
@@ -74,7 +85,7 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       if (newImageFile) {
-        // The file input with name="image" allows Multer to pick up the file correctly.
+        // It is important that the file input uses name="image" so Multer can process it.
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
@@ -196,12 +207,7 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // Construct image URL: ensuring backslashes are replaced with forward slashes.
-            const imageUrl = product.image
-              ? (product.image.startsWith('http')
-                  ? product.image
-                  : `${backendUrl}/${product.image.replace(/\\/g, '/')}`)
-              : defaultImage;
+            const imageUrl = getImageUrl(product.image);
             return (
               <div key={product._id} className="seller-dashboard__product-card">
                 <img
@@ -230,7 +236,9 @@ const SellerDashboard = () => {
                       />
                       <textarea
                         value={editProduct.description}
-                        onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, description: e.target.value })
+                        }
                         required
                       ></textarea>
                       <label className="seller-dashboard__file-label">
@@ -300,7 +308,6 @@ const SellerDashboard = () => {
         </div>
       )}
 
-      {/* Customer Feedback Section */}
       <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
         {feedbacks.length === 0 ? (

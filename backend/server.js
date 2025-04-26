@@ -19,7 +19,7 @@ const app = express();
 // Set up rate limiting middleware (e.g., 100 requests per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // max 100 requests per IP per windowMs
+  max: 100, // maximum of 100 requests per IP per windowMs
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use(limiter);
@@ -48,7 +48,8 @@ mongoose.connect(mongoURI, {
 // Middleware Setup
 app.use(helmet());
 app.disable('x-powered-by');
-app.use(cors({ origin: '*' })); // Allow all origins for API and static files
+// Allow all origins for API and static files
+app.use(cors({ origin: '*' })); 
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
