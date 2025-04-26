@@ -9,10 +9,20 @@ import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
 // Use proxy for API and backend for images.
-// If REACT_APP_BACKEND_URL isn't set, fallback to http://localhost:5000 when on localhost.
+// If REACT_APP_BACKEND_URL isn't set, fallback to http://localhost:5000 on localhost.
 const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
+
+// Preinstalled list of categories
+const categories = [
+  'Home Decor',
+  'Jewelry',
+  'Art',
+  'Fashion',
+  'Accessories',
+  'General'
+];
 
 // Helper to robustly build image URLs
 const getImageUrl = (image) => {
@@ -26,7 +36,6 @@ const getImageUrl = (image) => {
 };
 
 const SellerDashboard = () => {
-  // State for products and feedbacks.
   const [products, setProducts] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +47,7 @@ const SellerDashboard = () => {
     name: '',
     price: '',
     description: '',
-    category: '',
+    category: 'General',
     tags: ''
   });
   const [newImageFile, setNewImageFile] = useState(null);
@@ -49,7 +58,7 @@ const SellerDashboard = () => {
     name: '',
     price: '',
     description: '',
-    category: '',
+    category: 'General',
     tags: ''
   });
   const [editImageFile, setEditImageFile] = useState(null);
@@ -100,8 +109,14 @@ const SellerDashboard = () => {
       }
       const data = await createProduct(formData);
       setProducts([...products, data]);
-      // Reset the creation form.
-      setNewProduct({ name: '', price: '', description: '', category: '', tags: '' });
+      // Reset the form fields.
+      setNewProduct({
+        name: '',
+        price: '',
+        description: '',
+        category: 'General',
+        tags: ''
+      });
       setNewImageFile(null);
       setShowAddForm(false);
     } catch (err) {
@@ -117,7 +132,7 @@ const SellerDashboard = () => {
       formData.append('price', editProduct.price);
       formData.append('description', editProduct.description);
       formData.append('category', editProduct.category);
-      formData.append('tags', editProduct.tags); // Comma-separated string
+      formData.append('tags', editProduct.tags);
       if (editImageFile) {
         formData.append('image', editImageFile);
       }
@@ -125,7 +140,13 @@ const SellerDashboard = () => {
       setProducts(products.map(p => (p._id === editProductId ? data : p)));
       // Reset the edit fields.
       setEditProductId(null);
-      setEditProduct({ name: '', price: '', description: '', category: '', tags: '' });
+      setEditProduct({
+        name: '',
+        price: '',
+        description: '',
+        category: 'General',
+        tags: ''
+      });
       setEditImageFile(null);
     } catch (err) {
       setError('Failed to update product');
@@ -181,14 +202,18 @@ const SellerDashboard = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             required
           />
           <input
             type="number"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             required
           />
           <textarea
@@ -199,15 +224,26 @@ const SellerDashboard = () => {
             }
             required
           ></textarea>
-          <input
-            type="text"
-            placeholder="Category (e.g. Home Decor)"
-            value={newProduct.category}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, category: e.target.value })
-            }
-            required
-          />
+          
+          {/* Category Field as a select input */}
+          <label>
+            Category:
+            <select
+              value={newProduct.category}
+              onChange={(e) =>
+                setNewProduct({ ...newProduct, category: e.target.value })
+              }
+              required
+            >
+              {categories.map((cat, idx) => (
+                <option key={idx} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {/* Tags Field (comma-separated) */}
           <input
             type="text"
             placeholder="Tags (comma separated)"
@@ -216,6 +252,7 @@ const SellerDashboard = () => {
               setNewProduct({ ...newProduct, tags: e.target.value })
             }
           />
+
           <label className="seller-dashboard__file-label">
             Upload Product Image (optional)
             <div className="seller-dashboard__file-input-wrapper">
@@ -279,15 +316,24 @@ const SellerDashboard = () => {
                         }
                         required
                       ></textarea>
-                      <input
-                        type="text"
-                        placeholder="Category"
-                        value={editProduct.category}
-                        onChange={(e) =>
-                          setEditProduct({ ...editProduct, category: e.target.value })
-                        }
-                        required
-                      />
+                      {/* Category select input */}
+                      <label>
+                        Category:
+                        <select
+                          value={editProduct.category}
+                          onChange={(e) =>
+                            setEditProduct({ ...editProduct, category: e.target.value })
+                          }
+                          required
+                        >
+                          {categories.map((cat, idx) => (
+                            <option key={idx} value={cat}>
+                              {cat}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      {/* Tags input */}
                       <input
                         type="text"
                         placeholder="Tags (comma separated)"
@@ -323,9 +369,13 @@ const SellerDashboard = () => {
                       <h3>{product.name}</h3>
                       <p>${product.price}</p>
                       <p>{product.description}</p>
-                      <p><strong>Category:</strong> {product.category || 'General'}</p>
+                      <p>
+                        <strong>Category:</strong> {product.category || 'General'}
+                      </p>
                       {product.tags && product.tags.length > 0 && (
-                        <p><strong>Tags:</strong> {product.tags.join(', ')}</p>
+                        <p>
+                          <strong>Tags:</strong> {product.tags.join(', ')}
+                        </p>
                       )}
                       <div className="seller-dashboard__product-actions">
                         <button
@@ -371,7 +421,7 @@ const SellerDashboard = () => {
 
       <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
-        {/* Feedback rendering code remains unchanged */}
+        {/* Feedback rendering can be included here */}
       </section>
     </div>
   );
