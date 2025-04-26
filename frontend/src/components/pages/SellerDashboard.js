@@ -9,7 +9,7 @@ import { getFeedbacks } from '../../api/feedback/feedbackRequests';
 import defaultImage from '../../assets/images/default-product.png';
 
 // Use proxy for API and backend for images.
-// If REACT_APP_BACKEND_URL is not set, and we're on localhost, fallback to http://localhost:5000.
+// Fallback to http://localhost:5000 if REACT_APP_BACKEND_URL isn’t set.
 const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
@@ -17,15 +17,11 @@ const backendUrl =
 // Helper to robustly build image URLs
 const getImageUrl = (image) => {
   if (!image) return defaultImage;
-  // Convert Windows backslashes to forward slashes.
-  const imgPath = image.replace(/\\/g, '/');
-  // If image URL is already absolute, return it.
+  const imgPath = image.replace(/\\/g, '/'); // convert Windows backslashes to forward slashes
   if (/^https?:\/\//i.test(imgPath)) return imgPath;
-  // If image is served from the backend uploads folder, prepend backendUrl.
   if (imgPath.startsWith('uploads/')) {
     return `${backendUrl}/${imgPath}`;
   }
-  // Fallback to default image.
   return defaultImage;
 };
 
@@ -37,12 +33,20 @@ const SellerDashboard = () => {
 
   // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', price: '', description: '' });
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    price: '',
+    description: ''
+  });
   const [newImageFile, setNewImageFile] = useState(null);
 
   // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
-  const [editProduct, setEditProduct] = useState({ name: '', price: '', description: '' });
+  const [editProduct, setEditProduct] = useState({
+    name: '',
+    price: '',
+    description: ''
+  });
   const [editImageFile, setEditImageFile] = useState(null);
 
   // For search & pagination
@@ -85,7 +89,6 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       if (newImageFile) {
-        // It is important that the file input uses name="image" so Multer can process it.
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
@@ -225,13 +228,17 @@ const SellerDashboard = () => {
                       <input
                         type="text"
                         value={editProduct.name}
-                        onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, name: e.target.value })
+                        }
                         required
                       />
                       <input
                         type="number"
                         value={editProduct.price}
-                        onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
+                        onChange={(e) =>
+                          setEditProduct({ ...editProduct, price: e.target.value })
+                        }
                         required
                       />
                       <textarea
