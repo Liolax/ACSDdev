@@ -7,7 +7,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 
-// Load environment variables from the .env file
 dotenv.config();
 
 // Import your route files
@@ -17,14 +16,12 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// Set up rate limiting middleware: limit each IP to 100 requests per 15 minutes for example
+// Rate Limiting Middleware
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
 });
-
-// Apply the rate limiting middleware to all requests
 app.use(limiter);
 
 // MongoDB connection
@@ -62,6 +59,11 @@ const __dirname = path.dirname(__filename);
 
 // Serve static files from the "uploads" directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Optional base route for API
+app.get('/api', (req, res) => {
+  res.json({ message: 'Welcome to the API' });
+});
 
 // Register API Routes
 app.use('/api/products', productRoutes);

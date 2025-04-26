@@ -19,20 +19,12 @@ const SellerDashboard = () => {
 
   // State for adding a new product
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: '',
-    description: ''
-  });
+  const [newProduct, setNewProduct] = useState({ name: '', price: '', description: '' });
   const [newImageFile, setNewImageFile] = useState(null);
 
   // State for editing a product
   const [editProductId, setEditProductId] = useState(null);
-  const [editProduct, setEditProduct] = useState({
-    name: '',
-    price: '',
-    description: ''
-  });
+  const [editProduct, setEditProduct] = useState({ name: '', price: '', description: '' });
   const [editImageFile, setEditImageFile] = useState(null);
 
   // For search & pagination
@@ -74,7 +66,7 @@ const SellerDashboard = () => {
       formData.append('price', newProduct.price);
       formData.append('description', newProduct.description);
       if (newImageFile) {
-        // The name attribute is important for Multer to pick up the file correctly
+        // The name attribute ("image") from the file input is important for Multer.
         formData.append('image', newImageFile);
       }
       const data = await createProduct(formData);
@@ -196,11 +188,11 @@ const SellerDashboard = () => {
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
-            // Build image URL: if product.image is relative, prepend backendUrl; else use it directly.
+            // Construct the image URL by replacing backslashes with forward slashes.
             const imageUrl = product.image
               ? (product.image.startsWith('http')
                   ? product.image
-                  : `${backendUrl}/${product.image}`)
+                  : `${backendUrl}/${product.image.replace(/\\/g, '/')}`)
               : defaultImage;
             return (
               <div key={product._id} className="seller-dashboard__product-card">
