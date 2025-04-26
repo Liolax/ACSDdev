@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { Schema, model } from 'mongoose';
+
 const productSchema = new Schema(
   {
     name: { 
@@ -21,7 +23,16 @@ const productSchema = new Schema(
       type: String, 
       trim: true, 
       maxlength: [500, 'Description cannot exceed 500 characters']
-    }
+    },
+    category: { 
+      type: String,
+      trim: true,
+      default: 'General'  // New field: category
+    },
+    tags: [{ 
+      type: String, 
+      trim: true 
+    }]
   },
   { 
     timestamps: true, 
@@ -30,6 +41,8 @@ const productSchema = new Schema(
   }
 );
 
-productSchema.index({ name: 'text', description: 'text' });
+// Add text index on name, description, and category for search capabilities.
+productSchema.index({ name: 'text', description: 'text', category: 'text' });
 
 export default model('Product', productSchema);
+

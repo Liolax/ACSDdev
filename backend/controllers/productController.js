@@ -10,6 +10,20 @@ function isWithinUploads(filePath) {
   return normalizedPath.startsWith(UPLOADS_DIR);
 }
 
+// Helper: Safely delete a file (only within uploads/)
+async function safeDeleteFile(filePath) {
+  try {
+    if (isWithinUploads(filePath)) {
+      await fs.promises.unlink(filePath);
+      console.log(`Deleted file: ${filePath}`);
+    } else {
+      console.error('Attempt to delete file outside uploads directory:', filePath);
+    }
+  } catch (err) {
+    console.error('Error deleting file:', err);
+  }
+}
+
 // Retrieve all products
 export async function getProducts(req, res) {
   try {
@@ -36,7 +50,7 @@ export async function getProductById(req, res) {
 // Create a new product
 export async function createProduct(req, res) {
   try {
-    const { name, price, description } = req.body;
+    const { name, price, description, category, tags } = req.body;
     const parsedPrice = parseFloat(price);
     if (!name || isNaN(parsedPrice) || parsedPrice < 0) {
       return res.status(400).json({ error: 'Valid name and price are required.' });
@@ -44,14 +58,18 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path; // This should be something like "uploads/image-XYZ.jpg"
+      imagePath = req.file.path; // e.g., "uploads/image-XYZ.jpg"
     }
     
     const newProduct = new Product({
       name,
       price: parsedPrice,
       description,
-      image: imagePath
+      image: imagePath,
+      category: category ? category.trim() : 'General',
+      tags: tags
+        ? tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '')
+        : []
     });
     
     const savedProduct = await newProduct.save();
@@ -65,33 +83,30 @@ export async function createProduct(req, res) {
 // Update an existing product
 export async function updateProduct(req, res) {
   try {
-    // Find the existing product to get its current image
     const existingProduct = await Product.findById(req.params.id);
     if (!existingProduct) return res.status(404).json({ error: 'Product not found.' });
   
-    let updateData = req.body;
-    if (updateData.price) {
-      const parsedPrice = parseFloat(updateData.price);
+    let updateData = {};
+    
+    if (req.body.name) updateData.name = req.body.name.trim();
+    if (req.body.price) {
+      const parsedPrice = parseFloat(req.body.price);
       if (isNaN(parsedPrice) || parsedPrice < 0) {
         return res.status(400).json({ error: 'Invalid price value.' });
       }
       updateData.price = parsedPrice;
     }
+    if (req.body.description) updateData.description = req.body.description.trim();
+    if (req.body.category) updateData.category = req.body.category.trim();
+    if (req.body.tags) {
+      updateData.tags = req.body.tags.split(',').map((tag) => tag.trim()).filter((tag) => tag !== '');
+    }
+    
     if (req.file) {
       updateData.image = req.file.path;
-      // Delete the old image if it exists and is local
       if (existingProduct.image && !existingProduct.image.startsWith('http')) {
         const oldFilePath = path.join(process.cwd(), existingProduct.image);
-        if (isWithinUploads(oldFilePath)) {
-          try {
-            await fs.promises.unlink(oldFilePath);
-            console.log(`Deleted old image file: ${oldFilePath}`);
-          } catch (err) {
-            console.error('Error deleting old image file:', err);
-          }
-        } else {
-          console.error('Attempt to delete file outside uploads directory:', oldFilePath);
-        }
+        await safeDeleteFile(oldFilePath);
       }
     }
   
@@ -113,19 +128,10 @@ export async function deleteProduct(req, res) {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct) return res.status(404).json({ error: 'Product not found.' });
-    // Delete associated image file if it exists and is local
+    // Delete associated image file if it exists and is local.
     if (deletedProduct.image && !deletedProduct.image.startsWith('http')) {
       const filePath = path.join(process.cwd(), deletedProduct.image);
-      if (isWithinUploads(filePath)) {
-        try {
-          await fs.promises.unlink(filePath);
-          console.log('Successfully deleted orphan image file:', filePath);
-        } catch (err) {
-          console.error('Error deleting image file:', err);
-        }
-      } else {
-        console.error('Attempt to delete file outside uploads directory:', filePath);
-      }
+      await safeDeleteFile(filePath);
     }
     res.status(200).json({ success: true, product: deletedProduct });
   } catch (error) {

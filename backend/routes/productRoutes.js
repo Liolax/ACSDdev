@@ -9,7 +9,7 @@ import {
   deleteProduct
 } from '../controllers/productController.js';
 
-// Configure multer storage (ensure the "uploads" folder exists in your backend)
+// Configure multer storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -21,9 +21,24 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+// Filter to allow only image files (JPEG, PNG, WEBP)
+const fileFilter = (req, file, cb) => {
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type. Only JPG, PNG, and WEBP are allowed.'));
+  }
+};
+
+const upload = multer({ 
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }  // Limits file size to 5MB
+});
 
 const router = Router();
+
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 router.post('/', upload.single('image'), createProduct);
