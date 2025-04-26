@@ -13,7 +13,7 @@ const SellerDashboard = () => {
     price: '',
     description: ''
   });
-  // Separate state for the image file
+  // State for the image file
   const [newImageFile, setNewImageFile] = useState(null);
   
   // State for editing a product
@@ -25,7 +25,7 @@ const SellerDashboard = () => {
   });
   const [editImageFile, setEditImageFile] = useState(null);
   
-  // For search & pagination
+  // Search & pagination states
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +46,7 @@ const SellerDashboard = () => {
     }
   };
   
-  // Create Product with image file upload
+  // Create product with image upload
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
@@ -67,7 +67,7 @@ const SellerDashboard = () => {
     }
   };
   
-  // Update Product with potential new image file upload
+  // Update product with new image file (optional)
   const handleEditProduct = async (e) => {
     e.preventDefault();
     try {
@@ -105,7 +105,7 @@ const SellerDashboard = () => {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  
+
   return (
     <div className="seller-dashboard">
       <h2 className="seller-dashboard__header">Manage Your Products</h2>
@@ -151,12 +151,23 @@ const SellerDashboard = () => {
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             required
           ></textarea>
-          <input 
-            type="file"
-            accept="image/*"
-            onChange={(e) => setNewImageFile(e.target.files[0])}
-            required
-          />
+          
+          {/* Styled File Input */}
+          <label className="seller-dashboard__file-label">
+            Upload Product Image
+            <div className="seller-dashboard__file-input-wrapper">
+              <input 
+                type="file"
+                accept="image/*"
+                className="seller-dashboard__file-input"
+                onChange={(e) => setNewImageFile(e.target.files[0])}
+              />
+              <span className="seller-dashboard__file-name">
+                {newImageFile ? newImageFile.name : "No file chosen"}
+              </span>
+            </div>
+          </label>
+          
           <button type="submit">Create Product</button>
         </form>
       )}
@@ -192,11 +203,23 @@ const SellerDashboard = () => {
                       onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })}
                       required
                     ></textarea>
-                    <input 
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setEditImageFile(e.target.files[0])}
-                    />
+                    
+                    {/* Styled File Input for Edit */}
+                    <label className="seller-dashboard__file-label">
+                      Update Product Image
+                      <div className="seller-dashboard__file-input-wrapper">
+                        <input 
+                          type="file"
+                          accept="image/*"
+                          className="seller-dashboard__file-input"
+                          onChange={(e) => setEditImageFile(e.target.files[0])}
+                        />
+                        <span className="seller-dashboard__file-name">
+                          {editImageFile ? editImageFile.name : "No file chosen"}
+                        </span>
+                      </div>
+                    </label>
+                    
                     <div className="seller-dashboard__edit-actions">
                       <button type="submit">Save</button>
                       <button type="button" onClick={() => setEditProductId(null)}>Cancel</button>

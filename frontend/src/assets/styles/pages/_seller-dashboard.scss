@@ -206,7 +206,7 @@
   }
 }
 
-/* --- File Input Styling --- */
+/* --- File Input Custom Styling --- */
 .seller-dashboard__file-input-wrapper {
   display: flex;
   align-items: center;
@@ -224,12 +224,12 @@
   }
 }
 
-/* Hide default file input */
+/* Hide the default file input element */
 .seller-dashboard__file-input {
   display: none;
 }
 
-/* Styled button */
+/* Styled label for file input */
 .seller-dashboard__file-label {
   font-family: var(--font-family-heading);
   font-size: 1rem;
@@ -246,7 +246,7 @@
   }
 }
 
-/* Ensure file name displays next to button */
+/* Display the selected file name */
 .seller-dashboard__file-name {
   font-size: 0.95rem;
   color: base.$irish-green-dark;

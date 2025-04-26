@@ -6,27 +6,21 @@ const productSchema = new Schema(
       type: String, 
       required: [true, 'Product name is required'], 
       trim: true, 
-      minlength: [3, 'Name must be at least 3 characters long'] // Min length validation
+      minlength: [3, 'Name must be at least 3 characters long']
     },
     price: { 
       type: Number, 
       required: [true, 'Price is required'], 
-      min: [0, 'Price cannot be negative'] // Min price validation
+      min: [0, 'Price cannot be negative']
     },
     image: { 
       type: String, 
-      default: '', // Default value for image
-      validate: { 
-        validator: function (v) {
-          return v ? /^https?:\/\/.*\.(jpg|jpeg|png|gif|webp)$/i.test(v) : true; // URL format validation
-        },
-        message: props => `${props.value} is not a valid image URL`
-      }
+      default: ''  // Will store file path
     },
     description: { 
       type: String, 
       trim: true, 
-      maxlength: [500, 'Description cannot exceed 500 characters'] // Max length validation
+      maxlength: [500, 'Description cannot exceed 500 characters']
     }
   },
   { 
@@ -36,7 +30,6 @@ const productSchema = new Schema(
   }
 );
 
-// Index for faster text search on name and description
 productSchema.index({ name: 'text', description: 'text' });
 
 export default model('Product', productSchema);
