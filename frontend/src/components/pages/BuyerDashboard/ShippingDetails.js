@@ -1,60 +1,65 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import Button from '../../ui/Button';
+import '../../../assets/styles/pages/_shipping-details.scss';
 
-const ShippingDetails = ({ cartItems, onOrderPlaced }) => {
-  const [form, setForm] = useState({
+const ShippingDetails = ({ onSubmit }) => {
+  const [details, setDetails] = useState({
     address: '',
     city: '',
     postalCode: '',
-    country: ''
+    country: '',
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
-
-  const buyerId = localStorage.getItem('userId');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setDetails({ ...details, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setError('');
-    try {
-      const res = await axios.post('/api/orders', {
-        buyerId,
-        items: cartItems.map(item => ({
-          productId: item.id || item._id,
-          name: item.name,
-          image: item.image,
-          price: item.price,
-          quantity: item.quantity
-        })),
-        shippingDetails: form
-      });
-      setSubmitting(false);
-      onOrderPlaced(res.data);
-    } catch (err) {
-      setError('Failed to place order. Please try again.');
-      setSubmitting(false);
-    }
+    onSubmit(details);
   };
 
   return (
-    <div className="shipping-details">
-      <h2 className="shipping-details__header">Shipping Details</h2>
-      <form className="shipping-details__form" onSubmit={handleSubmit}>
-        <input type="text" name="address" placeholder="Address" value={form.address} onChange={handleChange} required />
-        <input type="text" name="city" placeholder="City" value={form.city} onChange={handleChange} required />
-        <input type="text" name="postalCode" placeholder="Postal Code" value={form.postalCode} onChange={handleChange} required />
-        <input type="text" name="country" placeholder="Country" value={form.country} onChange={handleChange} required />
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Placing Order...' : 'Place Order'}
-        </button>
-        {error && <div className="shipping-details__error">{error}</div>}
-      </form>
-    </div>
+    <form className="shipping-details" onSubmit={handleSubmit}>
+      <h3 className="shipping-details__title">Shipping Details</h3>
+      <div className="shipping-details__fields">
+        <input
+          className="shipping-details__input"
+          name="address"
+          placeholder="Address"
+          value={details.address}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="shipping-details__input"
+          name="city"
+          placeholder="City"
+          value={details.city}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="shipping-details__input"
+          name="postalCode"
+          placeholder="Postal Code"
+          value={details.postalCode}
+          onChange={handleChange}
+          required
+        />
+        <input
+          className="shipping-details__input"
+          name="country"
+          placeholder="Country"
+          value={details.country}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <Button className="shipping-details__button" type="submit">
+        Continue to Payment
+      </Button>
+    </form>
   );
 };
 

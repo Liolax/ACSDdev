@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Button from '../ui/Button';  // Previously was '../../ui/Button'
-import Icon from '../ui/Icon';        // Previously was '../../ui/Icon'
+import Icon from '../ui/Icon';
 import defaultImage from '../../assets/images/default-product.png';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
@@ -25,19 +24,17 @@ const getImageUrl = (image) => {
   return defaultImage;
 };
 
-const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
+const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTags, setSearchTags] = useState('');
   const [sortOrder, setSortOrder] = useState('');
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
+  
   useEffect(() => {
     (async () => {
       try {
@@ -57,7 +54,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
           setAllProducts(response.data);
         }
       } catch (error) {
-        // Fallback dummy products
+        // Fallback dummy products in case of error
         const dummyProducts = Array.from({ length: 12 }, (_, i) => ({
           _id: (i + 1).toString(),
           name: `Product ${String.fromCharCode(65 + i)}`,
@@ -84,7 +81,8 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     }
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
-        product.category && product.category.toLowerCase() === selectedCategory.toLowerCase()
+        product.category &&
+        product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
     if (searchTags.trim() !== '') {
@@ -119,7 +117,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   if (loading) return <p>Loading products...</p>;
 
   return (
-    <div>
+    <>
       <div className="search-bar">
         <input 
           type="text" 
@@ -187,35 +185,20 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
                 </div>
                 <div className="product-card__actions">
                   <button
-                    className="product-card__action-button wishlist-button"
-                    onClick={() =>
-                      onAddToWishlist
-                        ? onAddToWishlist(product)
-                        : alert('Added to Wishlist')
-                    }
+                    className="product-card__icon Irish-icon-btn"
                     title="Add to Wishlist"
+                    onClick={() => onAddToWishlist && onAddToWishlist(product._id)}
                   >
                     <Icon name="heart" />
                   </button>
                   <button
-                    className="product-card__action-button cart-button"
-                    onClick={() =>
-                      onAddToCart
-                        ? onAddToCart(product)
-                        : alert('Added to Cart')
-                    }
+                    className="product-card__icon Irish-icon-btn"
                     title="Add to Cart"
+                    onClick={() => onAddToCart && onAddToCart(product._id)}
                   >
                     <Icon name="cart" />
                   </button>
                 </div>
-                {onDetails && (
-                  <div className="details-button__wrapper">
-                    <Button className="details-button" onClick={() => onDetails(product)}>
-                      Details
-                    </Button>
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -253,7 +236,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
           )}
         </>
       )}
-    </div>
+    </>
   );
 };
 

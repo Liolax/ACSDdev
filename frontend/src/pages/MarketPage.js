@@ -5,14 +5,25 @@ import StandardProductGrid from '../components/shared/StandardProductGrid';
 import '../assets/styles/pages/_market.scss';
 
 const MarketPage = () => {
-  const userRole = localStorage.getItem('userRole');
+  // Define the actions for wishlist and cart
+  const handleAddToWishlist = (productId) => {
+    // Replace with your wishlist logic/API call if needed
+    console.log("Adding product to wishlist:", productId);
+  };
+
+  const handleAddToCart = (productId) => {
+    // Replace with your cart logic/API call if needed
+    console.log("Adding product to cart:", productId);
+  };
+
   return (
     <div className="page-container market-page">
-      <Header userRole={userRole} />
+      <Header />
       <main className="market-page__main-content">
-        <h2 className="market-page__title">Welcome to the Market</h2>
-        <p className="market-page__description">Browse our available products and discover great deals!</p>
-        <StandardProductGrid />
+        <StandardProductGrid 
+          onAddToWishlist={handleAddToWishlist}
+          onAddToCart={handleAddToCart}
+        />
       </main>
       <Footer />
     </div>

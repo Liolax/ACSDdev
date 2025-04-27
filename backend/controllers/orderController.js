@@ -76,3 +76,15 @@ export async function addFeedback(req, res) {
     res.status(500).json({ error: 'Failed to save feedback' });
   }
 }
+
+// Seller: Get all sales for current seller (products they sold)
+export async function getSales(req, res) {
+  try {
+    // Assume req.user._id is sellerId
+    const sellerId = req.user?._id;
+    const orders = await Order.find({ 'items.sellerId': sellerId }).sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get sales' });
+  }
+}

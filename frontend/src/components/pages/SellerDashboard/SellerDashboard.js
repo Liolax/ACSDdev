@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Button from '../../ui/Button';           
-import MySales from './MySales'; 
+import Button from '../../ui/Button';
+import MySales from './MySales';
 
 const SellerDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -11,7 +11,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     setLoadingOrders(true);
     axios.get('/api/orders')
-      .then(res => {
+      .then((res) => {
         setOrders(res.data || []);
         setLoadingOrders(false);
       })
@@ -43,7 +43,7 @@ const SellerDashboard = () => {
         ) : ordersToShip.length === 0 ? (
           <p className="seller-dashboard__empty">No orders pending shipment.</p>
         ) : (
-          ordersToShip.map(order => (
+          ordersToShip.map((order) => (
             <div key={order._id} className="order-card">
               <h3 className="order-card__id">Order {order._id}</h3>
               <p className="order-card__items-names">
@@ -60,7 +60,7 @@ const SellerDashboard = () => {
           ))
         )}
       </div>
-      
+      {/* My Sales Section */}
       <MySales />
     </div>
   );

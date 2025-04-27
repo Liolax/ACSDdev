@@ -40,3 +40,9 @@ export const deleteOrder = async (id) => {
     throw error;
   }
 };
+
+// Get all sales for current seller
+export const getSales = async () => {
+  const response = await axiosInstance.get(ordersEndpoints.getSales);
+  return response.data;
+};

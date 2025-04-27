@@ -1,60 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getSales } from '../../../api/orders/ordersRequests';
 import Button from '../../ui/Button';
-import '../../../assets/styles/pages/_my-sales.scss'; 
+import '../../../assets/styles/pages/_my-sales.scss';
 
 const MySales = () => {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const sellerId = localStorage.getItem('userId');
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`/api/orders?sellerId=${sellerId}`)
-      .then(res => {
-        // Filter orders that are delivered (completed sales).
-        const deliveredSales = res.data.filter(order => order.status === 'Delivered');
-        setSales(deliveredSales);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError('Failed to load sales.');
-        setLoading(false);
-      });
-  }, [sellerId]);
+    getSales()
+      .then((data) => setSales(data))
+      .catch((error) => console.error("Failed to get sales", error))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="my-sales">
       <h2 className="my-sales__header">My Sales</h2>
       {loading ? (
-        <p>Loading sales...</p>
-      ) : error ? (
-        <p className="my-sales__error">{error}</p>
-      ) : sales.length === 0 ? (
-        <p className="my-sales__empty">You have no completed sales yet.</p>
+        <p className="my-sales__loading">Loading sales…</p>
       ) : (
         <div className="my-sales__list">
-          {sales.map(order => (
-            <div key={order._id} className="order-card my-sales__order-card">
-              <h3 className="order-card__id">Order {order._id}</h3>
-              <p className="order-card__date">{new Date(order.date).toLocaleDateString()}</p>
-              <div className="order-card__details">
-                <p className="order-card__items-names">
-                  {order.items.map(item => item.name).join(', ')}
+          {sales.length === 0 ? (
+            <p className="my-sales__empty">No sales yet.</p>
+          ) : (
+            sales.map((order) => (
+              <div key={order._id} className="order-card my-sales__order-card">
+                <h3 className="order-card__id">Order #{order._id}</h3>
+                <p className="order-card__date">
+                  Date: {new Date(order.date).toLocaleDateString()}
                 </p>
-                <p className="order-card__status">Status: {order.status}</p>
-              </div>
-              {order.feedback?.given && (
-                <div className="order-card__feedback">
-                  <b>Feedback:</b>
-                  <p>Rating: {order.feedback.rating} ★</p>
-                  <p>Title: {order.feedback.title}</p>
-                  <p>Comments: {order.feedback.comments}</p>
+                <div className="order-card__details">
+                  {(order.items || []).map((item) => (
+                    <div key={item.productId} className="order-card__product">
+                      <p className="order-card__product-name">
+                        {item.name} (x{item.quantity})
+                      </p>
+                      <p className="order-card__product-price">
+                        €{item.price.toFixed(2)}
+                      </p>
+                      {order.status === 'Delivered' && item.feedback?.given && (
+                        <div className="order-card__feedback">
+                          <strong>Feedback:</strong>
+                          <p>Rating: {item.feedback.rating} ★</p>
+                          <p>Title: {item.feedback.title}</p>
+                          <p>Comments: {item.feedback.comments}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

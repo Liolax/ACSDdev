@@ -7,16 +7,13 @@ import '../../assets/styles/components/_header.scss';
 const Header = ({ onLoginClick }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  // Initialize userRole from localStorage
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
 
-  // Ensure header always reflects latest localStorage value.
   useEffect(() => {
     const updateUserRole = () => {
       setUserRole(localStorage.getItem('userRole'));
     };
 
-    // Check on mount, and listen for storage events
     updateUserRole();
     window.addEventListener('storage', updateUserRole);
     return () => {
@@ -36,7 +33,6 @@ const Header = ({ onLoginClick }) => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  // When seller is logged in, have the logo link to the seller dashboard.
   const logoLink = userRole === ROLES.SELLER ? '/seller-dashboard' : '/';
 
   return (
@@ -50,7 +46,6 @@ const Header = ({ onLoginClick }) => {
           </div>
         </NavLink>
       </div>
-      {/* Mobile hamburger button */}
       <button
         className="header__mobile-toggle"
         onClick={toggleMenu}
@@ -60,7 +55,6 @@ const Header = ({ onLoginClick }) => {
       >
         &#9776;
       </button>
-      {/* Main navigation */}
       <nav className={`header__nav${menuOpen ? ' open' : ''}`} id="main-navigation">
         {userRole === ROLES.SELLER ? (
           <>
@@ -115,7 +109,6 @@ const Header = ({ onLoginClick }) => {
           </>
         )}
       </nav>
-      {/* Mobile overlay */}
       {menuOpen && (
         <div
           style={{
