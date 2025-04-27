@@ -101,6 +101,71 @@
   }
 }
 
-.details-button {
-  margin: 12px 0 18px 0;
+// Wide Details Button
+.details-button__wrapper {
+  width: 100%;
+  padding: 0 14px 16px 14px;
+
+  .details-button {
+    width: 100%;
+    display: block;
+    font-size: 1.11rem;
+    padding: 12px 0;
+    border-radius: 6px;
+    background: #eab308;
+    color: #222;
+    font-weight: 700;
+    box-shadow: 0 2px 14px rgba(233, 188, 56, 0.11);
+    border: none;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+
+    &:hover,
+    &:focus {
+      background: #f8c400;
+      color: #1a1a1a;
+      box-shadow: 0 5px 24px 0 rgba(233, 188, 56, 0.20);
+    }
+  }
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 32px 0 10px 0;
+
+  .pagination__button,
+  .pagination__arrow {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: 1px solid #eab308;
+    background: #fff8e1;
+    color: #c59106;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover:not(:disabled),
+    &.active {
+      background: #ffe066;
+      color: #8d6a00;
+      border-color: #ffd700;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  .pagination__arrow {
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: #fffbe9;
+  }
 }

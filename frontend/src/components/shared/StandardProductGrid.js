@@ -5,27 +5,15 @@ import Icon from '../../components/ui/Icon';
 import defaultImage from '../../assets/images/default-product.png';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
-// Expanded list of preinstalled categories.
 const categories = [
-  'All',
-  'Home Decor',
-  'Jewelry',
-  'Art',
-  'Fashion',
-  'Accessories',
-  'Toys',
-  'Pottery',
-  'Woodwork',
-  'Electronics',
-  'Books',
-  'General'
+  'All', 'Home Decor', 'Jewelry', 'Art', 'Fashion', 'Accessories', 'Toys',
+  'Pottery', 'Woodwork', 'Electronics', 'Books', 'General'
 ];
 
 const backendUrl =
   process.env.REACT_APP_BACKEND_URL ||
   (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
 
-// Helper: Build image URL (identical to SellerDashboard).
 const getImageUrl = (image) => {
   if (!image || image.trim() === '') return defaultImage;
   const imgPath = image.replace(/\\/g, '/');
@@ -41,75 +29,43 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search and filtering state.
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTags, setSearchTags] = useState('');
-  const [sortOrder, setSortOrder] = useState(''); // '' | 'asc' | 'desc'
+  const [sortOrder, setSortOrder] = useState('');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     (async () => {
       try {
         const response = await axios.get('/api/products');
         if (!response.data || response.data.length === 0) {
-          const dummyProducts = [
-            { 
-              _id: '1', 
-              name: 'Product A', 
-              price: 9.99, 
-              image: 'https://picsum.photos/300/200?random=1',
-              category: 'General',
-              tags: ['dummy']
-            },
-            { 
-              _id: '2', 
-              name: 'Product B', 
-              price: 14.99, 
-              image: 'https://picsum.photos/300/200?random=2',
-              category: 'Home Decor',
-              tags: ['decor']
-            },
-            { 
-              _id: '3', 
-              name: 'Product C', 
-              price: 7.99, 
-              image: 'https://picsum.photos/300/200?random=3',
-              category: 'Art',
-              tags: ['art', 'handmade']
-            }
-          ];
+          // TEST: Use 12 dummy products for pagination demonstration!
+          const dummyProducts = Array.from({length: 12}, (_, i) => ({
+            _id: (i+1).toString(),
+            name: `Product ${String.fromCharCode(65+i)}`,
+            price: (9.99 + i).toFixed(2),
+            image: `https://picsum.photos/300/200?random=${i+1}`,
+            category: i % 2 === 0 ? 'General' : 'Home Decor',
+            tags: i % 3 === 0 ? ['dummy', 'art'] : ['decor']
+          }));
           setAllProducts(dummyProducts);
         } else {
           setAllProducts(response.data);
         }
       } catch (error) {
-        console.error('Error fetching products, using dummy data:', error);
-        const dummyProducts = [
-          { 
-            _id: '1', 
-            name: 'Product A', 
-            price: 9.99, 
-            image: 'https://picsum.photos/300/200?random=1',
-            category: 'General',
-            tags: ['dummy']
-          },
-          { 
-            _id: '2', 
-            name: 'Product B', 
-            price: 14.99, 
-            image: 'https://picsum.photos/300/200?random=2',
-            category: 'Home Decor',
-            tags: ['decor']
-          },
-          { 
-            _id: '3', 
-            name: 'Product C', 
-            price: 7.99, 
-            image: 'https://picsum.photos/300/200?random=3',
-            category: 'Art',
-            tags: ['art', 'handmade']
-          }
-        ];
+        // Fallback: Same 12 dummy products
+        const dummyProducts = Array.from({length: 12}, (_, i) => ({
+          _id: (i+1).toString(),
+          name: `Product ${String.fromCharCode(65+i)}`,
+          price: (9.99 + i).toFixed(2),
+          image: `https://picsum.photos/300/200?random=${i+1}`,
+          category: i % 2 === 0 ? 'General' : 'Home Decor',
+          tags: i % 3 === 0 ? ['dummy', 'art'] : ['decor']
+        }));
         setAllProducts(dummyProducts);
       } finally {
         setLoading(false);
@@ -117,26 +73,21 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     })();
   }, []);
 
-  // Build a list of unique tags from all products for auto-suggestions.
   const uniqueTags = Array.from(new Set(allProducts.flatMap(product => product.tags || [])));
 
-  // Filtering and sorting function.
   const getFilteredProducts = () => {
     let filtered = [...allProducts];
-
     if (searchTerm.trim() !== '') {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
       );
     }
-
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
         product.category &&
         product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
-
     if (searchTags.trim() !== '') {
       const tagArray = searchTags
         .split(',')
@@ -148,23 +99,27 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
         return tagArray.some(tag => productTags.includes(tag));
       });
     }
-
     if (sortOrder === 'asc') {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sortOrder === 'desc') {
       filtered.sort((a, b) => b.price - a.price);
     }
-
     return filtered;
   };
 
   const filteredProducts = getFilteredProducts();
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
+
+  // Reset page to 1 on filter change
+  useEffect(() => { setCurrentPage(1); }, [searchTerm, selectedCategory, searchTags, sortOrder]);
 
   if (loading) return <p>Loading products...</p>;
 
   return (
     <div>
-      {/* Search & Filter Bar */}
       <div className="search-bar">
         <input 
           type="text" 
@@ -202,68 +157,102 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
         </select>
       </div>
 
-      {/* Product Grid */}
       {filteredProducts.length === 0 ? (
         <p>No products match the current filters.</p>
       ) : (
-        <div className="standard-product-grid">
-          {filteredProducts.map((product) => (
-            <div key={product._id} className="product-card">
-              <img
-                src={getImageUrl(product.image)}
-                alt={product.name}
-                className="product-card__image"
-                crossOrigin="anonymous"
-                onError={e => {
-                  e.target.onerror = null;
-                  e.target.src = defaultImage;
-                }}
-              />
-              <div className="product-card__content">
-                <h3 className="product-card__content__title">{product.name}</h3>
-                <p className="product-card__content__price">${product.price}</p>
-                <p className="product-card__content__category">
-                  Category: {product.category || 'General'}
-                </p>
-                {product.tags && product.tags.length > 0 && (
-                  <p className="product-card__content__tags">
-                    Tags: {product.tags.join(', ')}
+        <>
+          <div className="standard-product-grid">
+            {currentProducts.map((product) => (
+              <div key={product._id} className="product-card">
+                <img
+                  src={getImageUrl(product.image)}
+                  alt={product.name}
+                  className="product-card__image"
+                  crossOrigin="anonymous"
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
+                  }}
+                />
+                <div className="product-card__content">
+                  <h3 className="product-card__content__title">{product.name}</h3>
+                  <p className="product-card__content__price">${product.price}</p>
+                  <p className="product-card__content__category">
+                    Category: {product.category || 'General'}
                   </p>
-                )}
-              </div>
-              {/* Action Icons for buyers */}
-              <div className="product-card__actions">
-                <button
-                  className="product-card__action-button wishlist-button"
-                  onClick={() =>
-                    onAddToWishlist 
-                      ? onAddToWishlist(product) 
-                      : alert('Added to Wishlist')
-                  }
-                  title="Add to Wishlist"
-                >
-                  <Icon name="heart" />
-                </button>
-                <button
-                  className="product-card__action-button cart-button"
-                  onClick={() =>
-                    onAddToCart 
-                      ? onAddToCart(product) 
-                      : alert('Added to Cart')
-                  }
-                  title="Add to Cart"
-                >
-                  <Icon name="cart" />
-                </button>
+                  {product.tags && product.tags.length > 0 && (
+                    <p className="product-card__content__tags">
+                      Tags: {product.tags.join(', ')}
+                    </p>
+                  )}
+                </div>
+                <div className="product-card__actions">
+                  <button
+                    className="product-card__action-button wishlist-button"
+                    onClick={() =>
+                      onAddToWishlist
+                        ? onAddToWishlist(product)
+                        : alert('Added to Wishlist')
+                    }
+                    title="Add to Wishlist"
+                  >
+                    <Icon name="heart" />
+                  </button>
+                  <button
+                    className="product-card__action-button cart-button"
+                    onClick={() =>
+                      onAddToCart
+                        ? onAddToCart(product)
+                        : alert('Added to Cart')
+                    }
+                    title="Add to Cart"
+                  >
+                    <Icon name="cart" />
+                  </button>
+                </div>
                 {onDetails && (
-                  <Button className="details-button" onClick={() => onDetails(product)}>
-                    Details
-                  </Button>
+                  <div className="details-button__wrapper">
+                    <Button className="details-button" onClick={() => onDetails(product)}>
+                      Details
+                    </Button>
+                  </div>
                 )}
               </div>
+            ))}
+          </div>
+          {totalPages > 1 && filteredProducts.length > 0 && (
+            <div className="pagination">
+              <button
+                className="pagination__arrow"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+                type="button"
+              >
+                &lt;
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  className={`pagination__button${currentPage === i + 1 ? ' active' : ''}`}
+                  onClick={() => setCurrentPage(i + 1)}
+                  type="button"
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                className="pagination__arrow"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                aria-label="Next page"
+                type="button"
+              >
+                &gt;
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
