@@ -11,19 +11,17 @@ const ShippingDetails = ({ cartItems, onOrderPlaced }) => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Replace this with your buyer/user id management as needed
   const buyerId = localStorage.getItem('userId');
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
     try {
-      // Create order: items, shippingDetails, buyerId
       const res = await axios.post('/api/orders', {
         buyerId,
         items: cartItems.map(item => ({
@@ -36,9 +34,9 @@ const ShippingDetails = ({ cartItems, onOrderPlaced }) => {
         shippingDetails: form
       });
       setSubmitting(false);
-      onOrderPlaced(res.data); // Pass order data to parent
+      onOrderPlaced(res.data);
     } catch (err) {
-      setError('Failed to place order');
+      setError('Failed to place order. Please try again.');
       setSubmitting(false);
     }
   };
@@ -47,38 +45,10 @@ const ShippingDetails = ({ cartItems, onOrderPlaced }) => {
     <div className="shipping-details">
       <h2 className="shipping-details__header">Shipping Details</h2>
       <form className="shipping-details__form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={form.address}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          value={form.city}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="postalCode"
-          placeholder="Postal Code"
-          value={form.postalCode}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="country"
-          placeholder="Country"
-          value={form.country}
-          onChange={handleChange}
-          required
-        />
+        <input type="text" name="address" placeholder="Address" value={form.address} onChange={handleChange} required />
+        <input type="text" name="city" placeholder="City" value={form.city} onChange={handleChange} required />
+        <input type="text" name="postalCode" placeholder="Postal Code" value={form.postalCode} onChange={handleChange} required />
+        <input type="text" name="country" placeholder="Country" value={form.country} onChange={handleChange} required />
         <button type="submit" disabled={submitting}>
           {submitting ? 'Placing Order...' : 'Place Order'}
         </button>

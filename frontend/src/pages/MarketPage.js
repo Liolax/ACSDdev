@@ -11,9 +11,7 @@ const MarketPage = () => {
       <Header userRole={userRole} />
       <main className="market-page__main-content">
         <h2 className="market-page__title">Welcome to the Market</h2>
-        <p className="market-page__description">
-          Browse our available products and discover great deals!
-        </p>
+        <p className="market-page__description">Browse our available products and discover great deals!</p>
         <StandardProductGrid />
       </main>
       <Footer />

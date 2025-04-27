@@ -1,126 +1,106 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import WishlistSection from './WishlistSection';
 import CartSection from './CartSection';
 import FeedbackPopup from '../../ui/FeedbackPopup';
 import Button from '../../ui/Button';
 
-// Helper to determine collage container size and grid layout based on the number of items.
 const getCollageStyle = (count) => {
   let containerSize = 120;
-  let gridTemplateColumns = '1fr'; // default for 1 item
-  
-  if (count === 1) {
-    gridTemplateColumns = '1fr';
-  } else if (count === 2) {
-    gridTemplateColumns = 'repeat(2, 1fr)';
-  } else if (count === 3 || count === 4) {
-    gridTemplateColumns = 'repeat(2, 1fr)';
-  } else {
-    gridTemplateColumns = 'repeat(3, 1fr)';
-  }
-  
+  let gridTemplateColumns = '1fr';
+  if (count === 1) gridTemplateColumns = '1fr';
+  else if (count === 2) gridTemplateColumns = 'repeat(2, 1fr)';
+  else if (count === 3 || count === 4) gridTemplateColumns = 'repeat(2, 1fr)';
+  else gridTemplateColumns = 'repeat(3, 1fr)';
   return { containerSize, gridTemplateColumns };
 };
 
 const BuyerDashboard = () => {
-  // Orders state.
+  // Orders state (real API call)
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  // Feedback state: keyed by order id.
-  const [feedbackByOrder, setFeedbackByOrder] = useState({});
-  const [feedbackOrderId, setFeedbackOrderId] = useState(null);
-  
-  // Wishlist and Cart state.
+
+  // Wishlist and Cart state
   const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState([]);
   const [wishlistVisible, setWishlistVisible] = useState(5);
   const [cartVisible, setCartVisible] = useState(5);
 
-  // Dummy orders data.
+  // Feedback state keyed by order id
+  const [feedbackByOrder, setFeedbackByOrder] = useState({});
+  const [feedbackOrderId, setFeedbackOrderId] = useState(null);
+
+  // Fetch orders, wishlist, and cart from backend
   useEffect(() => {
-    const dummyOrders = [
-      {
-        id: 'A1001',
-        status: 'Shipped',
-        date: '2023-05-01',
-        items: [
-          { name: 'Handwoven Basket', image: 'https://picsum.photos/100/100?random=11' },
-          { name: 'Handwoven Rug', image: 'https://picsum.photos/100/100?random=21' }
-        ]
-      },
-      {
-        id: 'A1002',
-        status: 'Delivered',
-        date: '2023-04-25',
-        items: [
-          { name: 'Artisan Vase', image: 'https://picsum.photos/100/100?random=12' }
-        ]
-      },
-      {
-        id: 'A1003',
-        status: 'Processing',
-        date: '2023-05-03',
-        items: [
-          { name: 'Bog Oak Bowl', image: 'https://picsum.photos/100/100?random=13' },
-          { name: 'Antique Plate', image: 'https://picsum.photos/100/100?random=14' },
-          { name: 'Nonewooden Spoon', image: 'https://picsum.photos/100/100?random=15' }
-        ]
-      }
-    ];
-    setOrders(dummyOrders);
-    setLoadingOrders(false);
+    axios.get('/api/orders')
+      .then(res => {
+        setOrders(res.data);
+        setLoadingOrders(false);
+      })
+      .catch(() => setLoadingOrders(false));
   }, []);
 
-  // Dummy wishlist and cart data.
   useEffect(() => {
-    const dummyWishlist = Array.from({ length: 10 }).map((_, index) => ({
-      id: index + 1,
-      name: `Wishlist Item ${index + 1}`,
-      price: parseFloat((Math.random() * 50).toFixed(2)),
-      image: `https://picsum.photos/300/200?random=${index + 101}`
-    }));
-    const dummyCart = Array.from({ length: 8 }).map((_, index) => ({
-      id: index + 1,
-      name: `Cart Item ${index + 1}`,
-      price: parseFloat((Math.random() * 75).toFixed(2)),
-      quantity: Math.floor(Math.random() * 3) + 1,
-      image: `https://picsum.photos/300/200?random=${index + 201}`
-    }));
-    setWishlist(dummyWishlist);
-    setCart(dummyCart);
+    axios.get('/api/wishlist')
+      .then(res => setWishlist(res.data))
+      .catch(() => setWishlist([]));
+    axios.get('/api/cart')
+      .then(res => setCart(res.data))
+      .catch(() => setCart([]));
   }, []);
 
-  // Wishlist handlers.
+  // Wishlist Handlers.
   const handleRemoveWishlist = (id) => {
-    setWishlist(wishlist.filter((item) => item.id !== id));
+    axios.delete(`/api/wishlist/${id}`).then(() => {
+      setWishlist(wishlist.filter(item => item.id !== id));
+    });
   };
 
   const handleMoveToCart = (item) => {
-    setWishlist(wishlist.filter((w) => w.id !== item.id));
-    const existingCartItem = cart.find((c) => c.id === item.id);
-    if (existingCartItem) {
-      setCart(cart.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
-    } else {
-      setCart([...cart, { ...item, quantity: 1 }]);
-    }
+    axios.post('/api/cart', { ...item, quantity: 1 }).then(() => {
+      setWishlist(wishlist.filter(w => w.id !== item.id));
+      const existingCart = cart.find(c => c.id === item.id);
+      if (existingCart) {
+        setCart(cart.map(c => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
+      } else {
+        setCart([...cart, { ...item, quantity: 1 }]);
+      }
+    });
   };
 
   const handleWishlistSeeLess = () => setWishlistVisible(5);
 
-  // Cart handlers.
-  const handleRemoveCart = (id) => setCart(cart.filter((item) => item.id !== id));
-  const handleCartSeeLess = () => setCartVisible(5);
-  const handlePay = () => alert('Proceed to payment and shipping selection.');
+  // Cart Handlers.
+  const handleRemoveCart = (id) => {
+    axios.delete(`/api/cart/${id}`).then(() => {
+      setCart(cart.filter(item => item.id !== id));
+    });
+  };
 
-  // Feedback handlers.
+  const handleCartSeeLess = () => setCartVisible(5);
+  
+  const handlePay = () => {
+    // Replace with proper payment and shipping flow.
+    alert('Proceed to payment and shipping selection.');
+  };
+
+  // Feedback Handlers.
   const handleFeedbackSubmit = (feedbackData) => {
-    console.log('Feedback submitted for order', feedbackData.orderId, feedbackData);
-    setFeedbackByOrder((prev) => ({ ...prev, [feedbackData.orderId]: feedbackData }));
+    axios.patch(`/api/orders/${feedbackData.orderId}/feedback`, {
+      rating: feedbackData.rating,
+      title: feedbackData.title,
+      comments: feedbackData.comments,
+    }).then(() => {
+      setFeedbackByOrder(prev => ({
+        ...prev,
+        [feedbackData.orderId]: { ...feedbackData, given: true }
+      }));
+    });
     setFeedbackOrderId(null);
   };
 
   const handleFeedbackDelete = (orderId) => {
-    setFeedbackByOrder((prev) => {
+    setFeedbackByOrder(prev => {
       const newFeedback = { ...prev };
       delete newFeedback[orderId];
       return newFeedback;
@@ -130,22 +110,20 @@ const BuyerDashboard = () => {
   return (
     <div className="buyer-dashboard">
       <h2 className="buyer-dashboard__header">My Purchases</h2>
-
-      {/* Quick Links */}
       <div className="buyer-dashboard__quick-links">
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
       </div>
-
-      {/* Orders Section */}
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
+        ) : orders.length === 0 ? (
+          <p className="buyer-dashboard__empty">No orders found. Your past orders will appear here when available.</p>
         ) : (
-          orders.map((order) => {
+          orders.map(order => {
             const { containerSize, gridTemplateColumns } = getCollageStyle(order.items.length);
             return (
-              <div key={order.id} className="order-card">
+              <div key={order._id} className="order-card">
                 <div
                   className="order-card__collage"
                   style={{
@@ -155,39 +133,32 @@ const BuyerDashboard = () => {
                   }}
                 >
                   {order.items.map((item, idx) => (
-                    <img
-                      key={idx}
-                      src={item.image}
-                      alt={item.name}
-                      className="order-card__mini-image"
-                    />
+                    <img key={idx} src={item.image} alt={item.name} className="order-card__mini-image" />
                   ))}
                 </div>
                 <div className="order-card__details">
-                  <h3 className="order-card__id">Order {order.id}</h3>
-                  <p className="order-card__items-names">
-                    {order.items.map(item => item.name).join(', ')}
-                  </p>
+                  <h3 className="order-card__id">Order {order._id}</h3>
+                  <p className="order-card__items-names">{order.items.map(item => item.name).join(', ')}</p>
                   <p className="order-card__status">Status: {order.status}</p>
-                  <p className="order-card__date">Date: {order.date}</p>
+                  <p className="order-card__date">Date: {new Date(order.date).toLocaleDateString()}</p>
                 </div>
                 <div className="order-card__actions">
-                  <Button className="button--sm" onClick={() => alert(`Tracking order ${order.id}`)}>
+                  <Button className="button--sm" onClick={() => alert(`Tracking order ${order._id}`)}>
                     Track Order
                   </Button>
                   {order.status === 'Delivered' && (
                     <>
-                      {feedbackByOrder[order.id] ? (
+                      {feedbackByOrder[order._id] ? (
                         <>
-                          <Button className="button--sm" onClick={() => setFeedbackOrderId(order.id)}>
+                          <Button className="button--sm" onClick={() => setFeedbackOrderId(order._id)}>
                             Edit Feedback
                           </Button>
-                          <Button className="button--sm" onClick={() => handleFeedbackDelete(order.id)}>
+                          <Button className="button--sm" onClick={() => handleFeedbackDelete(order._id)}>
                             Delete Feedback
                           </Button>
                         </>
                       ) : (
-                        <Button className="button--sm button--green" onClick={() => setFeedbackOrderId(order.id)}>
+                        <Button className="button--sm button--green" onClick={() => setFeedbackOrderId(order._id)}>
                           Give Feedback
                         </Button>
                       )}
@@ -200,7 +171,6 @@ const BuyerDashboard = () => {
         )}
       </div>
 
-      {/* Feedback Popup */}
       {feedbackOrderId && (
         <FeedbackPopup
           orderId={feedbackOrderId}
@@ -210,30 +180,36 @@ const BuyerDashboard = () => {
         />
       )}
 
-      {/* Wishlist Section */}
       <section className="buyer-dashboard__wishlist" id="wishlist-section">
         <h2 className="buyer-dashboard__section-header">Wishlist</h2>
-        <WishlistSection
-          items={wishlist}
-          visibleCount={wishlistVisible}
-          onSeeMore={() => setWishlistVisible(wishlistVisible + 5)}
-          onSeeLess={wishlistVisible > 5 ? handleWishlistSeeLess : null}
-          onRemove={handleRemoveWishlist}
-          onMoveToCart={handleMoveToCart}
-        />
+        {wishlist.length === 0 ? (
+          <p className="buyer-dashboard__empty">Your wishlist is currently empty.</p>
+        ) : (
+          <WishlistSection
+            items={wishlist}
+            visibleCount={wishlistVisible}
+            onSeeMore={() => setWishlistVisible(wishlistVisible + 5)}
+            onSeeLess={wishlistVisible > 5 ? handleWishlistSeeLess : null}
+            onRemove={handleRemoveWishlist}
+            onMoveToCart={handleMoveToCart}
+          />
+        )}
       </section>
 
-      {/* Cart Section */}
       <section className="buyer-dashboard__cart" id="cart-section">
         <h2 className="buyer-dashboard__section-header">Cart</h2>
-        <CartSection
-          items={cart}
-          visibleCount={cartVisible}
-          onSeeMore={() => setCartVisible(cartVisible + 5)}
-          onSeeLess={cartVisible > 5 ? handleCartSeeLess : null}
-          onRemove={handleRemoveCart}
-          onPay={handlePay}
-        />
+        {cart.length === 0 ? (
+          <p className="buyer-dashboard__empty">Your cart is currently empty.</p>
+        ) : (
+          <CartSection
+            items={cart}
+            visibleCount={cartVisible}
+            onSeeMore={() => setCartVisible(cartVisible + 5)}
+            onSeeLess={cartVisible > 5 ? handleCartSeeLess : null}
+            onRemove={handleRemoveCart}
+            onPay={handlePay}
+          />
+        )}
       </section>
     </div>
   );

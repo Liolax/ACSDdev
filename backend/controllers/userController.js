@@ -2,7 +2,7 @@ import User from '../models/UserModel.js';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'secret-key';
 
 // Register a new user
 export async function registerUser(req, res) {

@@ -6,7 +6,6 @@ import '../assets/styles/pages/_buyer-dashboard.scss';
 
 const BuyerDashboardPage = () => {
   const userRole = localStorage.getItem('userRole') || 'buyer';
-
   return (
     <div className="page-container buyer-dashboard-page">
       <Header userRole={userRole} />

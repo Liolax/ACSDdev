@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Button from '../../components/ui/Button';
-import Icon from '../../components/ui/Icon';
+import Button from '../ui/Button';  // Previously was '../../ui/Button'
+import Icon from '../ui/Icon';        // Previously was '../../ui/Icon'
 import defaultImage from '../../assets/images/default-product.png';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
@@ -43,12 +43,12 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
       try {
         const response = await axios.get('/api/products');
         if (!response.data || response.data.length === 0) {
-          // TEST: Use 12 dummy products for pagination demonstration!
-          const dummyProducts = Array.from({length: 12}, (_, i) => ({
-            _id: (i+1).toString(),
-            name: `Product ${String.fromCharCode(65+i)}`,
+          // Fallback dummy data
+          const dummyProducts = Array.from({ length: 12 }, (_, i) => ({
+            _id: (i + 1).toString(),
+            name: `Product ${String.fromCharCode(65 + i)}`,
             price: (9.99 + i).toFixed(2),
-            image: `https://picsum.photos/300/200?random=${i+1}`,
+            image: `https://picsum.photos/300/200?random=${i + 1}`,
             category: i % 2 === 0 ? 'General' : 'Home Decor',
             tags: i % 3 === 0 ? ['dummy', 'art'] : ['decor']
           }));
@@ -57,12 +57,12 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
           setAllProducts(response.data);
         }
       } catch (error) {
-        // Fallback: Same 12 dummy products
-        const dummyProducts = Array.from({length: 12}, (_, i) => ({
-          _id: (i+1).toString(),
-          name: `Product ${String.fromCharCode(65+i)}`,
+        // Fallback dummy products
+        const dummyProducts = Array.from({ length: 12 }, (_, i) => ({
+          _id: (i + 1).toString(),
+          name: `Product ${String.fromCharCode(65 + i)}`,
           price: (9.99 + i).toFixed(2),
-          image: `https://picsum.photos/300/200?random=${i+1}`,
+          image: `https://picsum.photos/300/200?random=${i + 1}`,
           category: i % 2 === 0 ? 'General' : 'Home Decor',
           tags: i % 3 === 0 ? ['dummy', 'art'] : ['decor']
         }));
@@ -84,8 +84,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     }
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
-        product.category &&
-        product.category.toLowerCase() === selectedCategory.toLowerCase()
+        product.category && product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
     if (searchTags.trim() !== '') {
@@ -113,8 +112,9 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
 
-  // Reset page to 1 on filter change
-  useEffect(() => { setCurrentPage(1); }, [searchTerm, selectedCategory, searchTags, sortOrder]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, searchTags, sortOrder]);
 
   if (loading) return <p>Loading products...</p>;
 
@@ -156,7 +156,6 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
           <option value="desc">High to Low</option>
         </select>
       </div>
-
       {filteredProducts.length === 0 ? (
         <p>No products match the current filters.</p>
       ) : (
@@ -220,7 +219,7 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
               </div>
             ))}
           </div>
-          {totalPages > 1 && filteredProducts.length > 0 && (
+          {totalPages > 1 && (
             <div className="pagination">
               <button
                 className="pagination__arrow"

@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROLES } from '../../constants/roles';
 import logo from '../../assets/images/logo.svg';
 import '../../assets/styles/components/_header.scss';
 
-const Header = ({ userRole, onLoginClick }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+const Header = ({ onLoginClick }) => {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Initialize userRole from localStorage
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
+
+  // Ensure header always reflects latest localStorage value.
+  useEffect(() => {
+    const updateUserRole = () => {
+      setUserRole(localStorage.getItem('userRole'));
+    };
+
+    // Check on mount, and listen for storage events
+    updateUserRole();
+    window.addEventListener('storage', updateUserRole);
+    return () => {
+      window.removeEventListener('storage', updateUserRole);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
+    setUserRole(null);
     navigate('/');
   };
 
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const toggleMenu = () => setMenuOpen(prev => !prev);
 
   const handleLinkClick = () => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  const logoLink = userRole === ROLES.SELLER ? "/seller-dashboard" : "/";
+  // When seller is logged in, have the logo link to the seller dashboard.
+  const logoLink = userRole === ROLES.SELLER ? '/seller-dashboard' : '/';
 
   return (
     <header className="header">
@@ -32,18 +50,17 @@ const Header = ({ userRole, onLoginClick }) => {
           </div>
         </NavLink>
       </div>
-      {/* Mobile Hamburger Toggle */}
+      {/* Mobile hamburger button */}
       <button
         className="header__mobile-toggle"
         onClick={toggleMenu}
         aria-label={menuOpen ? "Close navigation" : "Open navigation"}
         aria-expanded={menuOpen}
         aria-controls="main-navigation"
-        tabIndex={0}
       >
         &#9776;
       </button>
-      {/* Navigation for Seller */}
+      {/* Main navigation */}
       <nav className={`header__nav${menuOpen ? ' open' : ''}`} id="main-navigation">
         {userRole === ROLES.SELLER ? (
           <>
@@ -98,7 +115,7 @@ const Header = ({ userRole, onLoginClick }) => {
           </>
         )}
       </nav>
-      {/* Overlay for mobile menu */}
+      {/* Mobile overlay */}
       {menuOpen && (
         <div
           style={{

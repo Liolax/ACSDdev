@@ -1,35 +1,24 @@
 import React from 'react';
 
 const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onPay }) => {
-  // Only show the first `visibleCount` cart items.
+  if (items.length === 0) {
+    return <p className="buyer-dashboard__empty">Your cart is currently empty.</p>;
+  }
+  
   const visibleItems = items.slice(0, visibleCount);
-  // Calculate the total price.
-  const total = items.reduce(
-    (acc, item) => acc + Number(item.price) * item.quantity,
-    0
-  );
+  const total = items.reduce((acc, item) => acc + Number(item.price) * item.quantity, 0);
   return (
     <div className="buyer-dashboard__cart">
       <ul className="buyer-dashboard__cart-list">
-        {visibleItems.map((item) => (
+        {visibleItems.map(item => (
           <li key={item.id} className="buyer-dashboard__cart-item">
-            <img
-              src={item.image}
-              alt={item.name}
-              className="buyer-dashboard__cart-image"
-            />
+            <img src={item.image} alt={item.name} className="buyer-dashboard__cart-image" />
             <div className="buyer-dashboard__cart-item-details">
               <span className="buyer-dashboard__cart-item-info">
-                {item.name} –{' '}
-                <span className="buyer-dashboard__cart-price">
-                  ${item.price.toFixed(2)} x {item.quantity}
-                </span>
+                {item.name} – <span className="buyer-dashboard__cart-price">${item.price.toFixed(2)} x {item.quantity}</span>
               </span>
             </div>
-            <button
-              onClick={() => onRemove(item.id)}
-              className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete"
-            >
+            <button onClick={() => onRemove(item.id)} className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete">
               Delete
             </button>
           </li>
@@ -37,23 +26,17 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onPa
       </ul>
       <div className="buyer-dashboard__cart-controls">
         {visibleCount > 5 && onSeeLess && (
-          <button onClick={onSeeLess} className="button buyer-dashboard__button--sm see-more-btn">
-            See Less...
-          </button>
+          <button onClick={onSeeLess} className="button buyer-dashboard__button--sm see-more-btn">See Less...</button>
         )}
         {visibleCount < items.length && (
-          <button onClick={onSeeMore} className="button buyer-dashboard__button--sm see-more-btn">
-            See More...
-          </button>
+          <button onClick={onSeeMore} className="button buyer-dashboard__button--sm see-more-btn">See More...</button>
         )}
       </div>
       <div className="buyer-dashboard__cart-summary">
         <p>
           Total: <span className="buyer-dashboard__cart-total">${total.toFixed(2)}</span>
         </p>
-        <button onClick={onPay} className="button buyer-dashboard__pay-button">
-          Pay
-        </button>
+        <button onClick={onPay} className="button buyer-dashboard__pay-button">Pay</button>
       </div>
     </div>
   );

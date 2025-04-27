@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import '../../assets/styles/components/_button.scss'; 
+import '../../assets/styles/components/_button.scss';
 
 const Button = ({ children, onClick, className = '', ...props }) => {
   return (

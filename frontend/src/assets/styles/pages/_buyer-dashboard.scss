@@ -1,7 +1,7 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
 
-/* --- Buyer Dashboard --- */
+/* --- Buyer Dashboard Page --- */
 .buyer-dashboard-page {
   min-height: 100vh;
   padding-bottom: 32px;
@@ -16,13 +16,13 @@
   color: var(--color-dark-primary);
   border-radius: 14px;
   background: #fff;
-  box-shadow: 0 2.5px 12px rgba(23,98,62,0.07);
+  box-shadow: 0 2.5px 12px rgba(23, 98, 62, 0.07);
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
-/* Header & section titles */
+/* Headers & Section Titles */
 .buyer-dashboard__header,
 .buyer-dashboard__section-header {
   @include mixins.heading;
@@ -32,80 +32,45 @@
   font-family: var(--font-family-heading);
   font-size: 2.3rem;
   font-weight: 800;
-  text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(23,98,62,0.03);
+  text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(23, 98, 62, 0.03);
 }
 
-/* Tabs Navigation */
-.buyer-dashboard__tabs {
+/* Quick Links */
+.buyer-dashboard__quick-links {
   display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 16px;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-
-.buyer-dashboard__tab {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-family-heading);
-  font-size: 1.09rem;
-  font-weight: 700;
+.buyer-dashboard__quick-link {
+  font-size: 1rem;
   color: base.$irish-gold-dark;
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
   background: linear-gradient(90deg, base.$irish-gold-light 0%, #fffbe6 100%);
-  padding: 7px 20px;
-  border-radius: 18px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(247,178,55,0.10);
-  cursor: pointer;
-  transition: background 0.17s, color 0.17s, box-shadow 0.17s;
-
-  &:hover, &:focus,
-  &--active {
+  box-shadow: 0 2px 6px rgba(247, 178, 55, 0.09);
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+  text-decoration: none;
+  &:hover,
+  &:focus {
     background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-dark 100%);
     color: #fff;
-    box-shadow: 0 5px 16px rgba(247,178,55,0.15);
+    box-shadow: 0 4px 12px rgba(247, 178, 55, 0.13);
   }
 }
 
-/* --- BUTTON STYLES --- */
-button {
-  border-radius: 6px;
-  background: #1caf68;
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.12s;
-
-  &:hover {
-    background: #177e48;
-    transform: translateY(-2px);
-  }
-
-  &.button--sm {
-    padding: 6px 16px;
-    font-size: 0.9rem;
-    border-radius: 5px;
-  }
-
-  &.button--secondary {
-    background: base.$irish-gold-light;
-    color: base.$irish-gold-dark;
-    
-    &:hover {
-      background: base.$irish-gold;
-      color: #fff;
-    }
-  }
-
-  &.button--disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
+/* Empty message style with specified font */
+.buyer-dashboard__empty {
+  text-align: center;
+  font-size: 1.1rem;
+  color: base.$irish-green-dark;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  margin: 20px 0;
 }
 
-/* --- ORDER CARD --- */
+/* Order Card */
 .order-card {
   display: flex;
   align-items: flex-start;
@@ -113,14 +78,37 @@ button {
   margin-bottom: 18px;
   background: #fff;
   border-radius: 13px;
-  box-shadow: 0 4px 18px rgba(23,98,62,0.08);
+  box-shadow: 0 4px 18px rgba(23, 98, 62, 0.08);
   gap: 18px;
   transition: box-shadow 0.14s;
-
   &:hover {
-    box-shadow: 0 10px 32px rgba(247,178,55,0.09);
+    box-shadow: 0 10px 32px rgba(247, 178, 55, 0.09);
   }
-
+  &__collage {
+    display: grid;
+    gap: 3px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: base.$irish-gold-light;
+    grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
+    grid-auto-rows: minmax(36px, 1fr);
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+  &__mini-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+    background: #fffbe6;
+    border: 1px solid base.$irish-gold-light;
+    transition: transform 0.16s;
+    &:hover {
+      transform: scale(1.06);
+    }
+  }
   &__details {
     display: flex;
     flex-direction: column;
@@ -128,7 +116,6 @@ button {
     min-width: 160px;
     flex: 1;
   }
-
   &__id {
     font-family: var(--font-family-heading);
     font-size: 1.09rem;
@@ -136,13 +123,16 @@ button {
     font-weight: 700;
     margin-bottom: 3px;
   }
-
   &__status {
     font-weight: 600;
     font-size: 0.96rem;
     color: base.$irish-gold-dark;
   }
-
+  &__date {
+    font-size: 0.93rem;
+    color: base.$irish-green-light;
+    font-style: italic;
+  }
   &__actions {
     display: flex;
     gap: 7px;
@@ -152,14 +142,15 @@ button {
 }
 
 /* Wishlist & Cart Sections */
-.buyer-dashboard__wishlist, .buyer-dashboard__cart {
+.buyer-dashboard__wishlist,
+.buyer-dashboard__cart {
   background: none;
   border-radius: 10px;
   box-shadow: none;
   padding: 0;
 }
-
-.buyer-dashboard__wishlist-item, .buyer-dashboard__cart-item {
+.buyer-dashboard__wishlist-item,
+.buyer-dashboard__cart-item {
   display: flex;
   align-items: center;
   padding: 9px 7px;
@@ -167,11 +158,80 @@ button {
   background: #f8f4e3;
   margin-bottom: 6px;
   gap: 10px;
-  box-shadow: 0 1.5px 7px rgba(23,98,62,0.04);
-
+  box-shadow: 0 1.5px 7px rgba(23, 98, 62, 0.04);
+  transition: box-shadow 0.10s;
   &:hover {
-    box-shadow: 0 3px 11px rgba(247,178,55,0.08);
+    box-shadow: 0 3px 11px rgba(247, 178, 55, 0.08);
   }
+}
+.buyer-dashboard__wishlist-image,
+.buyer-dashboard__cart-image {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid base.$irish-gold;
+  background: base.$irish-gold-light;
+}
+.buyer-dashboard__wishlist-price,
+.buyer-dashboard__cart-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: base.$irish-gold-dark;
+  font-family: var(--font-family-heading);
+  margin-left: 7px;
+  background: #fff;
+  padding: 2px 8px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(247, 178, 55, 0.05);
+}
+.buyer-dashboard__wishlist-actions,
+.buyer-dashboard__cart-actions {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+  align-items: center;
+}
+.buyer-dashboard__wishlist-controls,
+.buyer-dashboard__cart-controls {
+  display: flex;
+  gap: 7px;
+  margin-top: 5px;
+}
+.see-more-btn {
+  font-family: var(--font-family-heading);
+  font-size: 1.04rem;
+  font-weight: 700;
+  color: base.$irish-green-dark;
+  background: linear-gradient(90deg, #e8f7e6 0%, #fffbe6 100%);
+  border-radius: 18px;
+  padding: 7px 20px;
+  box-shadow: 0 1px 5px rgba(23, 98, 62, 0.07);
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+  &:hover,
+  &:focus {
+    background: linear-gradient(90deg, base.$irish-green-light 0%, base.$irish-gold-light 100%);
+    color: base.$irish-gold-dark;
+    box-shadow: 0 2px 12px rgba(23, 98, 62, 0.11);
+  }
+}
+.buyer-dashboard__cart-total {
+  font-family: var(--font-family-heading);
+  color: base.$irish-gold-dark;
+  font-size: 1.13rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fffbe6 0%, base.$irish-gold-light 100%);
+  border-radius: 18px;
+  padding: 7px 20px;
+  border: 1.2px solid base.$irish-gold;
+  margin-left: 5px;
+  box-shadow: 0 2px 8px rgba(247, 178, 55, 0.07);
+}
+.buyer-dashboard__pay-button {
+  font-family: var(--font-family-heading);
+  font-size: 1.09rem;
+  font-weight: 700;
+  padding: 10px 30px;
 }
 
 /* Responsive Styling */
@@ -179,12 +239,10 @@ button {
   .buyer-dashboard { padding: 12px 2vw; border-radius: 10px; gap: 18px; }
   .order-card { flex-direction: column; padding: 8px 3px; }
 }
-
 @media (max-width: 600px) {
   .buyer-dashboard__tabs { flex-direction: column; align-items: stretch; gap: 7px; }
   button { padding: 7px 18px; }
 }
-
 @media (max-width: 480px) {
   .buyer-dashboard { padding: 3px 1vw; gap: 8px; }
   .order-card { padding: 3px 1px; font-size: 0.88rem; }
