@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '../../components/ui/Button';
 import Icon from '../../components/ui/Icon';
+import defaultImage from '../../assets/images/default-product.png';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
 // Expanded list of preinstalled categories.
@@ -19,6 +20,22 @@ const categories = [
   'Books',
   'General'
 ];
+
+const backendUrl =
+  process.env.REACT_APP_BACKEND_URL ||
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '');
+
+// Helper: Build image URL (identical to SellerDashboard).
+const getImageUrl = (image) => {
+  if (!image || image.trim() === '') return defaultImage;
+  const imgPath = image.replace(/\\/g, '/');
+  if (/^https?:\/\//i.test(imgPath)) return imgPath;
+  if (imgPath.startsWith('uploads/')) {
+    const slash = backendUrl.endsWith('/') ? '' : '/';
+    return `${backendUrl}${slash}${imgPath}`;
+  }
+  return defaultImage;
+};
 
 const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
   const [allProducts, setAllProducts] = useState([]);
@@ -141,18 +158,6 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
     return filtered;
   };
 
-  // Helper: Build image URL using the same logic as SellerDashboard.
-  const getImageUrl = (image) => {
-    if (!image || image.trim() === '')
-      return 'https://via.placeholder.com/300x200?text=No+Image';
-    const imgPath = image.replace(/\\/g, '/');
-    if (/^https?:\/\//i.test(imgPath)) return imgPath;
-    if (imgPath.startsWith('uploads/')) {
-      return `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/${imgPath}`;
-    }
-    return 'https://via.placeholder.com/300x200?text=No+Image';
-  };
-
   const filteredProducts = getFilteredProducts();
 
   if (loading) return <p>Loading products...</p>;
@@ -208,6 +213,11 @@ const StandardProductGrid = ({ onDetails, onAddToWishlist, onAddToCart }) => {
                 src={getImageUrl(product.image)}
                 alt={product.name}
                 className="product-card__image"
+                crossOrigin="anonymous"
+                onError={e => {
+                  e.target.onerror = null;
+                  e.target.src = defaultImage;
+                }}
               />
               <div className="product-card__content">
                 <h3 className="product-card__content__title">{product.name}</h3>
