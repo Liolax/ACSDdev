@@ -1,4 +1,5 @@
-import express, { json } from 'express';
+// ...other imports
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
@@ -7,19 +8,20 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 
-dotenv.config();
-
-// Import your route files
+// Import API routes
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js'; // Added order routes
+
+dotenv.config();
 
 const app = express();
 
 // Trust the first proxy so that express-rate-limit reads X-Forwarded-For correctly.
 app.set('trust proxy', 1);
 
-// Set up rate limiting middleware (e.g., 100 requests per 15 minutes)
+// Set up rate limiting middleware (100 requests per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // maximum of 100 requests per IP per windowMs
@@ -36,13 +38,8 @@ if (!mongoURI) {
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverApi: {
-    version: "1",
-    strict: true,
-    deprecationErrors: true,
-  },
 })
-  .then(() => console.log("Connected to NotesCluster"))
+  .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
     console.error("Failed to connect to MongoDB:", err.message);
     process.exit(1);
@@ -51,15 +48,15 @@ mongoose.connect(mongoURI, {
 // Middleware Setup
 app.use(helmet());
 app.disable('x-powered-by');
-app.use(cors({ origin: '*' })); // Allow all origins for API and static files
-app.use(json());
+app.use(cors({ origin: '*' })); // Allow all origins
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Determine __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "uploads" directory with explicit CORS headers.
+// Serve static files from the "uploads" directory with explicit CORS headers
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, filePath, stat) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -68,15 +65,16 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   }
 }));
 
-// Optional base API route for convenience
-app.get('/api', (req, res) => {
-  res.json({ message: 'Welcome to the API' });
-});
-
 // Register API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes); // Newly added order routes
+
+// Optional base API route for convenience
+app.get('/api', (req, res) => {
+  res.json({ message: 'Welcome to the API' });
+});
 
 // Catch-all for unknown routes
 app.use((req, res, next) => {

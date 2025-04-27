@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/styles/components/_popup.scss';
 
-const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback }) => {
-  const [rating, setRating] = useState(initialFeedback ? initialFeedback.rating : 5);
-  const [title, setTitle] = useState(initialFeedback ? initialFeedback.title : '');
-  const [comments, setComments] = useState(initialFeedback ? initialFeedback.comments : '');
+const FeedbackPopup = ({
+  orderId,
+  initialFeedback = null,
+  closePopup,
+  onSubmitFeedback
+}) => {
+  // Local state
+  const [rating, setRating] = useState(initialFeedback?.rating || 5);
+  const [title, setTitle] = useState(initialFeedback?.title || '');
+  const [comments, setComments] = useState(initialFeedback?.comments || '');
+  const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -17,94 +24,81 @@ const FeedbackPopup = ({ orderId, initialFeedback, closePopup, onSubmitFeedback 
       setTitle('');
       setComments('');
     }
+    setError('');
     setSubmitted(false);
-  }, [initialFeedback]);
+  }, [initialFeedback, orderId]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const feedbackData = { orderId, rating, title, comments };
-    onSubmitFeedback(feedbackData);
+    if (!title.trim() || !comments.trim()) {
+      setError('Title and comments are required.');
+      return;
+    }
+    onSubmitFeedback({ orderId, rating, title, comments });
     setSubmitted(true);
     setTimeout(() => {
       closePopup();
-    }, 2000);
+    }, 1500);
   };
 
   return (
     <div className="popup-overlay">
       <div className="popup">
         {submitted ? (
-          <p className="popup__thankyou">Thank you for your feedback!</p>
+          <div className="popup__thankyou">Thank you for your feedback!</div>
         ) : (
-          <>
-            <h2 className="popup__title">
+          <form className="popup__form" onSubmit={handleSubmit}>
+            <h3 className="popup__title">
               {initialFeedback ? 'Edit Feedback' : 'Provide Feedback'}
-            </h2>
-            <form className="popup__form" onSubmit={handleSubmit}>
-              <div className="popup__field" style={{ marginBottom: 10 }}>
-                <label className="popup__label">Rating:</label>
-                <div style={{ display: 'flex', gap: '8px', marginTop: 4 }}>
-                  {[1, 2, 3, 4, 5].map(num => (
-                    <label
-                      key={num}
-                      className="popup__rating-label"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        cursor: 'pointer',
-                        borderRadius: 6,
-                        padding: '2px 5px',
-                        background: rating === num ? '#ecfdf3' : 'transparent',
-                        transition: 'background 0.18s'
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={num}
-                        checked={rating === num}
-                        onChange={() => setRating(num)}
-                        style={{
-                          accentColor: "#1caf68",
-                          width: 16,
-                          height: 16,
-                          marginRight: 2,
-                          cursor: 'pointer'
-                        }}
-                      />
-                      <span style={{
-                        fontWeight: rating === num ? "bold" : "normal",
-                        color: rating === num ? "#1caf68" : "#177e48"
-                      }}>{num}</span>
-                    </label>
-                  ))}
-                </div>
+            </h3>
+            <div className="popup__field">
+              <label className="popup__label">Rating:</label>
+              <div className="popup__ratings">
+                {[1, 2, 3, 4, 5].map(num => (
+                  <label key={num} className="popup__rating-label">
+                    <input
+                      type="radio"
+                      name="rating"
+                      value={num}
+                      checked={rating === num}
+                      onChange={() => setRating(num)}
+                    />
+                    <span>{'★'.repeat(num)}</span>
+                  </label>
+                ))}
               </div>
-              <input
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="popup__input"
-                required
-              />
-              <textarea
-                placeholder="Your comments..."
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-                className="popup__textarea"
-                required
-              ></textarea>
-              <button type="submit" className="popup__button">
-                Submit Feedback
+            </div>
+            <input
+              type="text"
+              placeholder="Title"
+              className="popup__input"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              required
+            />
+            <textarea
+              className="popup__textarea"
+              placeholder="Your comments..."
+              value={comments}
+              onChange={e => setComments(e.target.value)}
+              required
+            />
+            {error && <div className="popup__error">{error}</div>}
+            <div className="popup__actions">
+              <button type="button" className="popup__button" onClick={closePopup}>
+                Cancel
               </button>
-            </form>
-          </>
+              <button type="submit" className="popup__button popup__button--primary">
+                Submit
+              </button>
+            </div>
+          </form>
         )}
-        <button className="popup__close" onClick={closePopup} aria-label="Close">
-          &times;
-        </button>
+        {!submitted && (
+          <button className="popup__close" onClick={closePopup} aria-label="Close">
+            ×
+          </button>
+        )}
       </div>
     </div>
   );
