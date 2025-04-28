@@ -48,6 +48,12 @@ export async function getProductById(req, res) {
 
 export async function createProduct(req, res) {
   try {
+    // Check if request body exists
+    if (!req.body) {
+      return res.status(400).json({ error: 'Request body is missing.' });
+    }
+    
+    // Destructure fields from req.body
     const { name, price, description, category, tags } = req.body;
     const parsedPrice = parseFloat(price);
     if (!name || isNaN(parsedPrice) || parsedPrice < 0) {
@@ -81,22 +87,25 @@ export async function updateProduct(req, res) {
     if (!req.params.id) {  
       return res.status(400).json({ error: 'Product id is required.' });
     }
+    if (!req.body && !req.file) {
+      return res.status(400).json({ error: 'Request body or file is required to update product.' });
+    }
     const existingProduct = await Product.findById(req.params.id);
     if (!existingProduct) return res.status(404).json({ error: 'Product not found.' });
     
     let updateData = {};
     
-    if (req.body.name) updateData.name = req.body.name.trim();
-    if (req.body.price) {
+    if (req.body && req.body.name) updateData.name = req.body.name.trim();
+    if (req.body && req.body.price) {
       const parsedPrice = parseFloat(req.body.price);
       if (isNaN(parsedPrice) || parsedPrice < 0) {
         return res.status(400).json({ error: 'Invalid price value.' });
       }
       updateData.price = parsedPrice;
     }
-    if (req.body.description) updateData.description = req.body.description.trim();
-    if (req.body.category) updateData.category = req.body.category.trim();
-    if (req.body.tags) {
+    if (req.body && req.body.description) updateData.description = req.body.description.trim();
+    if (req.body && req.body.category) updateData.category = req.body.category.trim();
+    if (req.body && req.body.tags) {
       updateData.tags = req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     }
     

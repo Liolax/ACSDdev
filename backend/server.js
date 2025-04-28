@@ -36,9 +36,12 @@ if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
   process.exit(1);
 }
+
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,  // Increase timeout to 30 seconds
+  connectTimeoutMS: 30000,           // Increase connection timeout to 30 seconds
 })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {

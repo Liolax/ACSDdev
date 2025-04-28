@@ -15,7 +15,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // fetch the logged-in user's role here (e.g., from localStorage or an auth provider)
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
       setUser({ role: storedRole });
@@ -30,17 +29,20 @@ const Home = () => {
       <Header onLoginClick={openLoginPopup} />
       <main className="home-page__main-content">
         <OurCommunity />
-        {/* Pass the user object and the login popup handler to OurProducts */}
-        <OurProducts user={user} openLoginPopup={openLoginPopup} />
+        <OurProducts
+          user={user}
+          openLoginPopup={openLoginPopup}
+          // can pass onAddToCart/onAddToWishlist here if needed.
+        />
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup 
+        <LoginPopup
           onClose={closeLoginPopup}
           handleLogin={(email, password, rememberMe, role) => {
             handleLogin(navigate, email, password, rememberMe, role);
-            // Update the user state on successful login
             setUser({ role });
+            localStorage.setItem('userRole', role);
           }}
         />
       )}

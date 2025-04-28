@@ -3,11 +3,10 @@ import StandardProductGrid from './shared/StandardProductGrid';
 import { getProducts } from '../api/products/productRequests';
 import '../assets/styles/components/_products.scss';
 
-const OurProducts = ({ user, openLoginPopup }) => {
+const OurProducts = ({ user, openLoginPopup, onAddToCart, onAddToWishlist }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Fetch products using the centralized API function.
     getProducts()
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));
@@ -16,9 +15,11 @@ const OurProducts = ({ user, openLoginPopup }) => {
   return (
     <div className="home-page__products">
       <h2>Our Products</h2>
-      <StandardProductGrid 
+      <StandardProductGrid
         products={products}
         user={user}
+        onAddToCart={onAddToCart}
+        onAddToWishlist={onAddToWishlist}
         onDetails={openLoginPopup}
       />
     </div>
