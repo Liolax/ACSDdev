@@ -12,6 +12,7 @@ export const getCart = async () => {
 
 export const addToCart = async (productId, quantity = 1) => {
   try {
+    // Send only productId and quantity since your backend validates these.
     const response = await apiClient.post(CART_ADD, { productId, quantity });
     return response.data;
   } catch (error) {

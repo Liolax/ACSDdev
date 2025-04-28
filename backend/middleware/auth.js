@@ -1,7 +1,16 @@
 import mongoose from 'mongoose';
 
-console.log("auth middleware loaded");
-
+/**
+ * Authentication Middleware (Demo Version)
+ *
+ * For demonstration purposes, if no token is provided,
+ * this middleware assigns a dummy user. In a real production environment,
+ * you should replace this logic with proper JWT verification.
+ *
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ * @param {function} next - Express next middleware function
+ */
 export default function auth(req, res, next) {
   console.log("Running in environment:", process.env.NODE_ENV);
   const authHeader = req.headers.authorization;
@@ -9,28 +18,23 @@ export default function auth(req, res, next) {
 
   let dummyUserId;
   try {
-    // Always use 'new' to construct the ObjectId:
+    // Always using 'new' to construct the ObjectId.
     dummyUserId = new mongoose.Types.ObjectId(dummyUserIdString);
   } catch (error) {
     console.error("Failed to instantiate dummy ObjectId:", error);
     return res.status(500).json({ error: "Internal Server Error: Invalid dummy user ID." });
   }
 
-  // For demonstration, if a token is provided, assign dummy user
+  // For demonstration/testing, if there is a token use it,
+  // otherwise, always assign the dummy user.
   if (authHeader) {
-    console.log("Auth Middleware: Token provided, assigning dummy user.");
+    console.log("Auth Middleware: Token provided, assigning dummy user for demonstration.");
     req.user = { _id: dummyUserId };
     return next();
   }
 
-  // In development, also assign the dummy user even if token is missing.
-  if (process.env.NODE_ENV === 'development') {
-    console.warn("Auth Middleware: No token found, assigning dummy user for DEVELOPMENT.");
-    req.user = { _id: dummyUserId };
-    return next();
-  }
-
-  // In production, if no token is provided, return Unauthorized.
-  console.warn("Auth Middleware: No token provided in a non-development environment.");
-  return res.status(401).json({ error: 'Unauthorized: Access token is required.' });
+  // Always assign dummy user if no token provided (demo override).
+  console.warn("Auth Middleware: No token provided. For demo purposes, assigning dummy user.");
+  req.user = { _id: dummyUserId };
+  return next();
 }

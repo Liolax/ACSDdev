@@ -18,11 +18,15 @@ export async function getWishlist(req, res) {
 export async function addWishlistItem(req, res) {
   try {
     const userId = req.user._id;
-    const { productId, name, price, image } = req.body;
+    // Destructure the request body and ensure price is a number.
+    let { productId, name, price, image } = req.body;
+    price = Number(price);
+    
     let wishlist = await Wishlist.findOne({ userId });
     if (!wishlist) {
       wishlist = new Wishlist({ userId, items: [] });
     }
+    // Check if item already exists in wishlist.
     const exists = wishlist.items.find(item => item.productId.toString() === productId);
     if (exists) {
       return res.status(400).json({ error: 'Item already in wishlist' });

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import WishlistSection from './WishlistSection';
-import CartSection from './CartSection';
-import FeedbackPopup from '../../ui/FeedbackPopup';
-import Button from '../../ui/Button';
+import WishlistSection from './WishlistSection';         
+import CartSection from './CartSection';                 
+import FeedbackPopup from '../../ui/FeedbackPopup';      
+import Button from '../../ui/Button';                    
+import '../../../assets/styles/pages/_buyer-dashboard.scss'; 
+import getImageUrl from '../../../helpers/getImageUrl';   
 
+// Helper function to determine collage style for order images
 const getCollageStyle = (count) => {
   let containerSize = 120;
   let gridTemplateColumns = '1fr';
@@ -16,7 +19,7 @@ const getCollageStyle = (count) => {
 };
 
 const BuyerDashboard = () => {
-  // Orders state (real API call)
+  // Orders state (fetch from backend)
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
@@ -37,50 +40,72 @@ const BuyerDashboard = () => {
         setOrders(res.data);
         setLoadingOrders(false);
       })
-      .catch(() => setLoadingOrders(false));
+      .catch(err => {
+        console.error("Error fetching orders:", err);
+        setLoadingOrders(false);
+      });
   }, []);
 
   useEffect(() => {
     axios.get('/api/wishlist')
       .then(res => setWishlist(res.data))
-      .catch(() => setWishlist([]));
+      .catch(err => {
+        console.error("Error fetching wishlist:", err);
+        setWishlist([]);
+      });
     axios.get('/api/cart')
       .then(res => setCart(res.data))
-      .catch(() => setCart([]));
+      .catch(err => {
+        console.error("Error fetching cart:", err);
+        setCart([]);
+      });
   }, []);
 
   // Wishlist Handlers.
   const handleRemoveWishlist = (id) => {
-    axios.delete(`/api/wishlist/${id}`).then(() => {
-      setWishlist(wishlist.filter(item => item.id !== id));
-    });
+    axios.delete(`/api/wishlist/${id}`)
+      .then(() => {
+        setWishlist(prev => prev.filter(item => item._id !== id && item.id !== id));
+      })
+      .catch(err => console.error("Error removing wishlist item:", err));
   };
 
   const handleMoveToCart = (item) => {
-    axios.post('/api/cart', { ...item, quantity: 1 }).then(() => {
-      setWishlist(wishlist.filter(w => w.id !== item.id));
-      const existingCart = cart.find(c => c.id === item.id);
-      if (existingCart) {
-        setCart(cart.map(c => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)));
-      } else {
-        setCart([...cart, { ...item, quantity: 1 }]);
-      }
-    });
+    // For adding to cart, backend expects productId and quantity.
+    const prodId = item.productId || item._id;
+    axios.post('/api/cart', { productId: prodId, quantity: 1 })
+      .then(() => {
+        setWishlist(prev => prev.filter(w => (w._id || w.id) !== (item._id || item.id)));
+        const existingCartItem = cart.find(c => (c._id || c.id) === (item._id || item.id));
+        if (existingCartItem) {
+          setCart(prev =>
+            prev.map(c =>
+              (c._id || c.id) === (item._id || item.id)
+                ? { ...c, quantity: c.quantity + 1 }
+                : c
+            )
+          );
+        } else {
+          setCart(prev => [...prev, { ...item, quantity: 1 }]);
+        }
+      })
+      .catch(err => console.error("Error moving item to cart:", err));
   };
 
   const handleWishlistSeeLess = () => setWishlistVisible(5);
 
   // Cart Handlers.
   const handleRemoveCart = (id) => {
-    axios.delete(`/api/cart/${id}`).then(() => {
-      setCart(cart.filter(item => item.id !== id));
-    });
+    axios.delete(`/api/cart/${id}`)
+      .then(() => {
+        setCart(prev => prev.filter(item => (item._id || item.id) !== id));
+      })
+      .catch(err => console.error("Error removing cart item:", err));
   };
 
   const handleCartSeeLess = () => setCartVisible(5);
   
   const handlePay = () => {
-    // Replace with proper payment and shipping flow.
     alert('Proceed to payment and shipping selection.');
   };
 
@@ -90,20 +115,22 @@ const BuyerDashboard = () => {
       rating: feedbackData.rating,
       title: feedbackData.title,
       comments: feedbackData.comments,
-    }).then(() => {
-      setFeedbackByOrder(prev => ({
-        ...prev,
-        [feedbackData.orderId]: { ...feedbackData, given: true }
-      }));
-    });
+    })
+      .then(() => {
+        setFeedbackByOrder(prev => ({
+          ...prev,
+          [feedbackData.orderId]: { ...feedbackData, given: true }
+        }));
+      })
+      .catch(err => console.error("Error submitting feedback:", err));
     setFeedbackOrderId(null);
   };
 
   const handleFeedbackDelete = (orderId) => {
     setFeedbackByOrder(prev => {
-      const newFeedback = { ...prev };
-      delete newFeedback[orderId];
-      return newFeedback;
+      const updated = { ...prev };
+      delete updated[orderId];
+      return updated;
     });
   };
 
@@ -114,11 +141,14 @@ const BuyerDashboard = () => {
         <a href="#wishlist-section" className="buyer-dashboard__quick-link">❤️ Wishlist</a>
         <a href="#cart-section" className="buyer-dashboard__quick-link">🛒 Cart</a>
       </div>
+
       <div className="buyer-dashboard__orders">
         {loadingOrders ? (
           <p>Loading orders...</p>
         ) : orders.length === 0 ? (
-          <p className="buyer-dashboard__empty">No orders found. Your past orders will appear here when available.</p>
+          <p className="buyer-dashboard__empty">
+            No orders found. Your past orders will appear here when available.
+          </p>
         ) : (
           orders.map(order => {
             const { containerSize, gridTemplateColumns } = getCollageStyle(order.items.length);
@@ -133,14 +163,23 @@ const BuyerDashboard = () => {
                   }}
                 >
                   {order.items.map((item, idx) => (
-                    <img key={idx} src={item.image} alt={item.name} className="order-card__mini-image" />
+                    <img
+                      key={idx}
+                      src={getImageUrl(item.image)}
+                      alt={item.name}
+                      className="order-card__mini-image"
+                    />
                   ))}
                 </div>
                 <div className="order-card__details">
                   <h3 className="order-card__id">Order {order._id}</h3>
-                  <p className="order-card__items-names">{order.items.map(item => item.name).join(', ')}</p>
+                  <p className="order-card__items-names">
+                    {order.items.map(item => item.name).join(', ')}
+                  </p>
                   <p className="order-card__status">Status: {order.status}</p>
-                  <p className="order-card__date">Date: {new Date(order.date).toLocaleDateString()}</p>
+                  <p className="order-card__date">
+                    Date: {new Date(order.date).toLocaleDateString()}
+                  </p>
                 </div>
                 <div className="order-card__actions">
                   <Button className="button--sm" onClick={() => alert(`Tracking order ${order._id}`)}>
@@ -170,15 +209,6 @@ const BuyerDashboard = () => {
           })
         )}
       </div>
-
-      {feedbackOrderId && (
-        <FeedbackPopup
-          orderId={feedbackOrderId}
-          initialFeedback={feedbackByOrder[feedbackOrderId] || null}
-          closePopup={() => setFeedbackOrderId(null)}
-          onSubmitFeedback={handleFeedbackSubmit}
-        />
-      )}
 
       <section className="buyer-dashboard__wishlist" id="wishlist-section">
         <h2 className="buyer-dashboard__section-header">Wishlist</h2>
@@ -211,6 +241,15 @@ const BuyerDashboard = () => {
           />
         )}
       </section>
+
+      {feedbackOrderId && (
+        <FeedbackPopup
+          orderId={feedbackOrderId}
+          initialFeedback={feedbackByOrder[feedbackOrderId] || null}
+          closePopup={() => setFeedbackOrderId(null)}
+          onSubmitFeedback={handleFeedbackSubmit}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api', // With "proxy" in package.json, this routes calls to our backend.
+  baseURL: '/api', // With "proxy" set in package.json, requests go to your backend.
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ apiClient.interceptors.response.use(
     if (error.response) {
       console.error('Response error:', error.response.data);
       if (error.response.status === 401) {
-        console.warn('Unauthorized access - consider redirecting to login.');
+        console.warn('Unauthorized access – consider redirecting to login.');
       }
     } else if (error.request) {
       console.error('No response received:', error.request);

@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../assets/styles/components/_popup.scss';
-
-const FeedbackPopup = ({
-  orderId,
-  initialFeedback = null,
-  closePopup,
-  onSubmitFeedback
-}) => {
-  // Local state
+import '../../assets/styles/components/_popup.scss'; // Adjust path as needed.
+const FeedbackPopup = ({ orderId, initialFeedback = null, closePopup, onSubmitFeedback }) => {
   const [rating, setRating] = useState(initialFeedback?.rating || 5);
   const [title, setTitle] = useState(initialFeedback?.title || '');
   const [comments, setComments] = useState(initialFeedback?.comments || '');
@@ -36,9 +29,7 @@ const FeedbackPopup = ({
     }
     onSubmitFeedback({ orderId, rating, title, comments });
     setSubmitted(true);
-    setTimeout(() => {
-      closePopup();
-    }, 1500);
+    setTimeout(() => closePopup(), 1500);
   };
 
   return (
@@ -48,13 +39,11 @@ const FeedbackPopup = ({
           <div className="popup__thankyou">Thank you for your feedback!</div>
         ) : (
           <form className="popup__form" onSubmit={handleSubmit}>
-            <h3 className="popup__title">
-              {initialFeedback ? 'Edit Feedback' : 'Provide Feedback'}
-            </h3>
+            <h3 className="popup__title">{initialFeedback ? 'Edit Feedback' : 'Provide Feedback'}</h3>
             <div className="popup__field">
               <label className="popup__label">Rating:</label>
               <div className="popup__ratings">
-                {[1, 2, 3, 4, 5].map(num => (
+                {[1,2,3,4,5].map(num => (
                   <label key={num} className="popup__rating-label">
                     <input
                       type="radio"
@@ -85,12 +74,8 @@ const FeedbackPopup = ({
             />
             {error && <div className="popup__error">{error}</div>}
             <div className="popup__actions">
-              <button type="button" className="popup__button" onClick={closePopup}>
-                Cancel
-              </button>
-              <button type="submit" className="popup__button popup__button--primary">
-                Submit
-              </button>
+              <button type="button" className="popup__button" onClick={closePopup}>Cancel</button>
+              <button type="submit" className="popup__button popup__button--primary">Submit</button>
             </div>
           </form>
         )}
@@ -103,5 +88,4 @@ const FeedbackPopup = ({
     </div>
   );
 };
-
 export default FeedbackPopup;
