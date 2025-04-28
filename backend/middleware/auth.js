@@ -1,23 +1,24 @@
+import mongoose from 'mongoose';
+
 export default function auth(req, res, next) {
   console.log("Running in environment:", process.env.NODE_ENV);
-
-  // Read the Authorization header from the request
   const authHeader = req.headers.authorization;
-
-  // If the header exists, would normally verify the token here.
-  // For now, we set a dummy user.
+  
+  // For demonstration, we use a fixed, valid ObjectId as a dummy user.
+  // Replace "60b8d2958b26c41f5c7ceee1" with any valid 24-character hex string.
+  const validDummyUserId = mongoose.Types.ObjectId("60b8d2958b26c41f5c7ceee1");
+  
   if (authHeader) {
-    // In production, verify the token and extract user data from it.
-    req.user = { _id: 'dummyUserId' };
+    // In production, verify the token and set req.user accordingly.
+    req.user = { _id: validDummyUserId };
     return next();
   }
-
-  // For development purposes, allow a fallback when no token is provided.
+  
+  // For development, allow a fallback when no token is provided.
   if (process.env.NODE_ENV === 'development') {
-    req.user = { _id: 'dummyUserId' };
+    req.user = { _id: validDummyUserId };
     return next();
   }
-
-  // If no token is provided and we're not in development, return "Unauthorized"
+  
   return res.status(401).json({ error: 'Unauthorized' });
 }

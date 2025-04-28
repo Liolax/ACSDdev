@@ -19,60 +19,55 @@ dotenv.config();
 
 const app = express();
 
-// Trust the first proxy so that express-rate-limit reads X-Forwarded-For correctly.
+// Trust proxies (important behind load balancers/proxies)
 app.set('trust proxy', 1);
 
-// Configure rate limiting middleware (100 requests per 15 minutes)
+// Configure rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // maximum of 100 requests per IP per windowMs
-  message: 'Too many requests from this IP, please try again later.',
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again after 15 minutes.',
 });
 app.use(limiter);
 
-// MongoDB connection setup
+// MongoDB connection
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
   process.exit(1);
 }
-
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000,  // Increase timeout to 30 seconds
-  connectTimeoutMS: 30000,           // Increase connection timeout to 30 seconds
+  serverSelectionTimeoutMS: 30000,
+  connectTimeoutMS: 30000,
 })
-  .then(() => console.log("Connected to MongoDB"))
+  .then(() => console.log("Successfully connected to MongoDB"))
   .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err.message);
+    console.error("Failed to connect to MongoDB:", err.message, err.stack);
     process.exit(1);
   });
 
-// Middleware Setup
+// Middleware
 app.use(helmet());
 app.disable('x-powered-by');
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Allow frontend domains
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Determine __dirname for ES Modules
+// Determine __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "uploads" directory with explicit CORS headers
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
-  setHeaders: (res, filePath, stat) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  }
-}));
+// Serve the uploads folder statically
+const uploadsPath = path.join(__dirname, 'uploads');
+console.log(`Serving static files from: ${uploadsPath}`);
+app.use('/uploads', express.static(uploadsPath));
 
-// Register API Routes
+// API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
@@ -80,16 +75,21 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 
-// Optional base API route for convenience
+// Base API route
 app.get('/api', (req, res) => {
-  res.json({ message: 'Welcome to the API' });
+  res.json({ message: 'Welcome to the EireCraft API' });
 });
 
-// Catch-all for unknown routes
+// 404 handler
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ message: `Route not found: ${req.method} ${req.originalUrl}` });
 });
 
-// Start the Server
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Global error handler caught:", err.stack);
+  res.status(500).json({ message: 'An internal server error occurred.' });
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
