@@ -43,6 +43,7 @@
   line-height: 1.15;
   letter-spacing: 0.01em;
 }
+
 @mixin card($radius: 14px, $shadow: var(--shadow-light), $bg: #fff) {
   border-radius: $radius;
   box-shadow: $shadow;
@@ -59,7 +60,8 @@
 
 @mixin visually-hidden {
   position: absolute !important;
-  height: 1px; width: 1px;
+  height: 1px;
+  width: 1px;
   overflow: hidden;
   clip: rect(1px, 1px, 1px, 1px);
   white-space: nowrap;

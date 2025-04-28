@@ -18,9 +18,12 @@
 @use './pages/seller-dashboard' as sellerDashboard;
 @use './pages/buyer-dashboard' as buyerDashboard;
 @use './pages/home' as home;
-@use './pages/shipping-details' as shippingDetails;
+
+// Import shipping-details from the checkout components folder
+@use './components/checkout/shipping-details' as shippingDetails;
+
 @use './pages/market' as market;
 @use './pages/contact' as contact;
 
-// Shared Component Styles
-@use './shared/mergedProductGrid' as mergedProductGrid;
+// Shared Component Styles – note the corrected path:
+@use './components/shared/mergedProductGrid' as mergedProductGrid;

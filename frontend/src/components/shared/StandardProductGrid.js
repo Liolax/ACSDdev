@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Icon from '../ui/Icon';
 import defaultImage from '../../assets/images/default-product.png';
 import ImagePopup from '../ui/ImagePopup';
-import getImageUrl from '../../helpers/getImageUrl'; // Default import
-import '../../assets/styles/shared/_mergedProductGrid.scss';
+import getImageUrl from '../../helpers/getImageUrl';
+import '../../assets/styles/components/shared/_mergedProductGrid.scss';
 
 const categories = [
   'All', 'Home Decor', 'Jewelry', 'Art', 'Fashion', 'Accessories', 'Toys',
@@ -16,7 +16,6 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
   const [searchTags, setSearchTags] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  // Store the original image path for the popup
   const [popupImagePath, setPopupImagePath] = useState(null);
   const itemsPerPage = 8;
 
@@ -59,6 +58,10 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
     setCurrentPage(1);
   }, [searchTerm, selectedCategory, searchTags, sortOrder, products]);
 
+  const filteredTagSuggestions = searchTags
+    ? uniqueTags.filter(tag => tag.startsWith(searchTags.toLowerCase()))
+    : [];
+
   return (
     <>
       <div className="search-bar">
@@ -72,7 +75,9 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
         >
-          {categories.map((cat, idx) => <option key={idx} value={cat}>{cat}</option>)}
+          {categories.map((cat, idx) => (
+            <option key={idx} value={cat}>{cat}</option>
+          ))}
         </select>
         <input
           type="text"
@@ -82,7 +87,9 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
           list="tagSuggestions"
         />
         <datalist id="tagSuggestions">
-          {uniqueTags.map(tag => <option key={tag} value={tag} />)}
+          {filteredTagSuggestions.map(tag => (
+            <option key={tag} value={tag} />
+          ))}
         </datalist>
         <select
           value={sortOrder}
@@ -108,17 +115,16 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
                     alt={product.name}
                     className="product-card__image"
                     crossOrigin="anonymous"
-                    onError={e => {
+                    onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = defaultImage;
                     }}
                     style={{ cursor: 'pointer' }}
-                    // When the image is clicked, store its path
                     onClick={() => setPopupImagePath(product.image)}
                   />
                   <div className="product-card__content">
                     <h3 className="product-card__content__title">{product.name}</h3>
-                    <p className="product-card__content__price">${product.price}</p>
+                    <p className="product-card__content__price">${Number(product.price).toFixed(2)}</p>
                     <p className="product-card__content__category">
                       Category: {product.category || 'General'}
                     </p>

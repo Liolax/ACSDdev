@@ -1,0 +1,59 @@
+@use '../base' as base;
+@use '../mixins' as mixins;
+
+// Container for the checkout page
+.page-container.checkout-page {
+  padding: 2rem;
+  background: #f8fff4; // light, fresh background
+  min-height: 100vh;
+}
+
+// Main checkout section styling
+.checkout-page__main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(23, 98, 62, 0.1);
+  border-radius: 12px;
+}
+
+// Title styling for the checkout page
+.checkout-page__title {
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+  font-size: 2rem;
+  color: base.$irish-green-dark;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid base.$irish-gold;
+  padding-bottom: 0.5rem;
+}
+
+// Content area within the checkout page
+.checkout-page__content {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+// Error message styling on the checkout page
+.checkout-page__error {
+  color: darkred;
+  background: #ffe6e6;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+// Responsive adjustments
+@media screen and (max-width: 768px) {
+  .checkout-page__main {
+    padding: 1.5rem;
+  }
+  .checkout-page__title {
+    font-size: 1.75rem;
+  }
+}

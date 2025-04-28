@@ -1,9 +1,9 @@
-import axios from '../axiosConfig';
+import apiClient from '../axiosConfig';
 import ordersEndpoints from './ordersEndpoints';
 
 export const getOrders = async () => {
   try {
-    const response = await axios.get(ordersEndpoints.getAll);
+    const response = await apiClient.get(ordersEndpoints.getAll);
     return response.data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export const getOrders = async () => {
 
 export const getSales = async () => {
   try {
-    const response = await axios.get(ordersEndpoints.getSales);
+    const response = await apiClient.get(ordersEndpoints.getSales);
     return response.data;
   } catch (error) {
     throw error;
@@ -21,7 +21,7 @@ export const getSales = async () => {
 
 export const createOrder = async (orderData) => {
   try {
-    const response = await axios.post(ordersEndpoints.create, orderData);
+    const response = await apiClient.post(ordersEndpoints.create, orderData);
     return response.data;
   } catch (error) {
     throw error;
@@ -30,7 +30,7 @@ export const createOrder = async (orderData) => {
 
 export const markOrderShipped = async (orderId) => {
   try {
-    const response = await axios.patch(ordersEndpoints.markShipped(orderId));
+    const response = await apiClient.patch(ordersEndpoints.markShipped(orderId));
     return response.data;
   } catch (error) {
     throw error;
@@ -39,7 +39,16 @@ export const markOrderShipped = async (orderId) => {
 
 export const markOrderDelivered = async (orderId) => {
   try {
-    const response = await axios.patch(ordersEndpoints.markDelivered(orderId));
+    const response = await apiClient.patch(ordersEndpoints.markDelivered(orderId));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const processPayment = async (orderId, paymentDetails) => {
+  try {
+    const response = await apiClient.patch(ordersEndpoints.processPayment(orderId), paymentDetails);
     return response.data;
   } catch (error) {
     throw error;
@@ -48,7 +57,7 @@ export const markOrderDelivered = async (orderId) => {
 
 export const addOrderFeedback = async (orderId, feedbackData) => {
   try {
-    const response = await axios.patch(ordersEndpoints.addFeedback(orderId), feedbackData);
+    const response = await apiClient.patch(ordersEndpoints.addFeedback(orderId), feedbackData);
     return response.data;
   } catch (error) {
     throw error;

@@ -6,8 +6,10 @@ import BuyerDashboardPage from './pages/BuyerDashboardPage';
 import SellerDashboardPage from './pages/SellerDashboardPage';
 import MarketPage from './pages/MarketPage';
 import ContactPage from './pages/ContactPage';
+import CheckoutPage from './pages/CheckoutPage';
 import './assets/styles/main.scss';
 import './App.css';
+import { AuthProvider } from './context/AuthContext';
 
 const NotFoundPage = () => (
   <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -17,19 +19,22 @@ const NotFoundPage = () => (
 );
 
 const App = () => (
-  <Router>
-    <div className="app">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/buyer-dashboard" element={<BuyerDashboardPage />} />
-        <Route path="/seller-dashboard" element={<SellerDashboardPage />} />
-        <Route path="/market" element={<MarketPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </div>
-  </Router>
+  <AuthProvider>
+    <Router>
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/buyer-dashboard" element={<BuyerDashboardPage />} />
+          <Route path="/seller-dashboard" element={<SellerDashboardPage />} />
+          <Route path="/market" element={<MarketPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </Router>
+  </AuthProvider>
 );
 
 export default App;

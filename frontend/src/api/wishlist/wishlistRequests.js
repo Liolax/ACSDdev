@@ -1,9 +1,9 @@
-import axios from '../axiosConfig';
+import apiClient from '../axiosConfig';
 import wishlistEndpoints from './wishlistEndpoints';
 
 export const getWishlist = async () => {
   try {
-    const response = await axios.get(wishlistEndpoints.getAll);
+    const response = await apiClient.get(wishlistEndpoints.getAll);
     return response.data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export const getWishlist = async () => {
 
 export const addWishlistItem = async (itemData) => {
   try {
-    const response = await axios.post(wishlistEndpoints.add, itemData);
+    const response = await apiClient.post(wishlistEndpoints.add, itemData);
     return response.data;
   } catch (error) {
     throw error;
@@ -21,7 +21,7 @@ export const addWishlistItem = async (itemData) => {
 
 export const removeWishlistItem = async (id) => {
   try {
-    const response = await axios.delete(wishlistEndpoints.remove(id));
+    const response = await apiClient.delete(wishlistEndpoints.remove(id));
     return response.data;
   } catch (error) {
     throw error;

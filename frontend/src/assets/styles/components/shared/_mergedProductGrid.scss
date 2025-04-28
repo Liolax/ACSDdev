@@ -1,5 +1,5 @@
-@use '../base' as base;
-@use '../mixins' as mixins;
+@use '../../base' as base;
+@use '../../mixins' as mixins;
 @use 'sass:color';
 
 .standard-product-grid {
@@ -101,7 +101,7 @@
   }
 }
 
-// Details Button Styling
+/* Details Button Styling */
 .details-button__wrapper {
   width: 100%;
   padding: 0 14px 16px 14px;
@@ -170,7 +170,7 @@
   }
 }
 
-/* --- Popup Overlay & Container --- */
+/* Popup Overlay & Container */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -197,7 +197,7 @@
   border: 2px solid base.$irish-gold-light;
 }
 
-/* --- Close Button --- */
+/* Close Button */
 .popup__close {
   position: absolute;
   top: 14px;
@@ -209,13 +209,14 @@
   cursor: pointer;
   transition: color 0.17s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: base.$irish-gold-dark;
     outline: none;
   }
 }
 
-/* --- Title & Form Elements --- */
+/* Title & Form Elements */
 .popup__title {
   font-family: var(--font-family-heading);
   font-weight: 800;
@@ -251,7 +252,7 @@
   color: base.$irish-green-dark;
   box-shadow: 0 1px 7px rgba(23, 98, 62, 0.06);
   transition: border-color 0.14s, box-shadow 0.14s;
-
+  
   &:focus {
     border-color: base.$irish-gold;
     box-shadow: 0 2px 12px rgba(247, 178, 55, 0.14);
@@ -264,7 +265,7 @@
   resize: vertical;
 }
 
-/* --- Rating Selection --- */
+/* Rating Selection */
 .popup__ratings {
   display: flex;
   gap: 10px;
@@ -275,7 +276,7 @@
   cursor: pointer;
   font-weight: 600;
   color: base.$irish-green-dark;
-
+  
   &.selected {
     background: #eafff3;
     padding: 5px 8px;
@@ -283,7 +284,7 @@
   }
 }
 
-/* --- Button Styles --- */
+/* Button Styles */
 .popup__actions {
   display: flex;
   gap: 13px;
@@ -302,33 +303,36 @@
   color: base.$irish-gold-text;
   cursor: pointer;
   transition: background 0.14s, color 0.14s, box-shadow 0.14s;
-
-  &:hover, &:focus {
+  
+  &:hover,
+  &:focus {
     background: linear-gradient(90deg, base.$irish-gold-dark 0%, base.$irish-gold 100%);
     color: #fff;
   }
-
+  
   &--secondary {
     background: base.$irish-gold-light;
     color: base.$irish-gold-dark;
-
-    &:hover, &:focus {
+    
+    &:hover,
+    &:focus {
       background: base.$irish-gold;
       color: #fff;
     }
   }
-
+  
   &--success {
     background: linear-gradient(90deg, #177e48 0%, #1caf68 100%);
     color: #fff;
-
-    &:hover, &:focus {
+    
+    &:hover,
+    &:focus {
       background: linear-gradient(90deg, #155e38 0%, #1caf68 90%);
     }
   }
 }
 
-/* --- Messages & Error Handling --- */
+/* Messages & Error Handling */
 .popup__error {
   color: #b10e0e;
   background: #fff0f0;
@@ -347,19 +351,19 @@
   font-weight: 700;
 }
 
-/* --- Responsive Tweaks --- */
+/* Responsive Tweaks */
 @media (max-width: 600px) {
   .popup {
     width: 97vw;
     padding: 18px 4vw;
     border-radius: 12px;
   }
-
+  
   .popup__title {
     font-size: 1.12rem;
     margin-bottom: 16px;
   }
-
+  
   .popup__button {
     font-size: 0.97rem;
     padding: 7px 16px;
@@ -367,8 +371,14 @@
   }
 }
 
-/* --- Animation --- */
+/* Animation */
 @keyframes popup-fade-in {
-  0% { opacity: 0; transform: scale(0.97) translateY(18px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

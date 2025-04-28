@@ -1,18 +1,22 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-  baseURL: '/api', // With "proxy" in package.json, API calls route to backend.
+const apiClient = axios.create({
+  baseURL: '/api', // With "proxy" in package.json, this routes calls to our backend.
   timeout: 5000,
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true // Ensures cookies and credentials are sent with requests
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true, // Ensures cookies/credentials are sent with requests.
 });
 
-// Request interceptor: Attach token if available
-axiosInstance.interceptors.request.use(
+// Attach auth token if available.
+apiClient.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem('token') || 'dummy_token';
-      config.headers.Authorization = `Bearer ${token}`;
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     } catch (error) {
       console.error('Error retrieving token:', error);
     }
@@ -24,8 +28,8 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor: Global error handling
-axiosInstance.interceptors.response.use(
+// Global error handling.
+apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
@@ -42,4 +46,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default apiClient;

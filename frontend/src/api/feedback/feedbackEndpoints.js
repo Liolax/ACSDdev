@@ -1,5 +1,4 @@
 const feedbackEndpoints = {
-  base: '/feedback',
   getAll: '/feedback',
   create: '/feedback',
 };
