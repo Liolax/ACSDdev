@@ -11,10 +11,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+      // Use the token from localStorage if available; otherwise, use a dummy token.
+      const token = localStorage.getItem('token') || 'dummy_token';
+      config.headers.Authorization = `Bearer ${token}`;
     } catch (error) {
       console.error('Error retrieving token:', error);
     }

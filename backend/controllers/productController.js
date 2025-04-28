@@ -4,27 +4,24 @@ import path from 'path';
 
 const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
 
-// Helper: Verify that a file path is within the uploads directory.
 function isWithinUploads(filePath) {
   const normalizedPath = path.normalize(filePath);
   return normalizedPath.startsWith(UPLOADS_DIR);
 }
 
-// Helper: Safely delete a file (only if inside uploads/)
 async function safeDeleteFile(filePath) {
   try {
-    if (isWithinUploads(filePath)) {
+    if (isWithinUploads(filePath) && fs.existsSync(filePath)) {
       await fs.promises.unlink(filePath);
       console.log(`Deleted file: ${filePath}`);
     } else {
-      console.error('Attempt to delete file outside uploads directory:', filePath);
+      console.warn('File not found or not within uploads directory:', filePath);
     }
   } catch (err) {
     console.error('Error deleting file:', err);
   }
 }
 
-// Retrieve all products
 export async function getProducts(req, res) {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -35,7 +32,6 @@ export async function getProducts(req, res) {
   }
 }
 
-// Retrieve a product by its ID
 export async function getProductById(req, res) {
   try {
     if (!req.params.id) {
@@ -50,7 +46,6 @@ export async function getProductById(req, res) {
   }
 }
 
-// Create a new product
 export async function createProduct(req, res) {
   try {
     const { name, price, description, category, tags } = req.body;
@@ -61,7 +56,7 @@ export async function createProduct(req, res) {
     
     let imagePath = '';
     if (req.file) {
-      imagePath = req.file.path; // Example: "uploads/image-XYZ.jpg"
+      imagePath = req.file.path;
     }
     
     const newProduct = new Product({
@@ -81,7 +76,6 @@ export async function createProduct(req, res) {
   }
 }
 
-// Update an existing product
 export async function updateProduct(req, res) {
   try {
     if (!req.params.id) {  
@@ -127,7 +121,6 @@ export async function updateProduct(req, res) {
   }
 }
 
-// Delete a product
 export async function deleteProduct(req, res) {
   try {
     if (!req.params.id) {

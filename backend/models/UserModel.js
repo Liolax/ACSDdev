@@ -8,7 +8,7 @@ const { sign } = jwt; // Destructure the 'sign' method from the default export
 const router = Router();
 
 // Use environment variable for the secret key with a fallback value
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'secret-key';
 
 // POST /api/users/register - Register a new user
 router.post('/register', async (req, res) => {

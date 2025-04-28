@@ -1,0 +1,21 @@
+.icon {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 1.4rem;
+  margin-right: 0.3rem;
+  
+  &.Irish-icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  &--heart:before {
+    content: "\f004"; /* Unicode for heart */
+  }
+  
+  &--cart:before {
+    content: "\f07a"; /* Unicode for shopping cart */
+  }
+}

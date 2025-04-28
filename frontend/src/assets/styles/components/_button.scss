@@ -10,7 +10,7 @@
   font-weight: 700;
   border: none;
   border-radius: 9px;
-  padding: 11px 28px;
+  padding: 0.5rem 1rem;
   box-shadow: 0 2px 8px rgba(247, 178, 55, 0.14);
   cursor: pointer;
   transition: 
@@ -99,4 +99,8 @@
 
 .button-right {
   margin-left: auto;
+}
+
+.button.full-width {
+  width: 100%;
 }

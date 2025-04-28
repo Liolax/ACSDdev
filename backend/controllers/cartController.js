@@ -1,7 +1,6 @@
-const Cart = require('../models/CartModel');
+import Cart from '../models/CartModel.js';
 
-// Get the user's cart
-exports.getCart = async (req, res) => {
+export const getCart = async (req, res) => {
   try {
     const userId = req.user._id;
     let cart = await Cart.findOne({ userId }).populate('items.productId');
@@ -13,11 +12,10 @@ exports.getCart = async (req, res) => {
   }
 };
 
-// Add item to cart or update quantity if exists
-exports.addToCart = async (req, res) => {
+export const addToCart = async (req, res) => {
   const userId = req.user._id;
   const { productId, quantity = 1, name, price, image } = req.body;
-  
+
   if (!productId || !price) {
     return res.status(400).json({ error: 'Invalid product details' });
   }
@@ -40,8 +38,7 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-// Update quantity of an item in the cart
-exports.updateCartItem = async (req, res) => {
+export const updateCartItem = async (req, res) => {
   const userId = req.user._id;
   const { quantity } = req.body;
   const { productId } = req.params;
@@ -66,8 +63,7 @@ exports.updateCartItem = async (req, res) => {
   }
 };
 
-// Remove an item from the cart
-exports.removeFromCart = async (req, res) => {
+export const removeFromCart = async (req, res) => {
   const userId = req.user._id;
   const { productId } = req.params;
 
@@ -84,8 +80,7 @@ exports.removeFromCart = async (req, res) => {
   }
 };
 
-// Clear the cart
-exports.clearCart = async (req, res) => {
+export const clearCart = async (req, res) => {
   const userId = req.user._id;
 
   try {

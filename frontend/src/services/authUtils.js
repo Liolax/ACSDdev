@@ -5,9 +5,6 @@ export const handleLogin = (navigate, email, password, rememberMe, role) => {
   localStorage.setItem('userRole', role);
 
   // Redirect based on role:
-  // If the role is buyer, redirect to /market.
-  // If the role is seller, redirect to /seller-dashboard.
-  // Otherwise, fallback to '/'
   if (role === 'buyer') {
     navigate('/market');
   } else if (role === 'seller') {

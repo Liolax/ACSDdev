@@ -1,4 +1,3 @@
-// ...other imports
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -12,7 +11,9 @@ import rateLimit from 'express-rate-limit';
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import orderRoutes from './routes/orderRoutes.js'; // Added order routes
+import orderRoutes from './routes/orderRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import wishlistRoutes from './routes/wishlistRoutes.js';
 
 dotenv.config();
 
@@ -69,7 +70,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes); // Newly added order routes
+app.use('/api/orders', orderRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
 // Optional base API route for convenience
 app.get('/api', (req, res) => {

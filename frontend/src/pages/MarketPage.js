@@ -1,19 +1,23 @@
 import React from 'react';
+import axios from '../api/axiosConfig';
 import Header from '../components/layouts/Header';
 import Footer from '../components/layouts/Footer';
 import StandardProductGrid from '../components/shared/StandardProductGrid';
 import '../assets/styles/pages/_market.scss';
 
 const MarketPage = () => {
-  // Define the actions for wishlist and cart
   const handleAddToWishlist = (productId) => {
-    // Replace with your wishlist logic/API call if needed
-    console.log("Adding product to wishlist:", productId);
+    axios
+      .post('/api/wishlist', { productId })
+      .then((res) => console.log("Added to wishlist:", res.data))
+      .catch((err) => console.error("Error adding to wishlist:", err));
   };
 
   const handleAddToCart = (productId) => {
-    // Replace with your cart logic/API call if needed
-    console.log("Adding product to cart:", productId);
+    axios
+      .post('/api/cart', { productId, quantity: 1 })
+      .then((res) => console.log("Added to cart:", res.data))
+      .catch((err) => console.error("Error adding to cart:", err));
   };
 
   return (

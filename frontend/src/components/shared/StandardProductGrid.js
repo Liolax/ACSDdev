@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Icon from '../ui/Icon';
 import defaultImage from '../../assets/images/default-product.png';
+import ImagePopup from '../ui/ImagePopup';
 import '../../assets/styles/shared/_mergedProductGrid.scss';
 
 const categories = [
@@ -31,16 +32,15 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTags, setSearchTags] = useState('');
   const [sortOrder, setSortOrder] = useState('');
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+  const [popupImage, setPopupImage] = useState(null);
   const itemsPerPage = 8;
-  
+
   useEffect(() => {
     (async () => {
       try {
         const response = await axios.get('/api/products');
         if (!response.data || response.data.length === 0) {
-          // Fallback dummy data
           const dummyProducts = Array.from({ length: 12 }, (_, i) => ({
             _id: (i + 1).toString(),
             name: `Product ${String.fromCharCode(65 + i)}`,
@@ -54,7 +54,6 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
           setAllProducts(response.data);
         }
       } catch (error) {
-        // Fallback dummy products in case of error
         const dummyProducts = Array.from({ length: 12 }, (_, i) => ({
           _id: (i + 1).toString(),
           name: `Product ${String.fromCharCode(65 + i)}`,
@@ -81,15 +80,11 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
     }
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
-        product.category &&
-        product.category.toLowerCase() === selectedCategory.toLowerCase()
+        product.category && product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
     if (searchTags.trim() !== '') {
-      const tagArray = searchTags
-        .split(',')
-        .map(tag => tag.trim().toLowerCase())
-        .filter(tag => tag !== '');
+      const tagArray = searchTags.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== '');
       filtered = filtered.filter(product => {
         if (!product.tags || product.tags.length === 0) return false;
         const productTags = product.tags.map(t => t.toLowerCase());
@@ -125,10 +120,7 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
+        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>{cat}</option>
           ))}
@@ -145,10 +137,7 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
             <option key={tag} value={tag} />
           ))}
         </datalist>
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-        >
+        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
           <option value="">Sort by Price</option>
           <option value="asc">Low to High</option>
           <option value="desc">High to Low</option>
@@ -166,10 +155,12 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
                   alt={product.name}
                   className="product-card__image"
                   crossOrigin="anonymous"
-                  onError={e => {
+                  onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
                   }}
+                  onClick={() => setPopupImage(getImageUrl(product.image))}
+                  style={{ cursor: 'pointer' }}
                 />
                 <div className="product-card__content">
                   <h3 className="product-card__content__title">{product.name}</h3>
@@ -235,6 +226,9 @@ const StandardProductGrid = ({ onAddToWishlist, onAddToCart }) => {
             </div>
           )}
         </>
+      )}
+      {popupImage && (
+        <ImagePopup imageSrc={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </>
   );
