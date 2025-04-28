@@ -1,17 +1,17 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: '/api', // With "proxy": "http://localhost:5000" in package.json, this routes to your backend.
+  baseURL: '/api', // With "proxy": "http://localhost:5000" in package.json, this routes API calls to backend.
   timeout: 5000,
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
+  withCredentials: true, // Ensure credentials (cookies, etc.) are sent along with requests.
 });
 
-// Request interceptor: attach token (or dummy token if none exists) to every request.
+// Request interceptor to attach token (if any)
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
-      // Try getting the token from localStorage; if missing, use a dummy token.
+      // Retrieve the token from localStorage; if not available, use a dummy token.
       const token = localStorage.getItem('token') || 'dummy_token';
       config.headers.Authorization = `Bearer ${token}`;
     } catch (error) {
@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor: handle errors globally.
+// Response interceptor to handle errors globally.
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

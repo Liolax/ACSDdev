@@ -1,16 +1,13 @@
 import React from 'react';
 import '../../assets/styles/components/_imagePopup.scss';
-import { getImageUrl } from '../../helpers/getImageUrl';
 
-const ImagePopup = ({ imageSrc, onClose }) => {
-  // Ensure imageSrc is a string; if it already starts with 'http', use it, else compute it.
-  const fullImageUrl =
-    typeof imageSrc === 'string' && imageSrc.startsWith('http')
-      ? imageSrc
-      : getImageUrl(imageSrc);
-
-  // Log the computed URL for debugging purposes.
-  console.log("ImagePopup - fullImageUrl:", fullImageUrl);
+const ImagePopup = ({ imageFilename, onClose }) => {
+  // Ensure that imageFilename is the file name 
+  // Construct the full image URL using the backend's uploads path.
+  const fullImageUrl = `http://localhost:5000/uploads/${imageFilename}`;
+  
+  // You can log the full URL for debugging
+  console.log("ImagePopup fullImageUrl:", fullImageUrl);
 
   return (
     <div className="image-popup-overlay" onClick={onClose}>

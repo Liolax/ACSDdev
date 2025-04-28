@@ -22,7 +22,7 @@ const app = express();
 // Trust the first proxy so that express-rate-limit reads X-Forwarded-For correctly.
 app.set('trust proxy', 1);
 
-// Set up rate limiting middleware (100 requests per 15 minutes)
+// Configure rate limiting middleware (100 requests per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // maximum of 100 requests per IP per windowMs
@@ -30,7 +30,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// MongoDB connection
+// MongoDB connection setup
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
@@ -52,7 +52,10 @@ mongoose.connect(mongoURI, {
 // Middleware Setup
 app.use(helmet());
 app.disable('x-powered-by');
-app.use(cors({ origin: '*' })); // Allow all origins
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Allow frontend domains
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
