@@ -1,12 +1,12 @@
 const ordersEndpoints = {
-  getAll: '/api/orders',
-  getSales: '/api/orders/sales', 
-  create: '/api/orders',
-  update: (id) => `/api/orders/${id}`,
-  delete: (id) => `/api/orders/${id}`,
-  markShipped: (id) => `/api/orders/${id}/ship`,
-  markDelivered: (id) => `/api/orders/${id}/deliver`,
-  addFeedback: (id) => `/api/orders/${id}/feedback`,
+  getAll: '/orders',
+  getSales: '/orders/sales',
+  create: '/orders',
+  update: (id) => `/orders/${id}`,
+  delete: (id) => `/orders/${id}`,
+  markShipped: (id) => `/orders/${id}/ship`,
+  markDelivered: (id) => `/orders/${id}/deliver`,
+  addFeedback: (id) => `/orders/${id}/feedback`,
 };
 
 export default ordersEndpoints;

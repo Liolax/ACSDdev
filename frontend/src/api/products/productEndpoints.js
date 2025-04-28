@@ -1,5 +1,4 @@
 const productEndpoints = {
-  base: '/products',
   getAll: '/products',
   create: '/products',
   update: (id) => `/products/${id}`,

@@ -1,48 +1,56 @@
-import axiosInstance from '../axiosConfig';
+import axios from '../axiosConfig';
 import ordersEndpoints from './ordersEndpoints';
 
-// Retrieve all orders
 export const getOrders = async () => {
   try {
-    const response = await axiosInstance.get(ordersEndpoints.getAll);
+    const response = await axios.get(ordersEndpoints.getAll);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// Create a new order
+export const getSales = async () => {
+  try {
+    const response = await axios.get(ordersEndpoints.getSales);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createOrder = async (orderData) => {
   try {
-    const response = await axiosInstance.post(ordersEndpoints.create, orderData);
+    const response = await axios.post(ordersEndpoints.create, orderData);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// Update an order by ID
-export const updateOrder = async (id, orderData) => {
+export const markOrderShipped = async (id) => {
   try {
-    const response = await axiosInstance.put(ordersEndpoints.update(id), orderData);
+    const response = await axios.patch(ordersEndpoints.markShipped(id));
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// Delete an order by ID
-export const deleteOrder = async (id) => {
+export const markOrderDelivered = async (id) => {
   try {
-    const response = await axiosInstance.delete(ordersEndpoints.delete(id));
+    const response = await axios.patch(ordersEndpoints.markDelivered(id));
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-// Get all sales for current seller
-export const getSales = async () => {
-  const response = await axiosInstance.get(ordersEndpoints.getSales);
-  return response.data;
+export const addOrderFeedback = async (id, feedbackData) => {
+  try {
+    const response = await axios.patch(ordersEndpoints.addFeedback(id), feedbackData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

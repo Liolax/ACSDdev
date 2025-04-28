@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_URL || '/api';
-
 const axiosInstance = axios.create({
-  baseURL,
+  baseURL: '/api', // This forwards to our backend.
   timeout: 5000,
-  headers: { 'Content-Type': 'application/json' }
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
+// Request interceptor: attach a token (or a dummy token) to every request.
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
-      // Use the token from localStorage if available; otherwise, use a dummy token.
+      // Pull token from localStorage.
       const token = localStorage.getItem('token') || 'dummy_token';
       config.headers.Authorization = `Bearer ${token}`;
     } catch (error) {
@@ -20,11 +20,12 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('Error in Axios request interceptor:', error);
+    console.error('Axios request error:', error);
     return Promise.reject(error);
   }
 );
 
+// Response interceptor: handle errors globally.
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

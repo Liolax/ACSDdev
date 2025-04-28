@@ -5,6 +5,7 @@ import Footer from '../components/layouts/Footer';
 import StandardProductGrid from '../components/shared/StandardProductGrid';
 import '../assets/styles/pages/_market.scss';
 
+
 const MarketPage = () => {
   const handleAddToWishlist = (productId) => {
     axios
