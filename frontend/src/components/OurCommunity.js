@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/styles/components/_community.scss'; // Style import for community section
+import '../assets/styles/components/_community.scss'; 
 
 const OurCommunity = () => {
   return (

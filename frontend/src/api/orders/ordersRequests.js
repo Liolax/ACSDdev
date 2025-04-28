@@ -28,27 +28,27 @@ export const createOrder = async (orderData) => {
   }
 };
 
-export const markOrderShipped = async (id) => {
+export const markOrderShipped = async (orderId) => {
   try {
-    const response = await axios.patch(ordersEndpoints.markShipped(id));
+    const response = await axios.patch(ordersEndpoints.markShipped(orderId));
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const markOrderDelivered = async (id) => {
+export const markOrderDelivered = async (orderId) => {
   try {
-    const response = await axios.patch(ordersEndpoints.markDelivered(id));
+    const response = await axios.patch(ordersEndpoints.markDelivered(orderId));
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const addOrderFeedback = async (id, feedbackData) => {
+export const addOrderFeedback = async (orderId, feedbackData) => {
   try {
-    const response = await axios.patch(ordersEndpoints.addFeedback(id), feedbackData);
+    const response = await axios.patch(ordersEndpoints.addFeedback(orderId), feedbackData);
     return response.data;
   } catch (error) {
     throw error;

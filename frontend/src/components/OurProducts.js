@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StandardProductGrid from './shared/StandardProductGrid';
+import { getProducts } from '../api/products/productRequests';
 import '../assets/styles/components/_products.scss';
 
-const OurProducts = ({ openLoginPopup }) => {
+const OurProducts = ({ user, openLoginPopup }) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Fetch products using the centralized API function.
+    getProducts()
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
+
   return (
     <div className="home-page__products">
       <h2>Our Products</h2>
-      <StandardProductGrid onDetails={openLoginPopup} />
+      <StandardProductGrid 
+        products={products}
+        user={user}
+        onDetails={openLoginPopup}
+      />
     </div>
   );
 };
