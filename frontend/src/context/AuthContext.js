@@ -1,63 +1,52 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getCurrentUser, loginUser as apiLogin, logoutUser as apiLogout } from '../api/auth/authRequests';
-import apiClient from '../api/axiosConfig';
+import { ROLES } from '../constants/roles';
 
-const AuthContext = createContext(null);
+// Dummy IDs should match the ones the backend middleware uses.
+const DUMMY_BUYER_ID = "60b8d2958b26c41f5c7ceee1";
+const DUMMY_SELLER_ID = "60b8d2958b26c41f5c7ceee2";
+
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkLoggedIn = async () => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        try {
-          apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
-        } catch (error) {
-          console.error("Auth check failed:", error);
-          await apiLogout();
-          setUser(null);
-        }
-      }
-      setLoading(false);
-    };
-    checkLoggedIn();
+    // Check if the user role is stored in localStorage
+    const storedRole = localStorage.getItem('userRole');
+    if (storedRole) {
+      const dummyUser = {
+        _id: storedRole === ROLES.SELLER ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
+        role: storedRole,
+        email: ""
+      };
+      setUser(dummyUser);
+      setIsAuthenticated(true);
+    }
   }, []);
 
-  const login = async (credentials) => {
-    try {
-      const { token, user: loggedInUser } = await apiLogin(credentials);
-      if (token && loggedInUser) {
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userRole', loggedInUser.role);
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setUser(loggedInUser);
-        return loggedInUser;
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      await apiLogout();
-      setUser(null);
-      throw error;
-    }
+  const login = async ({ email, password, role }) => {
+    // For testing, simply store the role and create a dummy user.
+    localStorage.setItem('userRole', role);
+    const dummyUser = {
+      _id: role === ROLES.SELLER ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
+      role,
+      email,
+    };
+    setUser(dummyUser);
+    setIsAuthenticated(true);
+    return dummyUser;
   };
 
   const logout = () => {
-    apiLogout();
-    delete apiClient.defaults.headers.common['Authorization'];
-    setUser(null);
-    localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
+    setUser(null);
+    setIsAuthenticated(false);
   };
 
-  const value = { user, setUser, login, logout, loading, isAuthenticated: !!user };
-
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };

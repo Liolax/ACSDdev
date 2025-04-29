@@ -8,8 +8,6 @@ import '../assets/styles/pages/_pageContainer.scss';
 
 const Login = () => {
   const navigate = useNavigate();
-
-  // Use a no-operation close since this page permanently shows the login form
   const noOpClose = () => {};
 
   return (

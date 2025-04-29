@@ -3,8 +3,7 @@ import * as cartController from '../controllers/cartController.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
-
-router.use(auth); // Protect all cart routes
+router.use(auth);
 
 router.get('/', cartController.getCart);
 router.post('/', cartController.addToCart);

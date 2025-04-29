@@ -1,28 +1,20 @@
 import apiClient from '../axiosConfig';
 
-export const loginUser = async (credentials) => {
+export const loginUser = async (email, password) => {
   try {
-    const response = await apiClient.post('/auth/login', credentials);
-    return response.data; // Expected response: { token, user }
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const logoutUser = async () => {
-  try {
-    const response = await apiClient.post('/auth/logout');
+    const response = await apiClient.post('/users/login', { email, password });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const getCurrentUser = async () => {
+export const registerUser = async (userData) => {
   try {
-    const response = await apiClient.get('/auth/me');
+    const response = await apiClient.post('/users/register', userData);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
+

@@ -6,8 +6,18 @@ import getImageUrl from '../../helpers/getImageUrl';
 import '../../assets/styles/components/shared/_mergedProductGrid.scss';
 
 const categories = [
-  'All', 'Home Decor', 'Jewelry', 'Art', 'Fashion', 'Accessories', 'Toys',
-  'Pottery', 'Woodwork', 'Electronics', 'Books', 'General'
+  'All',
+  'Home Decor',
+  'Jewelry',
+  'Art',
+  'Fashion',
+  'Accessories',
+  'Toys',
+  'Pottery',
+  'Woodwork',
+  'Electronics',
+  'Books',
+  'General'
 ];
 
 function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist, onDetails }) {
@@ -23,16 +33,20 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
 
   const getFilteredProducts = () => {
     let filtered = [...products];
+
     if (searchTerm.trim() !== '') {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
       );
     }
+
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(product =>
-        product.category && product.category.toLowerCase() === selectedCategory.toLowerCase()
+        product.category &&
+        product.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
+
     if (searchTags.trim() !== '') {
       const tagArray = searchTags.split(',').map(tag => tag.trim().toLowerCase());
       filtered = filtered.filter(product => {
@@ -40,11 +54,13 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
         return tagArray.some(tag => product.tags.map(t => t.toLowerCase()).includes(tag));
       });
     }
+
     if (sortOrder === 'asc') {
       filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (sortOrder === 'desc') {
       filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
     }
+
     return filtered;
   };
 
@@ -138,16 +154,19 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
                     {user && user.role === 'buyer' ? (
                       <>
                         <button
-                          className="product-card__action-button"
+                          className="product-card__action-button wishlist-button"
                           title="Add to Wishlist"
-                          onClick={() => onAddToWishlist && onAddToWishlist(product._id)}
+                          onClick={() => onAddToWishlist && onAddToWishlist(product._id, product.name, product.price, product.image)}
                         >
                           <Icon name="heart" />
                         </button>
                         <button
-                          className="product-card__action-button"
+                          className="product-card__action-button cart-button"
                           title="Add to Cart"
-                          onClick={() => onAddToCart && onAddToCart(product._id)}
+                          onClick={() =>
+                            onAddToCart &&
+                            onAddToCart(product._id, 1, product.name, product.price, product.image)
+                          }
                         >
                           <Icon name="cart" />
                         </button>

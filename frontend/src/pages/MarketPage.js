@@ -6,11 +6,11 @@ import LoginPopup from '../components/LoginPopup';
 import '../assets/styles/pages/_market.scss';
 import { getProducts } from '../api/products/productRequests';
 import { addToCart } from '../api/cart/cartRequests';
-import { addWishlistItem } from '../api/wishlist/wishlistRequests';
+import { addToWishlist } from '../api/wishlist/wishlistRequests';
 
 const MarketPage = () => {
   const [products, setProducts] = useState([]);
-  // Simulated logged-in buyer (no setUser needed)
+  // Simulated logged-in buyer for development
   const user = { role: 'buyer', name: 'John Doe' };
   const [showLogin, setShowLogin] = useState(false);
 
@@ -20,8 +20,10 @@ const MarketPage = () => {
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  const handleAddToWishlist = (productId) => {
-    addWishlistItem({ productId })
+  // Handler to add item to wishlist.
+  // It passes productId, name, price, and image as required.
+  const handleAddToWishlist = (productId, name, price, image) => {
+    addToWishlist(productId, name, price, image)
       .then((data) => {
         console.log("Added to wishlist:", data);
       })
@@ -30,8 +32,10 @@ const MarketPage = () => {
       });
   };
 
-  const handleAddToCart = (productId) => {
-    addToCart(productId, 1)
+  // Handler to add item to cart.
+  // Receives product._id, quantity, name, price, image.
+  const handleAddToCart = (productId, quantity, name, price, image) => {
+    addToCart(productId, quantity, name, price, image)
       .then((data) => {
         console.log("Added to cart:", data);
       })
@@ -40,7 +44,6 @@ const MarketPage = () => {
       });
   };
 
-  // For guests, clicking "Details" opens the login popup.
   const handleDetails = (productId) => {
     setShowLogin(true);
   };

@@ -1,40 +1,32 @@
-import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 
-/**
- * Authentication Middleware (Demo Version)
- *
- * For demonstration purposes, if no token is provided,
- * this middleware assigns a dummy user. In a real production environment,
- * you should replace this logic with proper JWT verification.
- *
- * @param {object} req - Express request object
- * @param {object} res - Express response object
- * @param {function} next - Express next middleware function
- */
+const JWT_SECRET = process.env.JWT_SECRET || 'our-secret-key';
+
+const DUMMY_BUYER_ID = "60b8d2958b26c41f5c7ceee1";
+const DUMMY_SELLER_ID = "60b8d2958b26c41f5c7ceee2";
+
 export default function auth(req, res, next) {
-  console.log("Running in environment:", process.env.NODE_ENV);
   const authHeader = req.headers.authorization;
-  const dummyUserIdString = "60b8d2958b26c41f5c7ceee1";
-
-  let dummyUserId;
-  try {
-    // Always using 'new' to construct the ObjectId.
-    dummyUserId = new mongoose.Types.ObjectId(dummyUserIdString);
-  } catch (error) {
-    console.error("Failed to instantiate dummy ObjectId:", error);
-    return res.status(500).json({ error: "Internal Server Error: Invalid dummy user ID." });
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.slice(7);
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = { _id: decoded.id, role: decoded.role };
+    } catch (err) {
+      console.error("Invalid token provided. Using dummy user for testing.", err);
+      const requestedRole = req.headers['x-dummy-role'] || "buyer";
+      req.user = {
+        _id: requestedRole === "seller" ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
+        role: requestedRole
+      };
+    }
+  } else {
+    console.log("No token provided. Using dummy user for testing.");
+    const requestedRole = req.headers['x-dummy-role'] || "buyer";
+    req.user = {
+      _id: requestedRole === "seller" ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
+      role: requestedRole
+    };
   }
-
-  // For demonstration/testing, if there is a token use it,
-  // otherwise, always assign the dummy user.
-  if (authHeader) {
-    console.log("Auth Middleware: Token provided, assigning dummy user for demonstration.");
-    req.user = { _id: dummyUserId };
-    return next();
-  }
-
-  // Always assign dummy user if no token provided (demo override).
-  console.warn("Auth Middleware: No token provided. For demo purposes, assigning dummy user.");
-  req.user = { _id: dummyUserId };
-  return next();
+  next();
 }
