@@ -16,126 +16,98 @@ import cartRoutes from './routes/cartRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 
 dotenv.config();
-
 const app = express();
-
-// Trust proxies (important behind load balancers/proxies)
 app.set('trust proxy', 1);
 
 // Configure rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: process.env.NODE_ENV === 'development' ? 1000 : 100,
     message: 'Too many requests from this IP, please try again after 15 minutes.',
 });
 app.use(limiter);
 
-// MongoDB connection
+// MongoDB connection with automatic retry handling
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
     console.error("MONGO_URI is not defined in your environment variables.");
     process.exit(1);
 }
+
 mongoose.connect(mongoURI, {
-    // useNewUrlParser: true, // Deprecated in newer Mongoose versions
-    // useUnifiedTopology: true, // Deprecated in newer Mongoose versions
     serverSelectionTimeoutMS: 30000,
     connectTimeoutMS: 30000,
 })
     .then(() => console.log("Successfully connected to MongoDB"))
     .catch((err) => {
-        console.error("Failed to connect to MongoDB:", err.message, err.stack);
+        console.error("Failed to connect to MongoDB:", err.message);
         process.exit(1);
     });
 
-// --- CORS Configuration START ---
-// Define allowed origins
-const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+// Handle unexpected MongoDB disconnects
+mongoose.connection.on('disconnected', () => {
+    console.warn("MongoDB disconnected. Attempting to reconnect...");
+    mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 30000 });
+});
 
-// If you have a production frontend URL, add it here:
-// if (process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL) {
-//   allowedOrigins.push(process.env.FRONTEND_URL);
-// }
+// CORS Configuration
+const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+if (process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
         }
-        return callback(null, true);
+        return callback(new Error('Blocked by CORS'), false);
     },
-    credentials: true, // Allow cookies/authorization headers
+    credentials: true,
 };
 
-// Apply CORS middleware globally with options
 app.use(cors(corsOptions));
-// --- CORS Configuration END ---
 
 // Middleware
-// Keep Helmet, but ensure COEP/COOP are disabled if they conflict with your setup
 app.use(helmet({
-    crossOriginEmbedderPolicy: false, // Disable COEP
-    crossOriginOpenerPolicy: false, // Disable COOP
-    // You might want to review other Helmet options as well
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
 }));
 app.disable('x-powered-by');
-// app.use(cors({...})); // Removed from here, applied above
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Determine __dirname in ES Modules
+// Static file serving
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Define the path to the uploads folder
 const uploadsPath = path.join(__dirname, 'uploads');
-console.log(`Serving static files from: ${uploadsPath}`);
 
-// Middleware to add Cross-Origin-Resource-Policy header for uploads
-// This is crucial if the frontend document has COEP: require-corp
 app.use('/uploads', (req, res, next) => {
-    // Set CORP header to allow embedding from any origin (less secure)
-    // For better security, use 'same-origin' or 'same-site' if applicable
     res.header("Cross-Origin-Resource-Policy", "cross-origin");
     next();
-}, express.static(uploadsPath)); // Serve static files after adding the header
+}, express.static(uploadsPath));
 
-
-// --- Favicon.ico Fix START ---
-// Serve favicon.ico from the public directory if it exists there
-// Assuming your favicon is in backend/public/favicon.ico
+// Favicon handling
 const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
-app.get('/favicon.ico', (req, res) => {
-    res.sendFile(faviconPath, (err) => {
-        if (err) {
-            console.error("Error serving favicon.ico:", err);
-            // If favicon is not found in backend/public, send 404
-            res.status(404).send('Favicon not found');
-        }
+app.get('/favicon.ico', (req, res) => res.sendFile(faviconPath));
+
+// **Health Check Endpoint**
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: "API is running",
+        uptime: process.uptime(),
+        dbConnected: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+        timestamp: new Date().toISOString()
     });
 });
-// If your favicon is in frontend/public, you might not need this backend route
-// if the frontend development server handles it. But if the browser requests
-// it from the backend, this will serve it.
-// --- Favicon.ico Fix END ---
 
-
-// API Routes (Keep these after middleware)
+// API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
-
-// Base API route
-app.get('/api', (req, res) => {
-    res.json({ message: 'Welcome to the EireCraft API' });
-});
 
 // 404 handler
 app.use((req, res, next) => {
@@ -144,11 +116,6 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-    // Handle CORS errors specifically if needed
-    if (err.message.includes('CORS policy')) {
-        console.error("CORS Error:", err.message);
-        return res.status(403).json({ message: 'CORS policy violation: Access denied.' });
-    }
     console.error("Global error handler caught:", err.stack);
     res.status(500).json({ message: err.message || 'An internal server error occurred.' });
 });
