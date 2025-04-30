@@ -11,7 +11,7 @@ import rateLimit from 'express-rate-limit';
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';  // Only one import of orderRoutes here!
+import orderRoutes from './routes/orderRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 
@@ -58,7 +58,9 @@ if (process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL) {
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
       return callback(null, true);
     }
     return callback(new Error('Blocked by CORS'), false);
@@ -66,7 +68,9 @@ const corsOptions = {
   credentials: true,
 };
 
+// Enable CORS for all routes and preflight requests.
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Middleware
 app.use(helmet({
@@ -105,7 +109,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes);   // Mounted only once here
+app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 

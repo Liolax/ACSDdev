@@ -58,9 +58,8 @@ const SellerDashboard = () => {
     setLoadingOrders(true);
     try {
       const res = await axios.get('/api/orders');
-      // If res.data has an 'orders' property, use it; otherwise assume res.data is the array.
+      // Extract orders array from response:
       const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
-      // Ensure that ordersData is an array.
       setOrders(Array.isArray(ordersData) ? ordersData : []);
       setLoadingOrders(false);
     } catch (err) {
@@ -71,6 +70,7 @@ const SellerDashboard = () => {
 
   const handleMarkShipped = async (orderId) => {
     try {
+      // Assuming your backend endpoint for marking as shipped is working at /api/orders/:orderId/ship
       await axios.patch(`/api/orders/${orderId}/ship`);
       setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'Shipped' } : o));
     } catch (err) {
@@ -78,7 +78,7 @@ const SellerDashboard = () => {
     }
   };
 
-  // Only orders with status 'Processing' need shipping.
+  // Orders to ship: only those with status "Processing" (i.e. orders that buyers have paid for)
   const ordersToShip = orders.filter(o => o.status === 'Processing');
 
   // Product CRUD State
@@ -204,6 +204,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="seller-dashboard">
+      {/* Orders to Ship Section */}
       <h2 className="seller-dashboard__header">Orders to Ship</h2>
       {orderError && <p className="seller-dashboard__error">{orderError}</p>}
       <div className="seller-dashboard__orders">
@@ -230,6 +231,7 @@ const SellerDashboard = () => {
         )}
       </div>
 
+      {/* Manage Products Section */}
       <h2 className="seller-dashboard__header">Manage Products</h2>
       {prodError && <p className="seller-dashboard__error">{prodError}</p>}
       <div className="seller-dashboard__search">
@@ -330,7 +332,6 @@ const SellerDashboard = () => {
                   }}
                   onClick={() => {
                     // For now, product images in dashboard do not open popup.
-                    // You can add functionality here if desired.
                   }}
                 />
                 <div className="seller-dashboard__product-info">

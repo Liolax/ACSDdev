@@ -6,7 +6,7 @@ import BuyerDashboardPage from './pages/BuyerDashboardPage';
 import SellerDashboardPage from './pages/SellerDashboardPage';
 import MarketPage from './pages/MarketPage';
 import ContactPage from './pages/ContactPage';
-import CheckoutPage from './pages/CheckoutPage'; // Import the CheckoutPage
+import CheckoutPage from './pages/CheckoutPage';
 import './assets/styles/main.scss';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
