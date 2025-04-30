@@ -58,7 +58,10 @@ const SellerDashboard = () => {
     setLoadingOrders(true);
     try {
       const res = await axios.get('/api/orders');
-      setOrders(res.data || []);
+      // If res.data has an 'orders' property, use it; otherwise assume res.data is the array.
+      const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
+      // Ensure that ordersData is an array.
+      setOrders(Array.isArray(ordersData) ? ordersData : []);
       setLoadingOrders(false);
     } catch (err) {
       setOrderError('Failed to load orders.');
@@ -75,6 +78,7 @@ const SellerDashboard = () => {
     }
   };
 
+  // Only orders with status 'Processing' need shipping.
   const ordersToShip = orders.filter(o => o.status === 'Processing');
 
   // Product CRUD State
@@ -108,9 +112,6 @@ const SellerDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Popup for full image.
-  const [popupImage, setPopupImage] = useState(null);
 
   useEffect(() => {
     fetchProducts();

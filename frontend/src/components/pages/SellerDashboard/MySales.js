@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getSales } from '../../../api/orders/ordersRequests';
-import Button from '../../ui/Button';
 import '../../../assets/styles/pages/_my-sales.scss';
 
 const MySales = () => {
@@ -10,7 +9,12 @@ const MySales = () => {
   useEffect(() => {
     setLoading(true);
     getSales()
-      .then((data) => setSales(data))
+      .then((data) => {
+        // If the data returned has a 'sales' key, use that;
+        // Otherwise, assume data is already the sales array.
+        const salesArray = data && data.sales ? data.sales : data;
+        setSales(salesArray);
+      })
       .catch((error) => console.error("Failed to get sales", error))
       .finally(() => setLoading(false));
   }, []);

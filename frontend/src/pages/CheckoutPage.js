@@ -1,139 +1,142 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Header from '../components/layouts/Header';
-import Footer from '../components/layouts/Footer';
-import CartReview from '../components/checkout/CartReview'; // Stub or implement your CartReview component
-import ShippingDetails from '../components/checkout/ShippingDetails';
-import PaymentSimulation from '../components/checkout/PaymentSimulation';
-import OrderConfirmation from '../components/checkout/OrderConfirmation'; // Stub or implement your OrderConfirmation component
-import { getCart } from '../api/cart/cartRequests';
-import { createOrder, processPayment } from '../api/orders/ordersRequests';
-import '../assets/styles/pages/_checkout-page.scss';
+import axios from 'axios';
+import { createOrder, simulatePayment } from '../api/orders/ordersRequests';
+import CheckoutSummary from '../components/checkout/CheckoutSummary';
+import ShippingForm from '../components/checkout/ShippingForm';
+import PaymentForm from '../components/checkout/PaymentForm';
+import Button from '../components/ui/Button';
+import '../assets/styles/pages/_checkout.scss';
 
 const CheckoutPage = () => {
-  const { user, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [step, setStep] = useState(1); // 1: Cart Review, 2: Shipping, 3: Payment, 4: Confirmation
-  const [cartItems, setCartItems] = useState([]);
-  // Removed unused shippingInfo variable
-  const [orderId, setOrderId] = useState(null);
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState({ items: [] });
+  const [loadingCart, setLoadingCart] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Multi-step flow: 1=Cart Review, 2=Shipping, 3=Payment Simulation, 4=Confirmation
+  const [currentStep, setCurrentStep] = useState(1);
+  const [shippingInfo, setShippingInfo] = useState({});
+  const [paymentInfo, setPaymentInfo] = useState({});
+  const [createdOrder, setCreatedOrder] = useState(null);
+  
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    if (isAuthenticated && step === 1) {
-      setLoading(true);
-      getCart()
-        .then((data) => {
-          setCartItems(data?.items || []);
-          if (!data || !data.items || data.items.length === 0) {
-            setError("Your cart is empty.");
-          } else {
-            setError(null);
-          }
-        })
-        .catch((err) => {
-          console.error("Error fetching cart for checkout:", err);
-          setError("Could not load your cart. Please try again.");
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [isAuthenticated, step]);
-
-  const handleShippingSubmit = async (details) => {
-    setLoading(true);
-    setError(null);
+  // Fetch current cart details
+  const fetchCart = async () => {
     try {
-      const newOrder = await createOrder({ ...details, items: cartItems, userId: user._id });
-      setOrderId(newOrder._id);
-      setOrderDetails(newOrder);
-      setStep(3);
+      const response = await axios.get('/api/cart');
+      setCart(response.data.cart || { items: [] });
     } catch (err) {
-      console.error("Error creating order:", err);
-      setError("Failed to save shipping details. Please try again.");
+      console.error("Error fetching cart", err);
+      setError("Failed to load cart. Please try again later.");
     } finally {
-      setLoading(false);
+      setLoadingCart(false);
     }
   };
 
-  const handlePaymentSubmit = async (paymentMethod) => {
-    if (!orderId) {
-      setError("Order ID is missing. Cannot process payment.");
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const nextStep = () => setCurrentStep(prev => prev + 1);
+  const prevStep = () => setCurrentStep(prev => prev - 1);
+
+  // Handler for payment simulation and order placement
+  const handleSimulatePayment = async () => {
     try {
-      const updatedOrder = await processPayment(orderId, {
-        method: paymentMethod,
-        transactionId: `sim_${Date.now()}`
-      });
-      setOrderDetails(updatedOrder);
-      setStep(4);
+      // Create order if not created already
+      let orderResponse;
+      if (!createdOrder) {
+        const orderPayload = {
+          cartId: cart._id,
+          items: cart.items,
+          shippingInfo,
+          paymentInfo
+        };
+        orderResponse = await createOrder(orderPayload);
+      }
+      // Use the order id (from createdOrder or the response)
+      const orderId = createdOrder ? createdOrder._id : orderResponse.order._id;
+      // Simulate payment (this could also invoke processPayment if needed)
+      await simulatePayment(orderId, paymentInfo);
+      
+      // Save the order details if not already saved
+      if (!createdOrder) {
+        setCreatedOrder(orderResponse.order);
+      }
+      
+      nextStep();
     } catch (err) {
-      console.error("Error processing payment:", err);
-      setError(`Payment failed (${paymentMethod}). Please try again or contact support.`);
-    } finally {
-      setLoading(false);
+      console.error("Payment simulation error:", err);
+      setError("Payment simulation failed. Please try again.");
     }
   };
 
   const renderStep = () => {
-    if (!isAuthenticated) {
-      return <p>Please log in to proceed with checkout.</p>;
-    }
-    if (error && step < 4) {
-      return <p className="error-message">{error}</p>;
-    }
-    switch (step) {
+    switch (currentStep) {
       case 1:
         return (
-          <CartReview
-            cartItems={cartItems}
-            loading={loading}
-            error={error}
-            onProceed={() => { if (cartItems.length > 0) setStep(2); }}
-          />
+          <div className="checkout-step">
+            <h3>Cart Review</h3>
+            <CheckoutSummary cart={cart} />
+            <div className="checkout-step__actions">
+              <Button onClick={nextStep}>Next: Shipping</Button>
+            </div>
+          </div>
         );
       case 2:
-        return <ShippingDetails onSubmit={handleShippingSubmit} loading={loading} />;
+        return (
+          <div className="checkout-step">
+            <h3>Shipping Information</h3>
+            <ShippingForm shippingInfo={shippingInfo} setShippingInfo={setShippingInfo} />
+            <div className="checkout-step__actions">
+              <Button onClick={prevStep}>Back</Button>
+              <Button onClick={nextStep}>Next: Payment</Button>
+            </div>
+          </div>
+        );
       case 3:
         return (
-          <PaymentSimulation
-            orderId={orderId}
-            orderAmount={orderDetails?.totalAmount}
-            onSubmit={handlePaymentSubmit}
-            loading={loading}
-          />
+          <div className="checkout-step">
+            <h3>Payment Simulation</h3>
+            <PaymentForm paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
+            <div className="checkout-step__actions">
+              <Button onClick={prevStep}>Back</Button>
+              <Button onClick={handleSimulatePayment}>Simulate Payment</Button>
+            </div>
+          </div>
         );
       case 4:
-        return <OrderConfirmation orderDetails={orderDetails} />;
+        return (
+          <div className="checkout-step">
+            <h3>Order Confirmation</h3>
+            <p>Your order has been placed successfully!</p>
+            {createdOrder && (
+              <div className="order-details">
+                <p>Order ID: {createdOrder._id}</p>
+                <p>
+                  Total: $
+                  {cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                </p>
+              </div>
+            )}
+            <div className="checkout-step__actions">
+              <Button onClick={() => navigate('/')}>Return Home</Button>
+            </div>
+          </div>
+        );
       default:
-        return <p>Invalid checkout step.</p>;
+        return null;
     }
   };
 
+  if (loadingCart) return <p>Loading checkout...</p>;
+  if (error) return <div className="checkout-page__error">{error}</div>;
+
   return (
-    <div className="page-container checkout-page">
-      <Header />
-      <main className="checkout-page__main">
-        <h1 className="checkout-page__title">Checkout</h1>
-        <div className="checkout-page__content">
-          {renderStep()}
-        </div>
-        {error && step < 4 && <p className="checkout-page__error">{error}</p>}
-        {loading && <p>Processing...</p>}
-      </main>
-      <Footer />
+    <div className="checkout-page">
+      <h2>Checkout</h2>
+      {renderStep()}
     </div>
   );
 };

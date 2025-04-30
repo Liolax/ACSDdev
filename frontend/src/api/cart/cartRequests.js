@@ -83,38 +83,3 @@ export const clearCart = async () => {
         throw new Error(error.message || "Failed to clear cart.");
     }
 };
-
-// Note: The moveWishlistItemToCart function seems to be defined in both
-// wishlistRequests.js and cartRequests.js in your provided code.
-// It's better to have a single source of truth for this logic.
-// Since the backend route for moving is in wishlistRoutes,
-// it makes more sense to keep the `moveWishlistItemToCart` function
-// in `frontend/src/api/wishlist/wishlistRequests.js` and call that function
-// from your components when moving an item.
-// The implementation below seems to be attempting a POST to a non-existent
-// /cart/move-from-wishlist endpoint based on your backend routes provided earlier.
-// I will comment it out or remove it to avoid confusion and potential errors.
-
-/*
-// This function seems redundant and points to a backend endpoint
-// not present in your provided backend routes.
-// The move logic is handled by wishlistController.moveWishlistToCart
-// and exposed via the PUT /wishlist/move-to-cart/:productId route.
-// You should call the moveWishlistItemToCart function from wishlistRequests.js instead.
-export const moveWishlistItemToCart = async (wishlistItemId, productId) => {
-    if (!wishlistItemId || !productId)
-        throw new Error("Both Wishlist Item ID and Product ID are required.");
-    try {
-        // This endpoint '/cart/move-from-wishlist' is not defined in your backend routes
-        const response = await apiClient.post(`${CART_ENDPOINTS.ADD_ITEM}/move-from-wishlist`, {
-            wishlistItemId,
-            productId,
-            quantity: 1
-        });
-        return response.data;
-    } catch (error) {
-        console.error("API Error moving wishlist item to cart:", error);
-        throw new Error(error.message || "Failed to move item from wishlist to cart.");
-    }
-};
-*/

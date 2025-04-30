@@ -1,0 +1,34 @@
+const webpack = require("webpack");
+
+module.exports = {
+  webpack: {
+    configure: (webpackConfig) => {
+      // Provide fallbacks for Node core modules
+      webpackConfig.resolve.fallback = {
+        ...webpackConfig.resolve.fallback,
+        buffer: require.resolve("buffer/"),
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        util: require.resolve("util/"),
+        vm: require.resolve("vm-browserify")
+      };
+
+      // Alias process references
+      webpackConfig.resolve.alias = {
+        ...webpackConfig.resolve.alias,
+        process: "process",
+        "process/browser": "process"
+      };
+
+      // Automatically provide global variables
+      webpackConfig.plugins.push(
+        new webpack.ProvidePlugin({
+          process: "process",
+          Buffer: ["buffer", "Buffer"]  // Provides Buffer
+        })
+      );
+
+      return webpackConfig;
+    }
+  }
+};

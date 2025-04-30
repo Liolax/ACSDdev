@@ -1,20 +1,17 @@
-import { Router } from 'express';
-import {
-  getOrders,
-  createOrder,
-  markShipped,
-  markDelivered,
-  addFeedback,
-  getSales, 
-} from '../controllers/orderController.js';
+import express from 'express';
+import * as orderController from '../controllers/orderController.js';
+import auth from '../middleware/auth.js';
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', getOrders);
-router.get('/sales', getSales); 
-router.post('/', createOrder);
-router.patch('/:id/ship', markShipped);
-router.patch('/:id/deliver', markDelivered);
-router.patch('/:id/feedback', addFeedback);
+router.use(auth); // All order routes must be authenticated
+
+router.get('/', orderController.getAllOrders);           
+router.get('/sales', orderController.getSales);            
+router.post('/', orderController.createOrder);
+router.post('/:orderId/paymentSimulation', orderController.simulatePayment);
+router.put('/:orderId/markShipped', orderController.markShipped);     
+router.put('/:orderId/markDelivered', orderController.markDelivered); 
+router.patch('/:orderId/feedback', orderController.addFeedback);      
 
 export default router;

@@ -1,39 +1,21 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const orderSchema = new Schema(
-  {
-    buyerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    items: [
-      {
-        productId: { type: Schema.Types.ObjectId, ref: 'Product' },
-        sellerId: { type: Schema.Types.ObjectId, ref: 'User' }, 
-        name: String,
-        image: String,
-        price: Number,
-        quantity: Number,
-        feedback: {
-          rating: Number,
-          title: String,
-          comments: String,
-          given: { type: Boolean, default: false }
-        }
-      },
-    ],
-    status: {
-      type: String,
-      enum: ['Processing', 'Shipped', 'Delivered'],
-      default: 'Processing',
-    },
-    shippingDetails: {
-      address: String,
-      city: String,
-      postalCode: String,
-      country: String,
-    },
-    date: { type: Date, default: Date.now },
-    // Root-level feedback can be deprecated if per-item feedback is used
-  },
-  { timestamps: true }
-);
+const orderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  cartId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
+  items: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      name: { type: String, required: true },
+      price: { type: Number, required: true },
+      quantity: { type: Number, required: true },
+      image: String
+    }
+  ],
+  shippingInfo: { type: Object, required: true },
+  paymentInfo: { type: Object, required: true },
+  status: { type: String, default: 'Processing' },
+  paymentStatus: { type: String, default: 'Pending' }
+}, { timestamps: true });
 
-export default model('Order', orderSchema);
+export default mongoose.model('Order', orderSchema);
