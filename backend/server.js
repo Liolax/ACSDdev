@@ -1,4 +1,3 @@
-// backend/server.js
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -18,6 +17,8 @@ import wishlistRoutes from './routes/wishlistRoutes.js';
 
 dotenv.config();
 
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL); // For debugging
+
 const app = express();
 app.set('trust proxy', 1);
 
@@ -29,7 +30,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// MongoDB connection with automatic retry handling
+// MongoDB connection
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
@@ -46,7 +47,6 @@ mongoose.connect(mongoURI, {
     process.exit(1);
   });
 
-// Handle unexpected MongoDB disconnects
 mongoose.connection.on('disconnected', () => {
   console.warn("MongoDB disconnected. Attempting to reconnect...");
   mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 30000 });
@@ -54,8 +54,6 @@ mongoose.connection.on('disconnected', () => {
 
 // CORS Configuration
 const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
-
-// Only include FRONTEND_URL from your environment if it is defined and not set to a placeholder value.
 if (
   process.env.NODE_ENV === 'production' &&
   process.env.FRONTEND_URL &&
@@ -66,7 +64,6 @@ if (
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error('Blocked by CORS'), false);
   },
@@ -109,8 +106,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes — note these are mounted with fixed, relative paths.
-// Be sure not to use environment variables as route prefixes unless they contain valid paths.
+// API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
