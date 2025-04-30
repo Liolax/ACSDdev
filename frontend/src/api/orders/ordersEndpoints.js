@@ -1,10 +1,8 @@
 export const ORDERS_ENDPOINTS = {
-  GET_ALL: '/orders',
-  GET_SALES: '/orders/sales',
   CREATE_ORDER: '/orders',
-  MARK_SHIPPED: '/orders/:orderId/markShipped',
-  MARK_DELIVERED: '/orders/:orderId/markDelivered',
-  PROCESS_PAYMENT: '/orders/:orderId/processPayment',
-  ADD_FEEDBACK: '/orders/:orderId/feedback',
-  PAYMENT_SIMULATION: '/orders/:orderId/paymentSimulation'
+  PAYMENT_SIMULATION: '/orders/:orderId/paymentSimulation',
+  GET_MY_PURCHASES: '/orders/my-purchases',
+  GET_MY_SALES: '/orders/my-sales',
+  MARK_SHIPPED: '/orders/:orderId/ship',
+  MARK_DELIVERED: '/orders/:orderId/deliver'
 };

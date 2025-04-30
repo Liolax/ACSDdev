@@ -4,14 +4,14 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.use(auth); // All order routes must be authenticated
+// All order routes are protected by auth middleware.
+router.use(auth);
 
-router.get('/', orderController.getAllOrders);           
-router.get('/sales', orderController.getSales);            
 router.post('/', orderController.createOrder);
 router.post('/:orderId/paymentSimulation', orderController.simulatePayment);
-router.put('/:orderId/markShipped', orderController.markShipped);     
-router.put('/:orderId/markDelivered', orderController.markDelivered); 
-router.patch('/:orderId/feedback', orderController.addFeedback);      
+router.get('/my-purchases', orderController.getMyPurchases);
+router.get('/my-sales', orderController.getMySales);
+router.put('/:orderId/ship', orderController.markShipped);
+router.put('//:orderId/deliver', orderController.markDelivered);
 
 export default router;

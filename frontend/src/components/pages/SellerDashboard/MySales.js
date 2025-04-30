@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSales } from '../../../api/orders/ordersRequests';
+import { getMySales } from '../../../api/orders/ordersRequests';
 import '../../../assets/styles/pages/_my-sales.scss';
 
 const MySales = () => {
@@ -8,10 +8,10 @@ const MySales = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSales()
+    getMySales()
       .then((data) => {
         // If the data returned has a 'sales' key, use that;
-        // Otherwise, assume data is already the sales array.
+        // otherwise, assume the data is already the sales array.
         const salesArray = data && data.sales ? data.sales : data;
         setSales(salesArray);
       })
@@ -33,7 +33,7 @@ const MySales = () => {
               <div key={order._id} className="order-card my-sales__order-card">
                 <h3 className="order-card__id">Order #{order._id}</h3>
                 <p className="order-card__date">
-                  Date: {new Date(order.date).toLocaleDateString()}
+                  Date: {new Date(order.createdAt).toLocaleDateString()}
                 </p>
                 <div className="order-card__details">
                   {(order.items || []).map((item) => (
