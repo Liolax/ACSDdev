@@ -37,10 +37,11 @@ if (!mongoURI) {
   process.exit(1);
 }
 
-mongoose.connect(mongoURI, {
-  serverSelectionTimeoutMS: 30000,
-  connectTimeoutMS: 30000,
-})
+mongoose
+  .connect(mongoURI, {
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
+  })
   .then(() => console.log("Successfully connected to MongoDB"))
   .catch((err) => {
     console.error("Failed to connect to MongoDB:", err.message);
@@ -74,10 +75,12 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // Middleware
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-  crossOriginOpenerPolicy: false,
-}));
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+  })
+);
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -87,10 +90,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsPath = path.join(__dirname, 'uploads');
 
-app.use('/uploads', (req, res, next) => {
-  res.header("Cross-Origin-Resource-Policy", "cross-origin");
-  next();
-}, express.static(uploadsPath));
+app.use(
+  '/uploads',
+  (req, res, next) => {
+    res.header("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  },
+  express.static(uploadsPath)
+);
 
 // Favicon handling
 const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
@@ -102,7 +109,7 @@ app.get('/api/health', (req, res) => {
     status: "API is running",
     uptime: process.uptime(),
     dbConnected: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -123,6 +130,12 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error("Global error handler caught:", err.stack);
   res.status(500).json({ message: err.message || 'An internal server error occurred.' });
+});
+
+app._router.stack.forEach((middleware) => {
+  if (middleware.route) {
+    console.log(middleware.route.path);
+  }
 });
 
 const PORT = process.env.PORT || 5000;

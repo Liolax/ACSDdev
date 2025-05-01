@@ -14,7 +14,7 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     shippingInfo: { type: Object, required: true },
-    paymentInfo: { type: Object }, // will be set after payment simulation
+    paymentInfo: { type: Object }, // Set after payment simulation
     totalAmount: { type: Number, required: true },
     status: { type: String, default: 'Pending' }, // "Pending", "Processing", "Shipped", "Delivered"
     paymentStatus: { type: String, default: 'Pending' } // "Pending", "Paid"

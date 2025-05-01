@@ -16,12 +16,10 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { name, email, message } = req.body;
-
     // Validation
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'Name, email, and message are required.' });
     }
-
     await submitFeedback(req, res);
   } catch (error) {
     console.error('Error submitting feedback:', error);
@@ -30,4 +28,3 @@ router.post('/', async (req, res) => {
 });
 
 export default router;
-

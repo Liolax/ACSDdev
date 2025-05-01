@@ -3,48 +3,50 @@ import Order from '../models/OrderModel.js';
 
 /**
  * Creates an order from cart items and shipping details (called during checkout).
- * Expects request body: { cartItems, shippingDetails }
+ * Expects request body: { cartItems, shippingInfo }
  */
 export const createOrder = async (req, res) => {
   try {
-    const userId = req.user._id; // Added by auth middleware
-    const { cartItems, shippingDetails } = req.body;
+    const userId = req.user._id; // Set by auth middleware
+    const { cartItems, shippingInfo, paymentInfo, cartId } = req.body;
 
-    if (!shippingDetails || Object.keys(shippingDetails).length === 0) {
+    if (!shippingInfo || Object.keys(shippingInfo).length === 0) {
       return res.status(400).json({ message: 'Shipping information is required.' });
     }
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
       return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
     }
 
-    // Securely calculate total amount
+    // Calculate total amount
     const totalAmount = cartItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
+      (sum, item) => sum + Number(item.price) * Number(item.quantity),
       0
     );
 
-    // Construct order items (assuming each cart item has a populated product)
+    // Construct order items. Expect each cart item is an object containing product details.
     const orderItems = cartItems.map(item => ({
-      productId: item.product._id,
-      name: item.product.name,
-      price: item.product.price,
+      productId: item.product._id ? item.product._id : item.productId, // Allow for populated product
+      name: item.product.name ? item.product.name : item.name,
+      price: item.product.price ? item.product.price : item.price,
       quantity: item.quantity,
-      image: item.product.imageUrl, // Store URL at time of purchase
+      image: item.product.imageUrl ? item.product.imageUrl : item.image,
     }));
 
     const newOrder = new Order({
       userId,
+      cartId,
       items: orderItems,
-      shippingInfo: shippingDetails,
+      shippingInfo,
       totalAmount,
-      status: 'Pending', // Before payment simulation
+      status: 'Pending', // Initial status before payment simulation
       paymentStatus: 'Pending',
+      paymentInfo: paymentInfo || {}
     });
 
     await newOrder.save();
 
-    // Optionally: clear user's cart here.
-    res.status(201).json(newOrder);
+    // Return in the structure expected by the frontend.
+    res.status(201).json({ order: newOrder });
   } catch (error) {
     console.error("Error creating order:", error);
     res.status(500).json({ message: error.message || "Failed to create order" });
@@ -62,8 +64,8 @@ export const simulatePayment = async (req, res) => {
     const userId = req.user._id;
     const { paymentDetails } = req.body;
 
-    if (!paymentDetails || !paymentDetails.method) {
-      return res.status(400).json({ message: 'Payment method details are required for simulation.' });
+    if (!paymentDetails || !paymentDetails.cardNumber || !paymentDetails.cardNumber.trim()) {
+      return res.status(400).json({ message: 'Card number is required for payment simulation.' });
     }
 
     const order = await Order.findOne({ _id: orderId, userId });
@@ -108,16 +110,15 @@ export const getMySales = async (req, res) => {
   try {
     const sellerId = req.user._id;
 
-    // Retrieve seller's products and extract their IDs.
-    const sellerProducts = await mongoose.model('Product')
-      .find({ sellerId }).select('_id');
+    // Get the seller's products
+    const sellerProducts = await mongoose.model('Product').find({ sellerId }).select('_id');
     const sellerProductIds = sellerProducts.map(p => p._id);
 
     if (sellerProductIds.length === 0) {
       return res.status(200).json([]);
     }
 
-    // Find orders where at least one item matches sellerProductIds.
+    // Find orders where any item matches sellerProductIds.
     const sales = await Order.find({ 'items.productId': { $in: sellerProductIds } })
       .sort({ createdAt: -1 })
       .populate('userId', 'name email');
@@ -135,7 +136,6 @@ export const getMySales = async (req, res) => {
 export const markShipped = async (req, res) => {
   try {
     const { orderId } = req.params;
-    // (Optional) Verify that the seller owns at least one product in the order.
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ message: "Order not found." });

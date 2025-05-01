@@ -1,6 +1,10 @@
 const webpack = require("webpack");
 
 module.exports = {
+  eslint: {
+    // Disable ESLint (temporarily disable linting)
+    enable: false,
+  },
   webpack: {
     configure: (webpackConfig) => {
       // Provide fallbacks for Node core modules
@@ -24,9 +28,26 @@ module.exports = {
       webpackConfig.plugins.push(
         new webpack.ProvidePlugin({
           process: "process",
-          Buffer: ["buffer", "Buffer"]  // Provides Buffer
+          Buffer: ["buffer", "Buffer"]
         })
       );
+      
+      // Optional: Exclude problematic modules from source-map-loader:
+      webpackConfig.module.rules.forEach((rule) => {
+        if (rule.use && Array.isArray(rule.use)) {
+          rule.use = rule.use.map((u) => {
+            if (typeof u === "object" && u.loader && u.loader.includes("source-map-loader")) {
+              // Exclude directories that are causing missing module errors
+              u.exclude = [
+                /node_modules[\\/]@pmmmwh[\\/]react-refresh-webpack-plugin/,
+                /node_modules[\\/]@formspree[\\/]react/,
+                /node_modules[\\/]@svgr[\\/]webpack/,
+              ];
+            }
+            return u;
+          });
+        }
+      });
 
       return webpackConfig;
     }

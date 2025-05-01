@@ -3,11 +3,12 @@ import { ORDERS_ENDPOINTS } from './ordersEndpoints';
 
 /**
  * Creates a new order.
- * checkoutData should include: { cartItems, shippingDetails }
+ * checkoutData should include: { cartItems, shippingInfo, paymentInfo, cartId }
  */
 export const createOrder = async (checkoutData) => {
   try {
     const response = await apiClient.post(ORDERS_ENDPOINTS.CREATE_ORDER, checkoutData);
+    // Expect response in shape { order: ... }
     return response.data;
   } catch (error) {
     console.error("API Error creating order:", error);
@@ -38,7 +39,6 @@ export const simulatePayment = async (orderId, paymentDetails) => {
 export const getMyPurchases = async () => {
   try {
     const response = await apiClient.get(ORDERS_ENDPOINTS.GET_MY_PURCHASES);
-    // Ensure we return an array
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("API Error fetching purchases:", error);

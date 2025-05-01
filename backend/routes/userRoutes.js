@@ -1,3 +1,4 @@
+import express from 'express';
 import { Router } from 'express';
 import User from '../models/UserModel.js';
 import { hash, compare } from 'bcryptjs';

@@ -12,6 +12,6 @@ router.post('/:orderId/paymentSimulation', orderController.simulatePayment);
 router.get('/my-purchases', orderController.getMyPurchases);
 router.get('/my-sales', orderController.getMySales);
 router.put('/:orderId/ship', orderController.markShipped);
-router.put('//:orderId/deliver', orderController.markDelivered);
+router.put('/:orderId/deliver', orderController.markDelivered);
 
 export default router;
