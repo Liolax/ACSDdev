@@ -64,7 +64,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.options('*', cors(corsOptions)); // <-- Commented out to fix path-to-regexp error
 
 app.use(
   helmet({
