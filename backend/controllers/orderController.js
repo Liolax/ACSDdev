@@ -46,11 +46,11 @@ export const createOrder = async (req, res) => {
       0
     );
 
-    // Convert all prices to string with two decimals for Decimal128
+    // Convert all prices to plain string for Decimal128
     const orderItems = itemsToOrder.map(item => ({
       productId: item.product?._id ? item.product._id : item.productId,
       name: item.product?.name ? item.product.name : item.name,
-      price: Number(item.product?.price ? item.product.price : item.price).toFixed(2), // <-- fix here
+      price: String(Number(item.product?.price ? item.product.price : item.price)), // <-- fix here
       quantity: item.quantity,
       image: item.product?.imageUrl ? item.product.imageUrl : item.image,
     }));
@@ -60,7 +60,7 @@ export const createOrder = async (req, res) => {
       cartId,
       items: orderItems,
       shippingInfo,
-      totalAmount: totalAmount.toFixed(2), // <-- fix here
+      totalAmount: String(Number(totalAmount)), // <-- fix here
       status: 'Pending', // Initial status before payment simulation
       paymentStatus: 'Pending',
       paymentInfo: paymentInfo || {}
