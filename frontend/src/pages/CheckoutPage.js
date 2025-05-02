@@ -48,9 +48,16 @@ const CheckoutPage = () => {
       // Create order if not created already
       let orderResponse;
       if (!createdOrder) {
+        // Ensure all cartItems have price as string with two decimals
+        const cartItems = cart.items.map(item => ({
+          ...item,
+          price: (typeof item.price === 'object' && item.price !== null && item.price.$numberDecimal)
+            ? Number(item.price.$numberDecimal).toFixed(2)
+            : Number(item.price).toFixed(2)
+        }));
         const orderPayload = {
           cartId: cart._id,
-          cartItems: cart.items, // <-- FIXED: was 'items', now 'cartItems'
+          cartItems,
           shippingInfo,
           paymentInfo
         };
