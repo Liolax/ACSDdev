@@ -22,6 +22,9 @@ export const addToWishlist = async (req, res) => {
         const user = req.user;
         let { productId, name, price, image } = req.body;
 
+        // Always store price as a number in wishlist
+        price = Number(price);
+
         if (!productId || !name || isNaN(price)) {
             return res.status(400).json({ success: false, error: 'Missing or invalid product details' });
         }
@@ -85,11 +88,8 @@ export const moveWishlistToCart = async (req, res) => {
         }
 
         if (!cart.items.some(cartItem => cartItem.productId.toString() === productId)) {
-            // Ensure price is a string for Decimal128 compatibility
-            let cartPrice = item.price;
-            if (typeof cartPrice === 'number') {
-                cartPrice = cartPrice.toString();
-            }
+            // Always convert price to string with two decimals for Decimal128
+            let cartPrice = Number(item.price).toFixed(2).toString();
             cart.items.push({ productId, name: item.name, price: cartPrice, image: item.image, quantity: 1 });
         }
 

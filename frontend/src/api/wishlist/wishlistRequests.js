@@ -19,11 +19,16 @@ export const addToWishlist = async (productId, name, price, image) => {
   if (!productId || !name || price === undefined) {
     throw new Error("Product ID, name, and price are required.");
   }
+  // Always send price as a number for wishlist (backend expects Number)
+  let safePrice = price;
+  if (typeof safePrice === 'string') {
+    safePrice = Number(safePrice);
+  }
   try {
     const response = await apiClient.post(WISHLIST_ENDPOINTS.ADD_ITEM, {
       productId,
       name,
-      price,
+      price: safePrice,
       image
     });
     return response.data;
@@ -45,6 +50,9 @@ export const removeFromWishlist = async (productId) => {
 export const moveWishlistToCart = async (productId) => {
   if (!productId) throw new Error("Product ID is required.");
   try {
+    // No price in request body, but backend will use wishlist item's price.
+    // If you ever need to send price, ensure it's a string with two decimals:
+    // price: Number(price).toFixed(2)
     const response = await apiClient.put(`${WISHLIST_ENDPOINTS.MOVE_TO_CART}/${productId}`);
     return response.data;
   } catch (error) {

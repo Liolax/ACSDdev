@@ -42,7 +42,9 @@ const MySales = () => {
                         {item.name} (x{item.quantity})
                       </p>
                       <p className="order-card__product-price">
-                        €{item.price.toFixed(2)}
+                        €{typeof item.price === 'number'
+                            ? item.price.toFixed(2)
+                            : Number(item.price).toFixed(2)}
                       </p>
                       {order.status === 'Delivered' && item.feedback?.given && (
                         <div className="order-card__feedback">

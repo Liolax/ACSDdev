@@ -1,5 +1,4 @@
 import React from 'react';
-// Assuming getImageUrl is also needed here for cart item images
 import getImageUrl from '../../../helpers/getImageUrl'; // Import getImageUrl
 
 // Helper: ensures we get a proper string id even if productId is populated (an object)
@@ -43,7 +42,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                             {/* Product Image */}
                             <img
                                 // Use getImageUrl helper for dynamic image source
-                                src={item.image ? getImageUrl(item.image) : '/assets/images/default-product.png'}
+                                src={getImageUrl(item.image)}
                                 alt={item.name}
                                 className="buyer-dashboard__cart-image"
                                 // Fallback for image loading errors
@@ -88,7 +87,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                 {/* Item Price */}
                                 <span className="buyer-dashboard__cart-price">
                                     {/* Format price to 2 decimal places */}
-                                    ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}
+                                    ${typeof item.price === 'number' ? item.price.toFixed(2) : Number(item.price).toFixed(2)}
                                 </span>
                             </div>
                             {/* Remove Button */}

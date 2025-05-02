@@ -196,7 +196,9 @@ return (
                     <span key={idx}>{item.name}{idx < order.items.length - 1 ? ', ' : ''}</span>
                   ))}
                 </p>
-                <p className="order-card__total">Total: ${order.total}</p>
+                <p className="order-card__total">
+                  Total: ${typeof order.total === 'number' ? order.total.toFixed(2) : Number(order.total || 0).toFixed(2)}
+                </p>
                 <p className="order-card__status">Status: {order.status}</p>
                 {order.status === 'delivered' && (
                   <Button
@@ -236,12 +238,13 @@ return (
       <h2 className="buyer-dashboard__header">Cart</h2>
       {cart.items.length > 0 ? (
         <CartSection
-          cart={cart}
-          handleRemoveCart={handleRemoveCart}
-          handleUpdateQuantity={handleUpdateQuantity}
-          visibleItems={cartVisible}
-          handleSeeLess={handleCartSeeLess}
-          handlePay={handlePay}
+          items={cart.items}
+          visibleCount={cartVisible}
+          onSeeLess={handleCartSeeLess}
+          onSeeMore={() => setCartVisible(cartVisible + 5)}
+          onRemove={handleRemoveCart}
+          onUpdateQuantity={handleUpdateQuantity}
+          onPay={handlePay}
         />
       ) : (
         <p className="buyer-dashboard__empty">

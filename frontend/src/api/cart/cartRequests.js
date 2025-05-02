@@ -15,15 +15,22 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
   if (!name || price === undefined) {
     throw new Error("Product name and price are required.");
   }
+  // Ensure price is always a string with two decimals for Decimal128 compatibility
+  let safePrice = price;
+  if (typeof safePrice === 'number') {
+    safePrice = safePrice.toFixed(2);
+  } else if (typeof safePrice === 'string') {
+    safePrice = Number(safePrice).toFixed(2);
+  }
   try {
-    const response = await apiClient.post('/cart/add-item', {
+    const res = await apiClient.post('/cart/add-item', {
       productId,
       quantity,
       name,
-      price,
+      price: safePrice,
       image
     });
-    return response.data;
+    return res.data.cart;
   } catch (error) {
     handleApiError(error);
   }
@@ -34,8 +41,8 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
  */
 export const getCart = async () => {
   try {
-    const response = await apiClient.get(CART_ENDPOINTS.GET_CART);
-    return response.data;
+    const res = await apiClient.get(CART_ENDPOINTS.GET_CART);
+    return res.data.cart || { items: [] };
   } catch (error) {
     handleApiError(error);
   }
@@ -49,8 +56,8 @@ export const updateCartItemQuantity = async (productId, quantity) => {
     throw new Error("Product ID and valid quantity are required.");
   }
   try {
-    const response = await apiClient.put(`/cart/update-item/${productId}`, { quantity });
-    return response.data;
+    const res = await apiClient.put(`/cart/update-item/${productId}`, { quantity });
+    return res.data.cart;
   } catch (error) {
     handleApiError(error);
   }
@@ -62,8 +69,8 @@ export const updateCartItemQuantity = async (productId, quantity) => {
 export const removeFromCart = async (productId) => {
   if (!productId) throw new Error("Product ID is required.");
   try {
-    const response = await apiClient.delete(`/cart/remove-item/${productId}`);
-    return response.data;
+    const res = await apiClient.delete(`/cart/remove-item/${productId}`);
+    return res.data.cart;
   } catch (error) {
     handleApiError(error);
   }
@@ -74,8 +81,8 @@ export const removeFromCart = async (productId) => {
  */
 export const clearCart = async () => {
   try {
-    const response = await apiClient.delete('/cart/clear');
-    return response.data;
+    const res = await apiClient.delete('/cart/clear');
+    return res.data.cart;
   } catch (error) {
     handleApiError(error);
   }

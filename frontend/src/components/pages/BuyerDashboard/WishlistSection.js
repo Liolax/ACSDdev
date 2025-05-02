@@ -28,7 +28,7 @@ const WishlistSection = ({ wishlist = [], handleRemoveWishlist, handleMoveToCart
                     return (
                         <li key={`${prodId}-${idx}`} className="buyer-dashboard__wishlist-item">
                             <img
-                                src={item.image ? getImageUrl(item.image) : '/assets/images/default-product.png'}
+                                src={getImageUrl(item.image)}
                                 alt={item.name}
                                 className="buyer-dashboard__wishlist-image"
                                 onError={(e) => {
@@ -39,7 +39,7 @@ const WishlistSection = ({ wishlist = [], handleRemoveWishlist, handleMoveToCart
                             <div className="buyer-dashboard__wishlist-item-details">
                                 <span className="buyer-dashboard__wishlist-item-info">{item.name}</span>
                                 <span className="buyer-dashboard__wishlist-price">
-                                    €{typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}
+                                    €{typeof item.price === 'number' ? item.price.toFixed(2) : Number(item.price).toFixed(2)}
                                 </span>
                             </div>
                             <div className="buyer-dashboard__wishlist-actions">

@@ -23,19 +23,23 @@ export const addToCart = async (req, res) => {
         const user = req.user; // Ensure the user is authenticated
         let { productId, quantity, name, price, image } = req.body;
 
-        // Convert quantity and price to numbers.
+        // Convert quantity to number
         quantity = Number(quantity);
-        price = Number(price); // Ensure price is a number
+
+        // Ensure price is a string with two decimals (for Decimal128)
+        price = Number(price);
+        if (isNaN(price)) {
+            return res.status(400).json({ success: false, error: 'Invalid price format' });
+        }
+        // Convert to string before saving to model (Decimal128 expects string, not number)
+        price = price.toFixed(2).toString();
 
         // Validate required fields.
-        if (!productId || !quantity || !name || Number.isNaN(price)) {
+        if (!productId || !quantity || !name || Number.isNaN(Number(price))) {
             return res
                 .status(400)
                 .json({ success: false, error: 'Missing or invalid product details' });
         }
-
-        // Convert price to string for Decimal128 compatibility
-        price = price.toString();
 
         // Find existing cart for the user. If none, create a new one.
         let cart = await Cart.findOne({ userId: user._id });
