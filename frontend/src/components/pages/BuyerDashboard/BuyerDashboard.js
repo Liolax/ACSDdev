@@ -28,6 +28,20 @@ const getCollageStyle = (count) => {
   return { containerSize, gridTemplateColumns };
 };
 
+const calculateTotal = (items) => {
+  if (!items || items.length === 0) return 0;
+  return items.reduce((sum, item) => {
+    const priceAsNumber = parseFloat(item.price);
+    const quantityAsNumber = Number(item.quantity);
+    if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
+      return sum + (priceAsNumber * quantityAsNumber);
+    } else {
+      console.error("Error calculating total for item:", item);
+      return sum;
+    }
+  }, 0);
+};
+
 const BuyerDashboard = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
@@ -103,11 +117,14 @@ const handleRemoveCart = (productId) => {
     .catch((err) => console.error("Error removing cart item:", err));
 };
 
-const handleUpdateQuantity = (productId, newQuantity) => {
-  updateCartItemQuantity(productId, newQuantity)
-    .then((res) => setCart(res.cart))
-    .catch((err) => console.error("Error updating cart item quantity:", err));
-};
+const handleUpdateQuantity = async (productId, newQuantity) => {
+  try {
+    const updatedCart = await updateCartItemQuantity(productId, newQuantity);
+    setCart(updatedCart);
+  } catch (err) {
+    console.error("Error updating cart item quantity:", err);
+  }
+}
 
 const handleCartSeeLess = () => setCartVisible(5);
 

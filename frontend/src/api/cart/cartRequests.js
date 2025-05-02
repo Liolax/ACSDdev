@@ -71,6 +71,7 @@ export const removeFromCart = async (productId) => {
     return res.data.cart;
   } catch (error) {
     handleApiError(error);
+    throw error;
   }
 };
 

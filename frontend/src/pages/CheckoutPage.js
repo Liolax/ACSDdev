@@ -116,7 +116,16 @@ const CheckoutPage = () => {
                 <p>Order ID: {createdOrder._id}</p>
                 <p>
                   Total: $
-                  {cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                  {cart.items.reduce((sum, item) => {
+                    const priceAsNumber = parseFloat(item.price);
+                    const quantityAsNumber = Number(item.quantity);
+                    if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
+                      return sum + priceAsNumber * quantityAsNumber;
+                    } else {
+                      console.error("Error calculating total for item:", item);
+                      return sum;
+                    }
+                  }, 0).toFixed(2)}
                 </p>
               </div>
             )}

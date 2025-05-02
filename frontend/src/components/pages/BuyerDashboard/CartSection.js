@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import getImageUrl from '../../../helpers/getImageUrl'; // Import getImageUrl
 
 // Helper: ensures we get a proper string id even if productId is populated (an object)
@@ -11,11 +11,27 @@ const getProductId = (item) => {
     return item.productId.toString();
 };
 
+const calculateTotal = (items) => {
+  if (!items || items.length === 0) return 0;
+  return items.reduce((sum, item) => {
+    const priceAsNumber = parseFloat(item.price);
+    const quantityAsNumber = Number(item.quantity);
+    if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
+      return sum + (priceAsNumber * quantityAsNumber);
+    } else {
+      console.error("Error calculating total for item:", item);
+      return sum;
+    }
+  }, 0);
+};
+
 const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUpdateQuantity, onPay }) => {
     // Normalize: if items is an object with an 'items' array, use that; otherwise assume items is an array.
     const normalizedItems = Array.isArray(items)
         ? items
         : (items && Array.isArray(items.items) ? items.items : []);
+
+    const [loadingItem, setLoadingItem] = useState(null);
 
     if (normalizedItems.length === 0) {
         return <p className="buyer-dashboard__empty">Your cart is currently empty.</p>;
@@ -25,10 +41,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
     const visibleItems = normalizedItems.slice(0, visibleCount);
 
     // Calculate the total price of items in the cart
-    const total = normalizedItems.reduce(
-        (acc, item) => acc + Number(item.price || 0) * (Number(item.quantity) || 1),
-        0
-    );
+    const total = calculateTotal(normalizedItems);
 
     return (
         <div className="buyer-dashboard__cart">
@@ -37,6 +50,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                 {visibleItems.map((item, idx) => {
                     // Get the product ID using the helper function
                     const prodId = getProductId(item);
+                    const isLoading = loadingItem === prodId;
                     return (
                         <li key={`${prodId}-${idx}`} className="buyer-dashboard__cart-item">
                             {/* Product Image */}
@@ -60,12 +74,14 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                     <button
                                         key={`decrease-quantity-${idx}`}
                                         className="button quantity-button"
-                                        onClick={() => {
-                                            if (typeof onUpdateQuantity === 'function') {
-                                                onUpdateQuantity(prodId, item.quantity - 1);
+                                        onClick={async () => {
+                                            if (item.quantity > 1 && typeof onUpdateQuantity === 'function' && !isLoading) {
+                                                setLoadingItem(prodId);
+                                                await onUpdateQuantity(prodId, item.quantity - 1);
+                                                setLoadingItem(null);
                                             }
                                         }}
-                                        disabled={item.quantity <= 1} // Disable button if quantity is 1 or less
+                                        disabled={item.quantity <= 1 || isLoading} // Disable button if quantity is 1 or less
                                     >
                                         -
                                     </button>
@@ -75,30 +91,38 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                     <button
                                         key={`increase-quantity-${idx}`}
                                         className="button quantity-button"
-                                        onClick={() => {
-                                            if (typeof onUpdateQuantity === 'function') {
-                                                onUpdateQuantity(prodId, item.quantity + 1);
+                                        onClick={async () => {
+                                            if (typeof onUpdateQuantity === 'function' && !isLoading) {
+                                                setLoadingItem(prodId);
+                                                await onUpdateQuantity(prodId, item.quantity + 1);
+                                                setLoadingItem(null);
                                             }
                                         }}
+                                        disabled={isLoading}
                                     >
                                         +
                                     </button>
+                                    {/* Optionally, show a spinner if isLoading */}
+                                    {/* {isLoading && <span className="cart-spinner">...</span>} */}
                                 </div>
                                 {/* Item Price */}
                                 <span className="buyer-dashboard__cart-price">
                                     {/* Format price to 2 decimal places */}
-                                    ${typeof item.price === 'number' ? item.price.toFixed(2) : Number(item.price).toFixed(2)}
+                                    ${parseFloat(item.price).toFixed(2)}
                                 </span>
                             </div>
                             {/* Remove Button */}
                             <button
                                 key={`remove-button-${idx}`}
-                                onClick={() => {
-                                    if (typeof onRemove === 'function') {
-                                        onRemove(prodId);
+                                onClick={async () => {
+                                    if (typeof onRemove === 'function' && !isLoading) {
+                                        setLoadingItem(prodId);
+                                        await onRemove(prodId);
+                                        setLoadingItem(null);
                                     }
                                 }}
                                 className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete"
+                                disabled={isLoading}
                             >
                                 Delete
                             </button>
