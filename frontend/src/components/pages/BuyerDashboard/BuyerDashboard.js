@@ -7,7 +7,7 @@ import FeedbackPopup from '../../ui/FeedbackPopup';
 import Button from '../../ui/Button';
 import '../../../assets/styles/pages/_buyer-dashboard.scss';
 import getImageUrl from '../../../helpers/getImageUrl';
-import { moveWishlistItemToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
+import { moveWishlistToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
 import { updateCartItemQuantity, removeFromCart as removeFromCartApi } from '../../../api/cart/cartRequests';
 import { submitFeedback } from '../../../api/feedback/feedbackRequests';
 
@@ -31,7 +31,7 @@ const getCollageStyle = (count) => {
 const BuyerDashboard = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  const [wishlist, setWishlist] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
   const [cart, setCart] = useState({ items: [] });
   const [wishlistVisible, setWishlistVisible] = useState(5);
   const [cartVisible, setCartVisible] = useState(5);
@@ -45,11 +45,11 @@ useEffect(() => {
   axios
     .get('/api/wishlist')
     .then((res) => {
-      setWishlist(res.data.wishlist);
+      setWishlist(res.data.wishlist?.items || []);
     })
     .catch((err) => {
       console.error("Error fetching wishlist:", err);
-      setWishlist(null);
+      setWishlist([]);
     });
 
   axios
@@ -81,14 +81,14 @@ useEffect(() => {
 // Wishlist Handlers
 const handleRemoveWishlist = (productId) => {
   removeFromWishlist(productId)
-    .then((res) => setWishlist(res.wishlist))
+    .then((res) => setWishlist(res.wishlist?.items || []))
     .catch((err) => console.error("Error removing wishlist item:", err));
 };
 
 const handleMoveToCart = (productId) => {
-  moveWishlistItemToCart(productId)
+  moveWishlistToCart(productId)
     .then((res) => {
-      setWishlist(res.wishlist);
+      setWishlist(res.wishlist?.items || []);
       setCart(res.cart);
     })
     .catch((err) => console.error("Error moving item to cart:", err));

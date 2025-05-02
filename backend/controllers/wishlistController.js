@@ -85,7 +85,12 @@ export const moveWishlistToCart = async (req, res) => {
         }
 
         if (!cart.items.some(cartItem => cartItem.productId.toString() === productId)) {
-            cart.items.push({ productId, name: item.name, price: item.price, image: item.image, quantity: 1 });
+            // Ensure price is a string for Decimal128 compatibility
+            let cartPrice = item.price;
+            if (typeof cartPrice === 'number') {
+                cartPrice = cartPrice.toString();
+            }
+            cart.items.push({ productId, name: item.name, price: cartPrice, image: item.image, quantity: 1 });
         }
 
         await cart.save();

@@ -16,7 +16,7 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
     throw new Error("Product name and price are required.");
   }
   try {
-    const response = await apiClient.post(CART_ENDPOINTS.ADD_ITEM, {
+    const response = await apiClient.post('/cart/add-item', {
       productId,
       quantity,
       name,
@@ -49,8 +49,7 @@ export const updateCartItemQuantity = async (productId, quantity) => {
     throw new Error("Product ID and valid quantity are required.");
   }
   try {
-    // Use the productId in the URL path for the PUT request
-    const response = await apiClient.put(`${CART_ENDPOINTS.UPDATE_ITEM}/${productId}`, { quantity });
+    const response = await apiClient.put(`/cart/update-item/${productId}`, { quantity });
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -63,8 +62,7 @@ export const updateCartItemQuantity = async (productId, quantity) => {
 export const removeFromCart = async (productId) => {
   if (!productId) throw new Error("Product ID is required.");
   try {
-    // Use the productId in the URL path for the DELETE request
-    const response = await apiClient.delete(`${CART_ENDPOINTS.REMOVE_ITEM}/${productId}`);
+    const response = await apiClient.delete(`/cart/remove-item/${productId}`);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -76,8 +74,7 @@ export const removeFromCart = async (productId) => {
  */
 export const clearCart = async () => {
   try {
-    // DELETE request to the base cart endpoint
-    const response = await apiClient.delete(CART_ENDPOINTS.CLEAR_CART);
+    const response = await apiClient.delete('/cart/clear');
     return response.data;
   } catch (error) {
     handleApiError(error);

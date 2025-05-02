@@ -4,9 +4,11 @@ import Cart from '../models/CartModel.js';
 export const getCart = async (req, res) => {
     try {
         const user = req.user; // Using our authenticated user
-        const cart = await Cart.findOne({ userId: user._id }).populate('items.productId');
+        let cart = await Cart.findOne({ userId: user._id }).populate('items.productId');
         if (!cart) {
-            return res.status(404).json({ success: false, message: 'Cart not found' });
+            // Auto-create an empty cart for the user if not found
+            cart = new Cart({ userId: user._id, items: [] });
+            await cart.save();
         }
         res.status(200).json({ success: true, cart });
     } catch (error) {
@@ -23,7 +25,7 @@ export const addToCart = async (req, res) => {
 
         // Convert quantity and price to numbers.
         quantity = Number(quantity);
-        price = Number(price);
+        price = Number(price); // Ensure price is a number
 
         // Validate required fields.
         if (!productId || !quantity || !name || Number.isNaN(price)) {
@@ -31,6 +33,9 @@ export const addToCart = async (req, res) => {
                 .status(400)
                 .json({ success: false, error: 'Missing or invalid product details' });
         }
+
+        // Convert price to string for Decimal128 compatibility
+        price = price.toString();
 
         // Find existing cart for the user. If none, create a new one.
         let cart = await Cart.findOne({ userId: user._id });

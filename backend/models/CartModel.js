@@ -11,7 +11,7 @@ const cartItemSchema = new mongoose.Schema({
     validate: {
       validator: (value) => {
         const decimal = new Decimal(value);
-        return decimal.isFinite() && decimal.isInteger();
+        return decimal.isFinite(); // Allow any finite decimal, not just integers
       },
       message: 'Price must be a valid decimal value'
     }

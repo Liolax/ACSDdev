@@ -21,12 +21,11 @@ const getImageUrl = (imagePath) => {
     : backendUrl;
   // If the imagePath starts with "uploads/"
   if (normalizedPath.startsWith('uploads/')) {
-    // Use the API endpoint for images
-    const filename = normalizedPath.split('/').pop();
-    return `${cleanBackendUrl}/api/products/images/${filename}`;
+    // Use the backend static file serving
+    return `${cleanBackendUrl}/${normalizedPath}`;
   }
-  // Otherwise, assume it belongs in the uploads folder
-  return `${cleanBackendUrl}/api/products/images/${normalizedPath}`;
+  // Fallback to default image
+  return defaultImage;
 };
 
 export default getImageUrl;
