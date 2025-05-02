@@ -5,43 +5,52 @@ import Cart from '../models/CartModel.js';
 export const createOrder = async (req, res) => {
   try {
     console.log('--- Order Creation Start ---');
-    const userId = req.user._id;
+    const user = req.user._id;
     const { shippingInfo, paymentInfo } = req.body;
 
     // Always fetch cart from DB for security
-    const cart = await Cart.findOne({ userId }).lean();
+    const cart = await Cart.findOne({ userId: user }).lean();
     if (!cart || !cart.items || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
     }
 
-    // Calculate total
-    let totalAmount = 0;
+    // Calculate prices
+    let itemsPrice = 0;
     const orderItems = cart.items.map(item => {
-      // Accept both Decimal128 and number/string
       let priceNum = item.price?.$numberDecimal
         ? parseFloat(item.price.$numberDecimal)
         : Number(item.price);
       if (isNaN(priceNum)) priceNum = 0;
-      const quantity = Number(item.quantity) || 1;
-      totalAmount += priceNum * quantity;
+      const qty = Number(item.quantity) || 1;
+      itemsPrice += priceNum * qty;
       return {
         productId: item.productId,
         name: item.name,
         price: mongoose.Types.Decimal128.fromString(priceNum.toFixed(2)),
-        quantity,
+        qty,
         image: item.image,
       };
     });
 
+    // Example: 10% tax and flat 5 shipping for demo
+    const taxPrice = itemsPrice * 0.1;
+    const shippingPrice = 5;
+    const totalPrice = itemsPrice + taxPrice + shippingPrice;
+
     const orderData = {
-      userId,
+      user,
       cartId: cart._id,
-      items: orderItems,
-      shippingInfo,
-      totalAmount: mongoose.Types.Decimal128.fromString(totalAmount.toFixed(2)),
-      status: 'Pending',
-      paymentStatus: 'Pending',
+      orderItems,
+      shippingAddress: shippingInfo,
       paymentInfo: paymentInfo || {},
+      itemsPrice: mongoose.Types.Decimal128.fromString(itemsPrice.toFixed(2)),
+      taxPrice: mongoose.Types.Decimal128.fromString(taxPrice.toFixed(2)),
+      shippingPrice: mongoose.Types.Decimal128.fromString(shippingPrice.toFixed(2)),
+      totalPrice: mongoose.Types.Decimal128.fromString(totalPrice.toFixed(2)),
+      isPaid: false,
+      isDelivered: false,
+      status: 'Pending',
+      paymentStatus: 'Pending'
     };
 
     console.log("Data being passed to new Order():", JSON.stringify(orderData, null, 2));

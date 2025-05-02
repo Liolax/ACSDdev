@@ -1,44 +1,54 @@
 import mongoose from 'mongoose';
-import Decimal from 'decimal.js';
 
 const orderSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     cartId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
-    items: [
+    orderItems: [
       {
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
         name: { type: String, required: true },
         price: {
           type: mongoose.Schema.Types.Decimal128,
-          required: true,
-          validate: {
-            validator: (value) => {
-              const decimal = new Decimal(value);
-              return decimal.isFinite(); // Allow any finite decimal, not just integers
-            },
-            message: 'Price must be a valid decimal value'
-          }
+          required: true
         },
-        quantity: { type: Number, required: true },
+        qty: { type: Number, required: true },
         image: String,
       },
     ],
-    shippingInfo: { type: Object, required: true },
-    paymentInfo: { type: Object }, // Set after payment simulation
-    totalAmount: {
+    shippingAddress: {
+      fullName: { type: String, required: true },
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
+    },
+    paymentInfo: { type: Object },
+    itemsPrice: {
       type: mongoose.Schema.Types.Decimal128,
       required: true,
-      validate: {
-        validator: (value) => {
-          const decimal = new Decimal(value);
-          return decimal.isFinite(); // Allow any finite decimal, not just integers
-        },
-        message: 'Total amount must be a valid decimal value'
-      }
+      default: 0.0
     },
-    status: { type: String, default: 'Pending' }, // "Pending", "Processing", "Shipped", "Delivered"
-    paymentStatus: { type: String, default: 'Pending' } // "Pending", "Paid"
+    taxPrice: {
+      type: mongoose.Schema.Types.Decimal128,
+      required: true,
+      default: 0.0
+    },
+    shippingPrice: {
+      type: mongoose.Schema.Types.Decimal128,
+      required: true,
+      default: 0.0
+    },
+    totalPrice: {
+      type: mongoose.Schema.Types.Decimal128,
+      required: true
+    },
+    isPaid: { type: Boolean, required: true, default: false },
+    paidAt: { type: Date },
+    isDelivered: { type: Boolean, required: true, default: false },
+    deliveredAt: { type: Date },
+    status: { type: String, default: 'Pending', required: true },
+    paymentStatus: { type: String, default: 'Pending', required: true }
   },
   { timestamps: true }
 );
