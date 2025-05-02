@@ -7,9 +7,8 @@ const DUMMY_SELLER_ID = "60b8d2958b26c41f5c7ceee2";
 
 export default function auth(req, res, next) {
   // Add check for JWT_SECRET availability if not in dummy mode
-  if (!JWT_SECRET && !(process.env.NODE_ENV === 'development')) { // Allow missing secret only in dev for dummy users
+  if (!JWT_SECRET && !(process.env.NODE_ENV === 'development')) {
       console.error('JWT_SECRET is not defined in environment variables. Required for token validation.');
-      // Decide how to handle: maybe block requests or only allow dummy users
       // For now, let it proceed to potentially use dummy users if applicable
   }
 
@@ -18,7 +17,7 @@ export default function auth(req, res, next) {
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.slice(7);
     try {
-      const decoded = jwt.verify(token, JWT_SECRET); // This will throw if JWT_SECRET is undefined
+      const decoded = jwt.verify(token, JWT_SECRET);
       req.user = { _id: decoded.id, role: decoded.role };
       next();
     } catch (err) {

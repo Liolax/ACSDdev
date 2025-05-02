@@ -1,9 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
@@ -12,9 +15,10 @@ import orderRoutes from './routes/orderRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 
-dotenv.config();
-
 const app = express();
+
+// Enable trust proxy to fix express-rate-limit warning
+app.set('trust proxy', 1);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -75,6 +79,9 @@ app.use(
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API Routes
 app.use('/api/products', productRoutes);

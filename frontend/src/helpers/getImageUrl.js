@@ -9,7 +9,7 @@ const getImageUrl = (imagePath) => {
   if (!imagePath || typeof imagePath !== 'string' || imagePath.trim() === '') {
     return defaultImage;
   }
-  // Normalize backslashes to forward slashes
+  // Normalize both backslashes and forward slashes
   const normalizedPath = imagePath.replace(/\\/g, '/');
   // If already an absolute URL, return it as is
   if (/^https?:\/\//i.test(normalizedPath)) {
@@ -21,10 +21,12 @@ const getImageUrl = (imagePath) => {
     : backendUrl;
   // If the imagePath starts with "uploads/"
   if (normalizedPath.startsWith('uploads/')) {
-    return `${cleanBackendUrl}/${normalizedPath}`;
+    // Use the API endpoint for images
+    const filename = normalizedPath.split('/').pop();
+    return `${cleanBackendUrl}/api/products/images/${filename}`;
   }
   // Otherwise, assume it belongs in the uploads folder
-  return `${cleanBackendUrl}/uploads/${normalizedPath}`;
+  return `${cleanBackendUrl}/api/products/images/${normalizedPath}`;
 };
 
 export default getImageUrl;

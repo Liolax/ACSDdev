@@ -46,29 +46,25 @@ const getImageUrl = (image) => {
 };
 
 const SellerDashboard = () => {
-  // Order Management State
   const [orders, setOrders] = useState([]);
-  const [loadingOrders, setLoadingOrders] = useState(true);
-  const [orderError, setOrderError] = useState('');
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [orderError, setOrderError] = useState(null);
 
   useEffect(() => {
+    const fetchOrders = async () => {
+      setLoadingOrders(true);
+      try {
+        const res = await axios.get('/api/orders');
+        const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+        setLoadingOrders(false);
+      } catch (err) {
+        setOrderError('Failed to fetch orders');
+        setLoadingOrders(false);
+      }
+    };
     fetchOrders();
   }, []);
-
-  const fetchOrders = async () => {
-    setLoadingOrders(true);
-    try {
-      const res = await axios.get('/api/orders');
-      // Extract orders array from response:
-      const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
-      // Ensure that ordersData is an array.
-      setOrders(Array.isArray(ordersData) ? ordersData : []);
-      setLoadingOrders(false);
-    } catch (err) {
-      setOrderError('Failed to load orders.');
-      setLoadingOrders(false);
-    }
-  };
 
   const handleMarkShipped = async (orderId) => {
     try {
@@ -76,11 +72,10 @@ const SellerDashboard = () => {
       await axios.patch(`/api/orders/${orderId}/ship`);
       setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'Shipped' } : o));
     } catch (err) {
-      setOrderError('Failed to update order status.');
+      setOrderError('Failed to mark as shipped');
     }
   };
 
-  // Only orders with status 'Processing' need shipping.
   // Orders to ship: only those with status "Processing" (i.e. orders that buyers have paid for)
   const ordersToShip = orders.filter(o => o.status === 'Processing');
 

@@ -54,8 +54,10 @@ export async function createProduct(req, res) {
     if (existingProduct) {
       return res.status(400).json({ error: 'Product with this name already exists.' });
     }
-    let imagePath = '';
-    if (req.file) imagePath = req.file.path;
+    let imagePath = req.file?.path;
+    if (imagePath) {
+      imagePath = imagePath.replace(/\\/g, '/'); // Normalize to forward slashes
+    }
     const newProduct = new Product({
       name,
       price: parsedPrice,
@@ -92,7 +94,7 @@ export async function updateProduct(req, res) {
       updateData.tags = req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     }
     if (req.file) {
-      updateData.image = req.file.path;
+      updateData.image = req.file.path.replace(/\\/g, '/');
       if (existingProduct.image && !existingProduct.image.startsWith('http')) {
         const oldFilePath = path.join(process.cwd(), existingProduct.image);
         await safeDeleteFile(oldFilePath);

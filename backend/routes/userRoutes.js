@@ -28,7 +28,6 @@ router.post('/register', async (req, res) => {
     const savedUser = await newUser.save();
     return res.status(201).json(savedUser);
   } catch (error) {
-    console.error("Error registering user:", error);
     return res.status(500).json({ message: 'Error registering user', error });
   }
 });
@@ -38,7 +37,6 @@ router.post('/login', async (req, res) => {
   try {
     // Add check for JWT_SECRET availability
     if (!JWT_SECRET) {
-      console.error('JWT_SECRET is not defined in environment variables.');
       return res.status(500).json({ message: 'Server configuration error.' });
     }
     const { email, password } = req.body;
@@ -56,7 +54,6 @@ router.post('/login', async (req, res) => {
     const token = sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
     return res.status(200).json({ token, user });
   } catch (error) {
-    console.error("Error logging in:", error);
     return res.status(500).json({ message: 'Error logging in', error });
   }
 });

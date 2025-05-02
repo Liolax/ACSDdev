@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import {
   fetchProducts,
   createProduct,
@@ -38,6 +39,28 @@ const upload = multer({
 });
 
 const router = Router();
+
+// Securely serve product images by filename (handles both / and \ in DB)
+router.get('/images/:filename', (req, res) => {
+  // Normalize filename to prevent path traversal and handle backslashes
+  let filename = req.params.filename.replace(/\\/g, '/');
+  // Only allow safe filenames (alphanumeric, dash, underscore, dot, extension)
+  if (!/^[a-zA-Z0-9._-]+\.(jpg|jpeg|png|gif|webp)$/i.test(filename)) {
+    return res.status(400).send('Invalid filename');
+  }
+  // Ensure the file exists in the uploads directory
+  const uploadsDir = path.resolve(process.cwd(), 'uploads');
+  const imagePath = path.resolve(uploadsDir, path.basename(filename));
+  if (!imagePath.startsWith(uploadsDir + path.sep)) {
+    return res.status(403).send('Forbidden');
+  }
+  fs.access(imagePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      return res.status(404).send('Image not found');
+    }
+    res.sendFile(imagePath);
+  });
+});
 
 router.get('/', fetchProducts);
 router.get('/:id', getProductById);
