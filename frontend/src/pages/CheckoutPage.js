@@ -72,6 +72,14 @@ const CheckoutPage = () => {
     }
   };
 
+  const getPriceNumber = (price) => {
+    if (typeof price === 'number') return price;
+    if (typeof price === 'string') return parseFloat(price);
+    if (price && typeof price === 'object' && price.$numberDecimal)
+      return parseFloat(price.$numberDecimal);
+    return NaN;
+  }
+
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -117,7 +125,7 @@ const CheckoutPage = () => {
                 <p>
                   Total: $
                   {cart.items.reduce((sum, item) => {
-                    const priceAsNumber = parseFloat(item.price);
+                    const priceAsNumber = getPriceNumber(item.price);
                     const quantityAsNumber = Number(item.quantity);
                     if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
                       return sum + priceAsNumber * quantityAsNumber;

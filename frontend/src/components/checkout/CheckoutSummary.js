@@ -1,9 +1,17 @@
 import React from 'react';
 
+const getPriceNumber = (price) => {
+  if (typeof price === 'number') return price;
+  if (typeof price === 'string') return parseFloat(price);
+  if (price && typeof price === 'object' && price.$numberDecimal)
+    return parseFloat(price.$numberDecimal);
+  return NaN;
+};
+
 const calculateTotal = (items) => {
   if (!items || items.length === 0) return 0;
   return items.reduce((sum, item) => {
-    const priceAsNumber = parseFloat(item.price);
+    const priceAsNumber = getPriceNumber(item.price);
     const quantityAsNumber = Number(item.quantity);
     if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
       return sum + (priceAsNumber * quantityAsNumber);
@@ -25,7 +33,7 @@ const CheckoutSummary = ({ cart }) => {
         {cart.items.map(item => (
           <li key={item.productId}>
             {item.name} &times; {item.quantity} - $
-            {(parseFloat(item.price) * Number(item.quantity)).toFixed(2)}
+            {(getPriceNumber(item.price) * Number(item.quantity)).toFixed(2)}
           </li>
         ))}
       </ul>

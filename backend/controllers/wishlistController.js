@@ -87,10 +87,14 @@ export const moveWishlistToCart = async (req, res) => {
             cart = new Cart({ userId: user._id, items: [] });
         }
 
-        if (!cart.items.some(cartItem => cartItem.productId.toString() === productId)) {
-            // Convert price to simple string for Decimal128
+        const cartItemIndex = cart.items.findIndex(cartItem => cartItem.productId.toString() === productId);
+        if (cartItemIndex === -1) {
+            // Not in cart, add as new item
             let cartPrice = Number(item.price).toString();
             cart.items.push({ productId, name: item.name, price: cartPrice, image: item.image, quantity: 1 });
+        } else {
+            // Already in cart, increment quantity
+            cart.items[cartItemIndex].quantity += 1;
         }
 
         await cart.save();

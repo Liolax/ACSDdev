@@ -11,10 +11,18 @@ const getProductId = (item) => {
     return item.productId.toString();
 };
 
+const getPriceNumber = (price) => {
+  if (typeof price === 'number') return price;
+  if (typeof price === 'string') return parseFloat(price);
+  if (price && typeof price === 'object' && price.$numberDecimal)
+    return parseFloat(price.$numberDecimal);
+  return NaN;
+};
+
 const calculateTotal = (items) => {
   if (!items || items.length === 0) return 0;
   return items.reduce((sum, item) => {
-    const priceAsNumber = parseFloat(item.price);
+    const priceAsNumber = getPriceNumber(item.price);
     const quantityAsNumber = Number(item.quantity);
     if (!isNaN(priceAsNumber) && !isNaN(quantityAsNumber)) {
       return sum + (priceAsNumber * quantityAsNumber);
@@ -107,8 +115,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                 </div>
                                 {/* Item Price */}
                                 <span className="buyer-dashboard__cart-price">
-                                    {/* Format price to 2 decimal places */}
-                                    ${parseFloat(item.price).toFixed(2)}
+                                    ${getPriceNumber(item.price).toFixed(2)}
                                 </span>
                             </div>
                             {/* Remove Button */}

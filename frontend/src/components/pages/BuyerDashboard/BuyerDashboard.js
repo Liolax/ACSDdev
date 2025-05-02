@@ -111,10 +111,13 @@ const handleMoveToCart = (productId) => {
 const handleWishlistSeeLess = () => setWishlistVisible(5);
 
 // Cart Handlers
-const handleRemoveCart = (productId) => {
-  removeFromCartApi(productId)
-    .then((res) => setCart(res.cart))
-    .catch((err) => console.error("Error removing cart item:", err));
+const handleRemoveCart = async (productId) => {
+  try {
+    const updatedCart = await removeFromCartApi(productId);
+    setCart(updatedCart);
+  } catch (err) {
+    console.error("Error removing cart item:", err);
+  }
 };
 
 const handleUpdateQuantity = async (productId, newQuantity) => {
