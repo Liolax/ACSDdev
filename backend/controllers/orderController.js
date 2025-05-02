@@ -1,5 +1,7 @@
+
 import mongoose from 'mongoose';
 import Order from '../models/OrderModel.js';
+import Cart from '../models/CartModel.js'; // Add this import
 
 /**
  * Creates an order from cart items and shipping details (called during checkout).
@@ -7,29 +9,51 @@ import Order from '../models/OrderModel.js';
  */
 export const createOrder = async (req, res) => {
   try {
+    // --- Add debug logs ---
+    console.log('--- Order Creation Start ---');
+    console.log('User ID from middleware:', req.user?._id);
+    console.log('User Role from middleware:', req.user?.role);
+
     const userId = req.user._id; // Set by auth middleware
     const { cartItems, shippingInfo, paymentInfo, cartId } = req.body;
+
+    console.log('User creating order:', userId);
+    console.log('cartId from request:', cartId);
+
+    let itemsToOrder = cartItems;
+    // If cartItems is missing or empty, fetch from DB as fallback
+    if (!itemsToOrder || !Array.isArray(itemsToOrder) || itemsToOrder.length === 0) {
+      const cart = await Cart.findOne({ userId }).lean();
+      console.log('Cart fetched in orderController:', JSON.stringify(cart));
+      if (cart && cart.items && cart.items.length > 0) {
+        console.log('Cart has items, proceeding to create order.');
+      } else {
+        console.error('Cart is empty or null in orderController. Throwing error.');
+        return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
+      }
+      itemsToOrder = cart.items;
+    }
 
     if (!shippingInfo || Object.keys(shippingInfo).length === 0) {
       return res.status(400).json({ message: 'Shipping information is required.' });
     }
-    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+    if (!itemsToOrder || !Array.isArray(itemsToOrder) || itemsToOrder.length === 0) {
       return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
     }
 
     // Calculate total amount
-    const totalAmount = cartItems.reduce(
+    const totalAmount = itemsToOrder.reduce(
       (sum, item) => sum + Number(item.price) * Number(item.quantity),
       0
     );
 
     // Construct order items. Expect each cart item is an object containing product details.
-    const orderItems = cartItems.map(item => ({
-      productId: item.product._id ? item.product._id : item.productId, // Allow for populated product
-      name: item.product.name ? item.product.name : item.name,
-      price: item.product.price ? item.product.price : item.price,
+    const orderItems = itemsToOrder.map(item => ({
+      productId: item.product?._id ? item.product._id : item.productId,
+      name: item.product?.name ? item.product.name : item.name,
+      price: item.product?.price ? item.product.price : item.price,
       quantity: item.quantity,
-      image: item.product.imageUrl ? item.product.imageUrl : item.image,
+      image: item.product?.imageUrl ? item.product.imageUrl : item.image,
     }));
 
     const newOrder = new Order({

@@ -22,6 +22,14 @@ const calculateTotal = (items) => {
   }, 0);
 };
 
+// Helper: ensures we get a proper string id even if productId is populated (an object)
+const getProductId = (item) => {
+  if (typeof item.productId === 'object' && item.productId !== null && item.productId._id) {
+    return item.productId._id.toString();
+  }
+  return item.productId ? item.productId.toString() : item._id?.toString() || Math.random().toString();
+};
+
 const CheckoutSummary = ({ cart }) => {
   const total = calculateTotal(cart.items);
   console.log(cart);
@@ -31,7 +39,7 @@ const CheckoutSummary = ({ cart }) => {
       <h3>Order Summary</h3>
       <ul className="checkout-summary__list">
         {cart.items.map(item => (
-          <li key={item.productId}>
+          <li key={getProductId(item)}>
             {item.name} &times; {item.quantity} - $
             {(getPriceNumber(item.price) * Number(item.quantity)).toFixed(2)}
           </li>

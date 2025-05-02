@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import apiClient from '../api/axiosConfig';
 import { createOrder, simulatePayment } from '../api/orders/ordersRequests';
 import CheckoutSummary from '../components/checkout/CheckoutSummary';
 import ShippingForm from '../components/checkout/ShippingForm';
@@ -49,7 +50,7 @@ const CheckoutPage = () => {
       if (!createdOrder) {
         const orderPayload = {
           cartId: cart._id,
-          items: cart.items,
+          cartItems: cart.items, // <-- FIXED: was 'items', now 'cartItems'
           shippingInfo,
           paymentInfo
         };

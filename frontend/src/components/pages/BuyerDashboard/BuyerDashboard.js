@@ -10,6 +10,7 @@ import getImageUrl from '../../../helpers/getImageUrl';
 import { moveWishlistToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
 import { updateCartItemQuantity, removeFromCart as removeFromCartApi } from '../../../api/cart/cartRequests';
 import { submitFeedback } from '../../../api/feedback/feedbackRequests';
+import { markDelivered } from '../../../api/orders/ordersRequests';
 
 // Helper function to determine collage style based on item count
 const getCollageStyle = (count) => {
@@ -156,6 +157,20 @@ const handleFeedbackDelete = (orderId) => {
   });
 };
 
+const handleMarkDelivered = async (orderId) => {
+  try {
+    await markDelivered(orderId);
+    setOrders(orders =>
+      orders.map(order =>
+        order._id === orderId ? { ...order, status: 'Delivered' } : order
+      )
+    );
+  } catch (err) {
+    // Optionally show error to user
+    console.error("Failed to mark as delivered", err);
+  }
+};
+
 // Defensive: fallback to empty array if cart or cart.items is undefined
 const cartItems = (cart && Array.isArray(cart.items)) ? cart.items : [];
 
@@ -223,11 +238,13 @@ return (
                   Total: ${typeof order.total === 'number' ? order.total.toFixed(2) : Number(order.total || 0).toFixed(2)}
                 </p>
                 <p className="order-card__status">Status: {order.status}</p>
-                {order.status === 'delivered' && (
-                  <Button
-                    className="order-card__feedback-button"
-                    onClick={() => setFeedbackOrderId(order._id)}
-                  >
+                {order.status === 'Shipped' && (
+                  <Button onClick={() => handleMarkDelivered(order._id)}>
+                    Delivered
+                  </Button>
+                )}
+                {order.status === 'Delivered' && (
+                  <Button onClick={() => setFeedbackOrderId(order._id)}>
                     Leave Feedback
                   </Button>
                 )}
