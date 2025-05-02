@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import '../../assets/styles/components/_popup.scss'; // Adjust path as needed.
-const FeedbackPopup = ({ orderId, initialFeedback = null, closePopup, onSubmitFeedback }) => {
+
+const FeedbackPopup = ({ orderId, userId, closePopup, onSubmitFeedback, initialFeedback = null }) => {
   const [rating, setRating] = useState(initialFeedback?.rating || 5);
   const [title, setTitle] = useState(initialFeedback?.title || '');
   const [comments, setComments] = useState(initialFeedback?.comments || '');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
     if (initialFeedback) {
@@ -17,7 +18,7 @@ const FeedbackPopup = ({ orderId, initialFeedback = null, closePopup, onSubmitFe
       setTitle('');
       setComments('');
     }
-    setError('');
+    setError(null);
     setSubmitted(false);
   }, [initialFeedback, orderId]);
 
@@ -25,11 +26,12 @@ const FeedbackPopup = ({ orderId, initialFeedback = null, closePopup, onSubmitFe
     e.preventDefault();
     if (!title.trim() || !comments.trim()) {
       setError('Title and comments are required.');
+      setIsValid(false);
       return;
     }
-    onSubmitFeedback({ orderId, rating, title, comments });
+    onSubmitFeedback({ order: orderId, user: userId, rating, title, comments });
     setSubmitted(true);
-    setTimeout(() => closePopup(), 1500);
+    setIsValid(true);
   };
 
   return (
@@ -75,7 +77,7 @@ const FeedbackPopup = ({ orderId, initialFeedback = null, closePopup, onSubmitFe
             {error && <div className="popup__error">{error}</div>}
             <div className="popup__actions">
               <button type="button" className="popup__button" onClick={closePopup}>Cancel</button>
-              <button type="submit" className="popup__button popup__button--primary">Submit</button>
+              <button type="submit" className="popup__button popup__button--primary" disabled={!isValid}>Submit</button>
             </div>
           </form>
         )}

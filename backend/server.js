@@ -17,8 +17,6 @@ import wishlistRoutes from './routes/wishlistRoutes.js';
 
 dotenv.config();
 
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL); // For debugging
-
 const app = express();
 app.set('trust proxy', 1);
 
@@ -55,12 +53,16 @@ mongoose.connection.on('disconnected', () => {
 
 // CORS Configuration
 const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
-if (
-  process.env.NODE_ENV === 'production' &&
-  process.env.FRONTEND_URL &&
-  process.env.FRONTEND_URL !== 'https://git.new/pathToRegexpError'
-) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
+// Simplify the condition to add FRONTEND_URL in production
+if (process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL) {
+  // Optional: Add a check to ensure it's a valid URL format if desired
+  if (process.env.FRONTEND_URL.startsWith('http')) {
+      allowedOrigins.push(process.env.FRONTEND_URL);
+  } else {
+      console.warn(`Production FRONTEND_URL is set but might be invalid: ${process.env.FRONTEND_URL}`);
+      // Decide if you want to add it anyway or throw an error
+      // allowedOrigins.push(process.env.FRONTEND_URL); // Uncomment to add even if format seems off
+  }
 }
 
 const corsOptions = {
@@ -99,10 +101,6 @@ app.use(
   express.static(uploadsPath)
 );
 
-// Favicon handling
-const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
-app.get('/favicon.ico', (req, res) => res.sendFile(faviconPath));
-
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
@@ -130,12 +128,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error("Global error handler caught:", err.stack);
   res.status(500).json({ message: err.message || 'An internal server error occurred.' });
-});
-
-app._router.stack.forEach((middleware) => {
-  if (middleware.route) {
-    console.log(middleware.route.path);
-  }
 });
 
 const PORT = process.env.PORT || 5000;

@@ -1,4 +1,3 @@
-import express from 'express';
 import { Router } from 'express';
 import User from '../models/UserModel.js';
 import { hash, compare } from 'bcryptjs';
@@ -7,8 +6,8 @@ import jwt from 'jsonwebtoken';
 const { sign } = jwt;
 const router = Router();
 
-// Use environment variable for secret key (or fallback)
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+// Read JWT_SECRET from environment variables only
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // POST /api/users/register - Register a new user
 router.post('/register', async (req, res) => {
@@ -37,6 +36,11 @@ router.post('/register', async (req, res) => {
 // POST /api/users/login - Log in a user
 router.post('/login', async (req, res) => {
   try {
+    // Add check for JWT_SECRET availability
+    if (!JWT_SECRET) {
+      console.error('JWT_SECRET is not defined in environment variables.');
+      return res.status(500).json({ message: 'Server configuration error.' });
+    }
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });

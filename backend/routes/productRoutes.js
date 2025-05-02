@@ -2,11 +2,11 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import {
-  getProducts,
-  getProductById,
+  fetchProducts,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getProductById
 } from '../controllers/productController.js';
 
 // Configure multer storage
@@ -39,7 +39,7 @@ const upload = multer({
 
 const router = Router();
 
-router.get('/', getProducts);
+router.get('/', fetchProducts);
 router.get('/:id', getProductById);
 router.post('/', upload.single('image'), createProduct);
 router.put('/:id', upload.single('image'), updateProduct);

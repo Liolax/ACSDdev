@@ -1,9 +1,21 @@
 import mongoose from 'mongoose';
+import Decimal from 'decimal.js';
 
 const cartItemSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
   name: { type: String, required: true },
-  price: { type: Number, required: true, min: 0 },
+  price: {
+    type: mongoose.Schema.Types.Decimal128,
+    required: true,
+    min: 0,
+    validate: {
+      validator: (value) => {
+        const decimal = new Decimal(value);
+        return decimal.isFinite() && decimal.isInteger();
+      },
+      message: 'Price must be a valid decimal value'
+    }
+  },
   quantity: {
     type: Number,
     default: 1,

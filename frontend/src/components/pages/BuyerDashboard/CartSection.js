@@ -12,7 +12,6 @@ const getProductId = (item) => {
     return item.productId.toString();
 };
 
-
 const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUpdateQuantity, onPay }) => {
     // Normalize: if items is an object with an 'items' array, use that; otherwise assume items is an array.
     const normalizedItems = Array.isArray(items)
@@ -60,8 +59,13 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                 <div className="buyer-dashboard__quantity-controls">
                                     {/* Decrease Quantity Button */}
                                     <button
+                                        key={`decrease-quantity-${idx}`}
                                         className="button quantity-button"
-                                        onClick={() => onUpdateQuantity(prodId, item.quantity - 1)} // Call onUpdateQuantity with product ID and decreased quantity
+                                        onClick={() => {
+                                            if (typeof onUpdateQuantity === 'function') {
+                                                onUpdateQuantity(prodId, item.quantity - 1);
+                                            }
+                                        }}
                                         disabled={item.quantity <= 1} // Disable button if quantity is 1 or less
                                     >
                                         -
@@ -70,8 +74,13 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                     <span className="quantity-display">{item.quantity}</span>
                                     {/* Increase Quantity Button */}
                                     <button
+                                        key={`increase-quantity-${idx}`}
                                         className="button quantity-button"
-                                        onClick={() => onUpdateQuantity(prodId, item.quantity + 1)} // Call onUpdateQuantity with product ID and increased quantity
+                                        onClick={() => {
+                                            if (typeof onUpdateQuantity === 'function') {
+                                                onUpdateQuantity(prodId, item.quantity + 1);
+                                            }
+                                        }}
                                     >
                                         +
                                     </button>
@@ -84,7 +93,12 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                             </div>
                             {/* Remove Button */}
                             <button
-                                onClick={() => onRemove(prodId)}
+                                key={`remove-button-${idx}`}
+                                onClick={() => {
+                                    if (typeof onRemove === 'function') {
+                                        onRemove(prodId);
+                                    }
+                                }}
                                 className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete"
                             >
                                 Delete
@@ -98,7 +112,12 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                 {/* Show See Less button if more than 5 items are visible and onSeeLess is provided */}
                 {visibleCount > 5 && onSeeLess && (
                     <button
-                        onClick={onSeeLess}
+                        key="see-less-button"
+                        onClick={() => {
+                            if (typeof onSeeLess === 'function') {
+                                onSeeLess();
+                            }
+                        }}
                         className="button buyer-dashboard__button--sm see-more-btn"
                     >
                         See Less...
@@ -107,7 +126,12 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                 {/* Show See More button if there are more items than currently visible */}
                 {visibleCount < normalizedItems.length && onSeeMore && (
                     <button
-                        onClick={onSeeMore}
+                        key="see-more-button"
+                        onClick={() => {
+                            if (typeof onSeeMore === 'function') {
+                                onSeeMore();
+                            }
+                        }}
                         className="button buyer-dashboard__button--sm see-more-btn"
                     >
                         See More...
@@ -119,7 +143,15 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                 <p>
                     Total: <span className="buyer-dashboard__cart-total">${total.toFixed(2)}</span>
                 </p>
-                <button onClick={onPay} className="button buyer-dashboard__pay-button">
+                <button
+                    key="pay-button"
+                    onClick={() => {
+                        if (typeof onPay === 'function') {
+                            onPay();
+                        }
+                    }}
+                    className="button buyer-dashboard__pay-button"
+                >
                     Pay
                 </button>
             </div>

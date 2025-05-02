@@ -6,6 +6,8 @@
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
       "@shared/*": ["components/shared/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types"],
+    "moduleResolution": "node"
   }
 }

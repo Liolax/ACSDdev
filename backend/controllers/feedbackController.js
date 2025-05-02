@@ -1,32 +1,28 @@
 import Feedback from '../models/FeedbackModel.js';
 
-// Controller to handle submitting user feedback
-export async function submitFeedback(req, res) {
+// GET /api/feedback - Retrieve all feedback entries
+export async function getFeedbacks(req, res) {
   try {
-    const { name, email, message } = req.body;
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Name, email, and message are required.' });
-    }
-
-    const newFeedback = new Feedback({ name, email, message });
-    const savedFeedback = await newFeedback.save();
-
-    res.status(201).json({ success: true, feedback: savedFeedback });
+    const feedbacks = await Feedback.find()
+      .populate('user', 'name email')
+      .populate('order', '_id');
+    res.status(200).json({ feedbacks });
   } catch (error) {
-    console.error('Error submitting feedback:', error);
-    res.status(500).json({ error: 'An error occurred while submitting feedback.' });
+    res.status(500).json({ error: 'Failed to fetch feedbacks.' });
   }
 }
 
-// Controller to retrieve all feedbacks
-export async function getFeedbacks(req, res) {
+// POST /api/feedback/create - Submit new feedback
+export async function submitFeedback(req, res) {
   try {
-    const feedbacks = await Feedback.find().sort({ createdAt: -1 }); // Retrieve feedback sorted by newest
-    res.status(200).json({ feedbacks });
+    const { user, order, rating, title, comments } = req.body;
+    if (!user || !order || !rating) {
+      return res.status(400).json({ error: 'User, order, and rating are required.' });
+    }
+    const feedback = new Feedback({ user, order, rating, title, comments });
+    await feedback.save();
+    res.status(201).json({ success: true, feedback });
   } catch (error) {
-    console.error('Error fetching feedbacks:', error);
-    res.status(500).json({ error: 'An error occurred while fetching feedbacks.' });
+    res.status(500).json({ error: 'Failed to submit feedback.' });
   }
 }

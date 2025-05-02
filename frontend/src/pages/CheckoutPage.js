@@ -24,7 +24,7 @@ const CheckoutPage = () => {
   // Fetch current cart details
   const fetchCart = async () => {
     try {
-      const response = await axios.get('/api/cart');
+      const response = await apiClient.get('/cart');
       setCart(response.data.cart || { items: [] });
     } catch (err) {
       console.error("Error fetching cart", err);
@@ -53,16 +53,16 @@ const CheckoutPage = () => {
           shippingInfo,
           paymentInfo
         };
-        orderResponse = await createOrder(orderPayload);
+        orderResponse = await apiClient.post('/orders', orderPayload);
       }
       // Use the order id (from createdOrder or the response)
-      const orderId = createdOrder ? createdOrder._id : orderResponse.order._id;
+      const orderId = createdOrder ? createdOrder._id : orderResponse.data.order._id;
       // Simulate payment (this could also invoke processPayment if needed)
-      await simulatePayment(orderId, paymentInfo);
+      await apiClient.post(`/orders/${orderId}/simulate-payment`, paymentInfo);
       
       // Save the order details if not already saved
       if (!createdOrder) {
-        setCreatedOrder(orderResponse.order);
+        setCreatedOrder(orderResponse.data.order);
       }
       
       nextStep();

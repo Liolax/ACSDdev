@@ -2,7 +2,8 @@ import User from '../models/UserModel.js';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret-key';
+// Read JWT_SECRET from environment variables only
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Register a new user
 export async function registerUser(req, res) {
@@ -39,6 +40,11 @@ export async function registerUser(req, res) {
 // Login a user
 export async function loginUser(req, res) {
   try {
+    // Add check for JWT_SECRET availability
+    if (!JWT_SECRET) {
+      console.error('JWT_SECRET is not defined in environment variables.');
+      return res.status(500).json({ error: 'Server configuration error.' });
+    }
     const { email, password } = req.body;
 
     // Validate required fields

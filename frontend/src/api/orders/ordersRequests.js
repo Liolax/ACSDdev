@@ -1,18 +1,25 @@
 import apiClient from '../axiosConfig';
 import { ORDERS_ENDPOINTS } from './ordersEndpoints';
 
+const handleApiError = (error) => {
+  console.error("API Error:", error);
+  throw new Error(error.response?.data?.message || "API request failed");
+};
+
 /**
  * Creates a new order.
- * checkoutData should include: { cartItems, shippingInfo, paymentInfo, cartId }
+ * checkoutData should include: { cartItems, shippingInfo, paymentInfo, cartId, totalAmount }
  */
 export const createOrder = async (checkoutData) => {
   try {
+    if (typeof checkoutData.totalAmount !== 'number' || checkoutData.totalAmount % 1 !== 0) {
+      throw new Error('Total amount must be a decimal value');
+    }
     const response = await apiClient.post(ORDERS_ENDPOINTS.CREATE_ORDER, checkoutData);
     // Expect response in shape { order: ... }
     return response.data;
   } catch (error) {
-    console.error("API Error creating order:", error);
-    throw new Error(error.response?.data?.message || "Failed to create order");
+    handleApiError(error);
   }
 };
 
@@ -24,12 +31,11 @@ export const createOrder = async (checkoutData) => {
 export const simulatePayment = async (orderId, paymentDetails) => {
   if (!orderId) throw new Error("Order ID is required for payment simulation.");
   try {
-    const url = ORDERS_ENDPOINTS.PAYMENT_SIMULATION.replace(':orderId', orderId);
+    const url = ORDERS_ENDPOINTS.PAYMENT_SIMULATION(orderId);
     const response = await apiClient.post(url, { paymentDetails });
     return response.data;
   } catch (error) {
-    console.error("API Error simulating payment:", error);
-    throw new Error(error.response?.data?.message || "Payment simulation failed");
+    handleApiError(error);
   }
 };
 
@@ -41,8 +47,7 @@ export const getMyPurchases = async () => {
     const response = await apiClient.get(ORDERS_ENDPOINTS.GET_MY_PURCHASES);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
-    console.error("API Error fetching purchases:", error);
-    throw new Error(error.response?.data?.message || "Failed to fetch your purchases");
+    handleApiError(error);
   }
 };
 
@@ -54,8 +59,7 @@ export const getMySales = async () => {
     const response = await apiClient.get(ORDERS_ENDPOINTS.GET_MY_SALES);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
-    console.error("API Error fetching sales:", error);
-    throw new Error(error.response?.data?.message || "Failed to fetch your sales");
+    handleApiError(error);
   }
 };
 
@@ -66,12 +70,11 @@ export const getMySales = async () => {
 export const markShipped = async (orderId) => {
   if (!orderId) throw new Error("Order ID is required.");
   try {
-    const url = ORDERS_ENDPOINTS.MARK_SHIPPED.replace(':orderId', orderId);
+    const url = ORDERS_ENDPOINTS.MARK_SHIPPED(orderId);
     const response = await apiClient.put(url);
     return response.data;
   } catch (error) {
-    console.error("API Error marking order as shipped:", error);
-    throw new Error(error.response?.data?.message || "Failed to mark order as shipped");
+    handleApiError(error);
   }
 };
 
@@ -82,11 +85,10 @@ export const markShipped = async (orderId) => {
 export const markDelivered = async (orderId) => {
   if (!orderId) throw new Error("Order ID is required.");
   try {
-    const url = ORDERS_ENDPOINTS.MARK_DELIVERED.replace(':orderId', orderId);
+    const url = ORDERS_ENDPOINTS.MARK_DELIVERED(orderId);
     const response = await apiClient.put(url);
     return response.data;
   } catch (error) {
-    console.error("API Error marking order as delivered:", error);
-    throw new Error(error.response?.data?.message || "Failed to mark order as delivered");
+    handleApiError(error);
   }
 };

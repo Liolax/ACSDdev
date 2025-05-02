@@ -58,8 +58,9 @@ export const removeFromWishlist = async (productId) => {
 export const moveWishlistItemToCart = async (productId) => {
     if (!productId) throw new Error("Product ID is required.");
     try {
-        // Note: The endpoint path includes the productId as a URL parameter
-        const response = await apiClient.put(`${WISHLIST_ENDPOINTS.MOVE_TO_CART}/${productId}`);
+        // Replace :productId with actual productId in the endpoint
+        const endpoint = WISHLIST_ENDPOINTS.MOVE_TO_CART.replace(':productId', productId);
+        const response = await apiClient.put(endpoint);
         return response.data;
     } catch (error) {
         console.error("API Error moving wishlist item to cart:", error);

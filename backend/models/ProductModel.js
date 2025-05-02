@@ -25,7 +25,7 @@ const productSchema = new Schema(
     category: { 
       type: String,
       trim: true,
-      default: 'General' // Default category  
+      default: 'General'
     },
     tags: [{ 
       type: String, 
@@ -39,7 +39,6 @@ const productSchema = new Schema(
   }
 );
 
-// Create a text index over name, description, and category for search/filtering.
 productSchema.index({ name: 'text', description: 'text', category: 'text' });
 
 export default model('Product', productSchema);

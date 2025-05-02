@@ -26,7 +26,7 @@ export const addToCart = async (req, res) => {
         price = Number(price);
 
         // Validate required fields.
-        if (!productId || !quantity || !name || isNaN(price)) {
+        if (!productId || !quantity || !name || Number.isNaN(price)) {
             return res
                 .status(400)
                 .json({ success: false, error: 'Missing or invalid product details' });
@@ -62,25 +62,12 @@ export const updateCartItem = async (req, res) => {
     try {
         const user = req.user;
         const { productId } = req.params;
-        const { quantity } = req.body;
-
-        if (!quantity || Number(quantity) < 1) {
-            return res
-                .status(400)
-                .json({ success: false, error: 'Invalid quantity' });
-        }
-
-        const newQuantity = Number(quantity);
+        const { quantity: newQuantity } = req.body;
         let cart = await Cart.findOne({ userId: user._id });
         if (!cart) {
-            return res
-                .status(404)
-                .json({ success: false, error: 'Cart not found' });
+            return res.status(404).json({ success: false, error: 'Cart not found' });
         }
-
-        const itemIndex = cart.items.findIndex(
-            item => item.productId.toString() === productId
-        );
+        const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
         if (itemIndex === -1) {
             return res
                 .status(404)

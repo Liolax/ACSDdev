@@ -1,37 +1,14 @@
-import { Schema, model } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator'; // Plugin for unique validation
+import mongoose from 'mongoose';
 
-const feedbackSchema = new Schema(
+const feedbackSchema = new mongoose.Schema(
   {
-    name: { 
-      type: String, 
-      required: [true, 'Name is required'], // Validation message 
-      trim: true
-    },
-    email: { 
-      type: String, 
-      required: [true, 'Email is required'], // Validation message 
-      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Email format validation
-      trim: true
-    },
-    message: { 
-      type: String, 
-      required: [true, 'Message is required'], // Validation message 
-      trim: true,
-      minlength: [10, 'Message must be at least 10 characters long'] // Min length validation
-    }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    title: { type: String, trim: true, maxlength: 100 },
+    comments: { type: String, trim: true, maxlength: 1000 },
   },
-  { 
-    timestamps: true, 
-    toJSON: { virtuals: true }, 
-    toObject: { virtuals: true } // Include virtuals in JSON and object responses
-  }
+  { timestamps: true }
 );
 
-// Plugin for unique validation errors
-feedbackSchema.plugin(uniqueValidator, { message: '{PATH} must be unique.' });
-
-// Index for faster search by email
-feedbackSchema.index({ email: 1 });
-
-export default model('Feedback', feedbackSchema);
+export default mongoose.model('Feedback', feedbackSchema);

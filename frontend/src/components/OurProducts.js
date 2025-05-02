@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import StandardProductGrid from './shared/StandardProductGrid';
-import { getProducts } from '../api/products/productRequests';
+import { fetchProducts } from '../api/products/productRequests';
 import '../assets/styles/components/_products.scss';
 
 const OurProducts = ({ user, openLoginPopup, onAddToCart, onAddToWishlist }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getProducts()
+    fetchProducts()
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);

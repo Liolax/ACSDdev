@@ -1,7 +1,7 @@
 import apiClient from '../axiosConfig';
 import productEndpoints from './productEndpoints';
 
-export const getProducts = async () => {
+export const fetchProducts = async () => {
   try {
     const response = await apiClient.get(productEndpoints.getAll);
     return response.data;
@@ -34,7 +34,7 @@ export const updateProduct = async (id, formData) => {
 
 export const deleteProduct = async (id) => {
   try {
-    const response = await apiClient.delete(productEndpoints.delete(id));
+    const response = await apiClient.delete(productEndpoints.delete.replace(':id', id));
     return response.data;
   } catch (error) {
     throw error;

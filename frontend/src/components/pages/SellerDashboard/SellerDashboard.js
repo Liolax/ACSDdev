@@ -4,11 +4,12 @@ import Button from '../../ui/Button';
 import MySales from './MySales';
 import defaultImage from '../../../assets/images/default-product.png';
 import {
-  getProducts,
+  fetchProducts,
   createProduct,
   updateProduct,
   deleteProduct
 } from '../../../api/products/productRequests';
+import { getFeedbacks } from '../../../api/feedback/feedbackRequests';
 
 // Preinstalled categories – expanded list.
 const categories = [
@@ -114,20 +115,19 @@ const SellerDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchProducts();
+    const fetchProductsAsync = async () => {
+      setLoadingProducts(true);
+      try {
+        const data = await fetchProducts();
+        setProducts(data);
+        setLoadingProducts(false);
+      } catch (err) {
+        setProdError('Failed to fetch products');
+        setLoadingProducts(false);
+      }
+    };
+    fetchProductsAsync();
   }, []);
-
-  const fetchProducts = async () => {
-    setLoadingProducts(true);
-    try {
-      const data = await getProducts();
-      setProducts(data);
-      setLoadingProducts(false);
-    } catch (err) {
-      setProdError('Failed to fetch products');
-      setLoadingProducts(false);
-    }
-  };
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -201,6 +201,24 @@ const SellerDashboard = () => {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [loadingFeedback, setLoadingFeedback] = useState(true);
+
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      setLoadingFeedback(true);
+      try {
+        const data = await getFeedbacks();
+        setFeedbacks(data);
+      } catch (err) {
+        // handle error
+      } finally {
+        setLoadingFeedback(false);
+      }
+    };
+    fetchFeedbacks();
+  }, []);
 
   return (
     <div className="seller-dashboard">
@@ -461,7 +479,23 @@ const SellerDashboard = () => {
       )}
       <section className="seller-dashboard__feedback">
         <h3>Customer Feedback</h3>
-        {/* Feedback rendering can be added here */}
+        {loadingFeedback ? (
+          <p>Loading feedback...</p>
+        ) : feedbacks.length === 0 ? (
+          <p>No feedback yet.</p>
+        ) : (
+          <ul>
+            {feedbacks.map(fb => (
+              <li key={fb._id}>
+                <strong>Order:</strong> {fb.order?._id}<br />
+                <strong>Rating:</strong> {fb.rating}<br />
+                <strong>Title:</strong> {fb.title}<br />
+                <strong>Comments:</strong> {fb.comments}<br />
+                <strong>User:</strong> {fb.user?.name || 'Anonymous'}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
       <MySales />
     </div>

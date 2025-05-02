@@ -4,7 +4,7 @@ import Footer from '../components/layouts/Footer';
 import StandardProductGrid from '../components/shared/StandardProductGrid';
 import LoginPopup from '../components/LoginPopup';
 import '../assets/styles/pages/_market.scss';
-import { getProducts } from '../api/products/productRequests';
+import { fetchProducts } from '../api/products/productRequests';
 import { addToCart } from '../api/cart/cartRequests';
 import { addToWishlist } from '../api/wishlist/wishlistRequests';
 
@@ -15,7 +15,7 @@ const MarketPage = () => {
   const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    getProducts()
+    fetchProducts()
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
