@@ -1,74 +1,54 @@
 import mongoose from 'mongoose';
 import Order from '../models/OrderModel.js';
-import Cart from '../models/CartModel.js'; // Add this import
+import Cart from '../models/CartModel.js';
 
-/**
- * Creates an order from cart items and shipping details (called during checkout).
- * Expects request body: { cartItems, shippingInfo }
- */
 export const createOrder = async (req, res) => {
   try {
-    // --- Add debug logs ---
     console.log('--- Order Creation Start ---');
-    console.log('User ID from middleware:', req.user?._id);
-    console.log('User Role from middleware:', req.user?.role);
+    const userId = req.user._id;
+    const { shippingInfo, paymentInfo } = req.body;
 
-    const userId = req.user._id; // Set by auth middleware
-    const { cartItems, shippingInfo, paymentInfo, cartId } = req.body;
-
-    console.log('User creating order:', userId);
-    console.log('cartId from request:', cartId);
-
-    let itemsToOrder = cartItems;
-    // If cartItems is missing or empty, fetch from DB as fallback
-    if (!itemsToOrder || !Array.isArray(itemsToOrder) || itemsToOrder.length === 0) {
-      const cart = await Cart.findOne({ userId }).lean();
-      console.log('Cart fetched in orderController:', JSON.stringify(cart));
-      if (cart && cart.items && cart.items.length > 0) {
-        console.log('Cart has items, proceeding to create order.');
-      } else {
-        console.error('Cart is empty or null in orderController. Throwing error.');
-        return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
-      }
-      itemsToOrder = cart.items;
-    }
-
-    if (!shippingInfo || Object.keys(shippingInfo).length === 0) {
-      return res.status(400).json({ message: 'Shipping information is required.' });
-    }
-    if (!itemsToOrder || !Array.isArray(itemsToOrder) || itemsToOrder.length === 0) {
+    // Always fetch cart from DB for security
+    const cart = await Cart.findOne({ userId }).lean();
+    if (!cart || !cart.items || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cannot create an order with an empty cart.' });
     }
 
-    // Calculate total amount
-    const totalAmount = itemsToOrder.reduce(
-      (sum, item) => sum + Number(item.price) * Number(item.quantity),
-      0
-    );
-
-    // Convert all prices to plain string for Decimal128
-    const orderItems = itemsToOrder.map(item => ({
-      productId: item.product?._id ? item.product._id : item.productId,
-      name: item.product?.name ? item.product.name : item.name,
-      price: String(Number(item.product?.price ? item.product.price : item.price)), // <-- fix here
-      quantity: item.quantity,
-      image: item.product?.imageUrl ? item.product.imageUrl : item.image,
-    }));
-
-    const newOrder = new Order({
-      userId,
-      cartId,
-      items: orderItems,
-      shippingInfo,
-      totalAmount: String(Number(totalAmount)), // <-- fix here
-      status: 'Pending', // Initial status before payment simulation
-      paymentStatus: 'Pending',
-      paymentInfo: paymentInfo || {}
+    // Calculate total
+    let totalAmount = 0;
+    const orderItems = cart.items.map(item => {
+      // Accept both Decimal128 and number/string
+      let priceNum = item.price?.$numberDecimal
+        ? parseFloat(item.price.$numberDecimal)
+        : Number(item.price);
+      if (isNaN(priceNum)) priceNum = 0;
+      const quantity = Number(item.quantity) || 1;
+      totalAmount += priceNum * quantity;
+      return {
+        productId: item.productId,
+        name: item.name,
+        price: mongoose.Types.Decimal128.fromString(priceNum.toFixed(2)),
+        quantity,
+        image: item.image,
+      };
     });
 
+    const orderData = {
+      userId,
+      cartId: cart._id,
+      items: orderItems,
+      shippingInfo,
+      totalAmount: mongoose.Types.Decimal128.fromString(totalAmount.toFixed(2)),
+      status: 'Pending',
+      paymentStatus: 'Pending',
+      paymentInfo: paymentInfo || {},
+    };
+
+    console.log("Data being passed to new Order():", JSON.stringify(orderData, null, 2));
+
+    const newOrder = new Order(orderData);
     await newOrder.save();
 
-    // Return in the structure expected by the frontend.
     res.status(201).json({ order: newOrder });
   } catch (error) {
     console.error("Error creating order:", error);
