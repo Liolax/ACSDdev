@@ -61,6 +61,7 @@ const SellerDashboard = () => {
       const res = await axios.get('/api/orders');
       // Extract orders array from response:
       const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
+      // Ensure that ordersData is an array.
       setOrders(Array.isArray(ordersData) ? ordersData : []);
       setLoadingOrders(false);
     } catch (err) {
@@ -79,6 +80,7 @@ const SellerDashboard = () => {
     }
   };
 
+  // Only orders with status 'Processing' need shipping.
   // Orders to ship: only those with status "Processing" (i.e. orders that buyers have paid for)
   const ordersToShip = orders.filter(o => o.status === 'Processing');
 
