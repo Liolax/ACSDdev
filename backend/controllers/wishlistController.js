@@ -88,8 +88,8 @@ export const moveWishlistToCart = async (req, res) => {
         }
 
         if (!cart.items.some(cartItem => cartItem.productId.toString() === productId)) {
-            // Always convert price to string with two decimals for Decimal128
-            let cartPrice = Number(item.price).toFixed(2).toString();
+            // Convert price to simple string for Decimal128
+            let cartPrice = Number(item.price).toString();
             cart.items.push({ productId, name: item.name, price: cartPrice, image: item.image, quantity: 1 });
         }
 

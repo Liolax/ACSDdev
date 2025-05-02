@@ -15,12 +15,10 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
   if (!name || price === undefined) {
     throw new Error("Product name and price are required.");
   }
-  // Ensure price is always a string with two decimals for Decimal128 compatibility
+  // Always send price as a number for cart (backend expects Number)
   let safePrice = price;
-  if (typeof safePrice === 'number') {
-    safePrice = safePrice.toFixed(2);
-  } else if (typeof safePrice === 'string') {
-    safePrice = Number(safePrice).toFixed(2);
+  if (typeof safePrice === 'string') {
+    safePrice = Number(safePrice);
   }
   try {
     const res = await apiClient.post('/cart/add-item', {
@@ -41,8 +39,8 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
  */
 export const getCart = async () => {
   try {
-    const res = await apiClient.get(CART_ENDPOINTS.GET_CART);
-    return res.data.cart || { items: [] };
+    const response = await apiClient.get('/cart');
+    return response.data.cart;
   } catch (error) {
     handleApiError(error);
   }

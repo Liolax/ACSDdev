@@ -136,6 +136,9 @@ const handleFeedbackDelete = (orderId) => {
   });
 };
 
+// Defensive: fallback to empty array if cart or cart.items is undefined
+const cartItems = (cart && Array.isArray(cart.items)) ? cart.items : [];
+
 return (
   <div className="buyer-dashboard">
     <h2 className="buyer-dashboard__header">My Purchases</h2>
@@ -236,9 +239,9 @@ return (
     {/* Cart Section */}
     <div id="cart-section" className="buyer-dashboard__cart">
       <h2 className="buyer-dashboard__header">Cart</h2>
-      {cart.items.length > 0 ? (
+      {cartItems.length > 0 ? (
         <CartSection
-          items={cart.items}
+          items={cartItems}
           visibleCount={cartVisible}
           onSeeLess={handleCartSeeLess}
           onSeeMore={() => setCartVisible(cartVisible + 5)}

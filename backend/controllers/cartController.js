@@ -26,16 +26,15 @@ export const addToCart = async (req, res) => {
         // Convert quantity to number
         quantity = Number(quantity);
 
-        // Ensure price is a string with two decimals (for Decimal128)
-        price = Number(price);
-        if (isNaN(price)) {
+        // Validate price as number, but store as string for Decimal128
+        const priceNum = Number(price);
+        if (isNaN(priceNum)) {
             return res.status(400).json({ success: false, error: 'Invalid price format' });
         }
-        // Convert to string before saving to model (Decimal128 expects string, not number)
-        price = price.toFixed(2).toString();
+        price = price.toString(); // store as simple string
 
         // Validate required fields.
-        if (!productId || !quantity || !name || Number.isNaN(Number(price))) {
+        if (!productId || !quantity || !name || isNaN(priceNum)) {
             return res
                 .status(400)
                 .json({ success: false, error: 'Missing or invalid product details' });
