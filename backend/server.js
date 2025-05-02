@@ -3,11 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 
-// Import API routes
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -18,17 +15,14 @@ import wishlistRoutes from './routes/wishlistRoutes.js';
 dotenv.config();
 
 const app = express();
-app.set('trust proxy', 1);
 
-// Configure rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'development' ? 1000 : 100,
   message: 'Too many requests from this IP, please try again after 15 minutes.',
 });
 app.use(limiter);
 
-// MongoDB connection
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is not defined in your environment variables.");
@@ -51,23 +45,19 @@ mongoose.connection.on('disconnected', () => {
   mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 30000 });
 });
 
-// CORS Configuration
 const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
-// Simplify the condition to add FRONTEND_URL in production
 if (process.env.NODE_ENV === 'production' && process.env.FRONTEND_URL) {
-  // Optional: Add a check to ensure it's a valid URL format if desired
   if (process.env.FRONTEND_URL.startsWith('http')) {
-      allowedOrigins.push(process.env.FRONTEND_URL);
-  } else {
-      console.warn(`Production FRONTEND_URL is set but might be invalid: ${process.env.FRONTEND_URL}`);
-      // Decide if you want to add it anyway or throw an error
-      // allowedOrigins.push(process.env.FRONTEND_URL); // Uncomment to add even if format seems off
+    allowedOrigins.push(process.env.FRONTEND_URL);
   }
 }
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
     return callback(new Error('Blocked by CORS'), false);
   },
   credentials: true,
@@ -76,7 +66,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Middleware
 app.use(
   helmet({
     crossOriginEmbedderPolicy: false,
@@ -86,30 +75,6 @@ app.use(
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Static file serving
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadsPath = path.join(__dirname, 'uploads');
-
-app.use(
-  '/uploads',
-  (req, res, next) => {
-    res.header("Cross-Origin-Resource-Policy", "cross-origin");
-    next();
-  },
-  express.static(uploadsPath)
-);
-
-// Health Check Endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: "API is running",
-    uptime: process.uptime(),
-    dbConnected: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
-    timestamp: new Date().toISOString(),
-  });
-});
 
 // API Routes
 app.use('/api/products', productRoutes);

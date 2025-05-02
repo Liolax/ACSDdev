@@ -12,6 +12,10 @@ router.post('/:orderId/paymentSimulation', orderController.simulatePayment);
 router.get('/my-purchases', orderController.getMyPurchases);
 router.get('/my-sales', orderController.getMySales);
 router.put('/:orderId/ship', orderController.markShipped);
+// BAD (causes error!):
+// router.put('/:orderId:/ship', orderController.markShipped);
+// router.put('/:orderId:/ship', ...);
+// router.get('/:') <-- BAD
 router.put('/:orderId/deliver', orderController.markDelivered);
 
 export default router;
