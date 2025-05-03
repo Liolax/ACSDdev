@@ -94,7 +94,6 @@ const CheckoutPage = () => {
       case 1:
         return (
           <div className="checkout-step">
-            <h3>Cart Review</h3>
             <CheckoutSummary cart={cart} />
             <div className="checkout-step__actions">
               <Button onClick={nextStep}>Next: Shipping</Button>
@@ -104,7 +103,6 @@ const CheckoutPage = () => {
       case 2:
         return (
           <div className="checkout-step">
-            <h3>Shipping Information</h3>
             <ShippingForm shippingInfo={shippingInfo} setShippingInfo={setShippingInfo} />
             <div className="checkout-step__actions">
               <Button onClick={prevStep}>Back</Button>
@@ -115,7 +113,6 @@ const CheckoutPage = () => {
       case 3:
         return (
           <div className="checkout-step">
-            <h3>Payment Simulation</h3>
             <PaymentForm paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
             <div className="checkout-step__actions">
               <Button onClick={prevStep}>Back</Button>
