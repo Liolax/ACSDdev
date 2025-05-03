@@ -96,7 +96,9 @@ const CheckoutPage = () => {
           <div className="checkout-step">
             <CheckoutSummary cart={cart} />
             <div className="checkout-step__actions">
-              <Button onClick={nextStep}>Next: Shipping</Button>
+              <Button data-action="next" className="checkout-next-btn" onClick={nextStep}>
+                Next: Shipping
+              </Button>
             </div>
           </div>
         );
@@ -105,8 +107,12 @@ const CheckoutPage = () => {
           <div className="checkout-step">
             <ShippingForm shippingInfo={shippingInfo} setShippingInfo={setShippingInfo} />
             <div className="checkout-step__actions">
-              <Button onClick={prevStep}>Back</Button>
-              <Button onClick={nextStep}>Next: Payment</Button>
+              <Button data-action="back" className="checkout-back-btn" onClick={prevStep}>
+                Back
+              </Button>
+              <Button data-action="next" className="checkout-next-btn" onClick={nextStep}>
+                Next: Payment
+              </Button>
             </div>
           </div>
         );
@@ -115,8 +121,12 @@ const CheckoutPage = () => {
           <div className="checkout-step">
             <PaymentForm paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
             <div className="checkout-step__actions">
-              <Button onClick={prevStep}>Back</Button>
-              <Button onClick={handleSimulatePayment}>Simulate Payment</Button>
+              <Button data-action="back" className="checkout-back-btn" onClick={prevStep}>
+                Back
+              </Button>
+              <Button data-action="simulate" className="checkout-simulate-btn" onClick={handleSimulatePayment}>
+                Simulate Payment
+              </Button>
             </div>
           </div>
         );
