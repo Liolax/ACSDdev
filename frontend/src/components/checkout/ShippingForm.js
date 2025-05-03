@@ -1,9 +1,14 @@
 import React from 'react';
+import { validateShippingInfo } from './validation';
 
-const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
+const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setShippingInfo({ ...shippingInfo, [name]: value });
+    if (setErrors) {
+      const newErrors = validateShippingInfo({ ...shippingInfo, [name]: value });
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -20,6 +25,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
             onChange={handleChange}
             required
           />
+          {errors.fullName && <span className="form-error">{errors.fullName}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="address">Address:</label>
@@ -31,6 +37,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
             onChange={handleChange}
             required
           />
+          {errors.address && <span className="form-error">{errors.address}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="city">City:</label>
@@ -42,6 +49,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
             onChange={handleChange}
             required
           />
+          {errors.city && <span className="form-error">{errors.city}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="postalCode">Postal Code:</label>
@@ -53,6 +61,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
             onChange={handleChange}
             required
           />
+          {errors.postalCode && <span className="form-error">{errors.postalCode}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="country">Country:</label>
@@ -64,6 +73,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo }) => {
             onChange={handleChange}
             required
           />
+          {errors.country && <span className="form-error">{errors.country}</span>}
         </div>
       </form>
     </div>

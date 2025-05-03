@@ -1,28 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { validatePaymentInfo } from './validation';
 
-const validateCardNumber = (num) => /^\d{12,19}$/.test(num.replace(/\s/g, ''));
-const validateExpiry = (exp) => /^(\d{2}\/\d{2}|\d{2,4}\/?\d{2,4})$/.test(exp.replace(/\s/g, ''));
-const validateCVV = (cvv) => /^\d{3,4}$/.test(cvv);
+const PaymentForm = ({ paymentInfo, setPaymentInfo, errors = {}, setErrors }) => {
+  const [localErrors, setLocalErrors] = useState({});
 
-const PaymentForm = ({ paymentInfo, setPaymentInfo }) => {
-  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    setLocalErrors(errors);
+  }, [errors]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPaymentInfo({ ...paymentInfo, [name]: value });
-
-    // Validate on change
-    let err = {};
-    if (name === 'cardNumber' && value && !validateCardNumber(value)) {
-      err.cardNumber = 'Card number must be 12-19 digits.';
-    }
-    if (name === 'expiry' && value && !validateExpiry(value)) {
-      err.expiry = 'Expiry must be MM/YY or MMYYYY.';
-    }
-    if (name === 'cvv' && value && !validateCVV(value)) {
-      err.cvv = 'CVV must be 3 or 4 digits.';
-    }
-    setErrors({ ...errors, ...err });
+    const newErrors = validatePaymentInfo({ ...paymentInfo, [name]: value });
+    setLocalErrors(newErrors);
+    if (setErrors) setErrors(newErrors);
   };
 
   return (
@@ -39,7 +30,7 @@ const PaymentForm = ({ paymentInfo, setPaymentInfo }) => {
             onChange={handleChange}
             required
           />
-          {errors.cardNumber && <span className="form-error">{errors.cardNumber}</span>}
+          {localErrors.cardNumber && <span className="form-error">{localErrors.cardNumber}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="expiry">Expiry Date:</label>
@@ -52,7 +43,7 @@ const PaymentForm = ({ paymentInfo, setPaymentInfo }) => {
             onChange={handleChange}
             required
           />
-          {errors.expiry && <span className="form-error">{errors.expiry}</span>}
+          {localErrors.expiry && <span className="form-error">{localErrors.expiry}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="cvv">CVV:</label>
@@ -64,7 +55,7 @@ const PaymentForm = ({ paymentInfo, setPaymentInfo }) => {
             onChange={handleChange}
             required
           />
-          {errors.cvv && <span className="form-error">{errors.cvv}</span>}
+          {localErrors.cvv && <span className="form-error">{localErrors.cvv}</span>}
         </div>
       </form>
     </div>

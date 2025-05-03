@@ -8,6 +8,7 @@ import ShippingForm from '../components/checkout/ShippingForm';
 import PaymentForm from '../components/checkout/PaymentForm';
 import Button from '../components/ui/Button';
 import '../assets/styles/pages/_checkout.scss';
+import { validateShippingInfo, validatePaymentInfo, validateCartItems } from '../components/checkout/validation';
 
 const CheckoutPage = () => {
   const [cart, setCart] = useState({ items: [] });
@@ -19,6 +20,8 @@ const CheckoutPage = () => {
   const [shippingInfo, setShippingInfo] = useState({});
   const [paymentInfo, setPaymentInfo] = useState({});
   const [createdOrder, setCreatedOrder] = useState(null);
+  const [shippingErrors, setShippingErrors] = useState({});
+  const [paymentErrors, setPaymentErrors] = useState({});
   
   const navigate = useNavigate();
 
@@ -39,7 +42,33 @@ const CheckoutPage = () => {
     fetchCart();
   }, []);
 
-  const nextStep = () => setCurrentStep(prev => prev + 1);
+  const nextStep = () => {
+    if (currentStep === 1) {
+      // Validate cart
+      const cartError = validateCartItems(cart.items);
+      if (cartError) {
+        setError(cartError);
+        return;
+      }
+      setError(null);
+      setCurrentStep(prev => prev + 1);
+    } else if (currentStep === 2) {
+      // Validate shipping info
+      const errors = validateShippingInfo(shippingInfo);
+      setShippingErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+      setCurrentStep(prev => prev + 1);
+    } else if (currentStep === 3) {
+      // Validate payment info
+      const errors = validatePaymentInfo(paymentInfo);
+      setPaymentErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+      setCurrentStep(prev => prev + 1);
+    } else {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
   const prevStep = () => setCurrentStep(prev => prev - 1);
 
   // Handler for payment simulation and order placement
@@ -96,6 +125,9 @@ const CheckoutPage = () => {
           <div className="checkout-step">
             <CheckoutSummary cart={cart} />
             <div className="checkout-step__actions">
+              <Button data-action="back" className="checkout-back-btn" onClick={() => navigate(-1)}>
+                Back
+              </Button>
               <Button data-action="next" className="checkout-next-btn" onClick={nextStep}>
                 Next: Shipping
               </Button>
@@ -105,7 +137,12 @@ const CheckoutPage = () => {
       case 2:
         return (
           <div className="checkout-step">
-            <ShippingForm shippingInfo={shippingInfo} setShippingInfo={setShippingInfo} />
+            <ShippingForm
+              shippingInfo={shippingInfo}
+              setShippingInfo={setShippingInfo}
+              errors={shippingErrors}
+              setErrors={setShippingErrors}
+            />
             <div className="checkout-step__actions">
               <Button data-action="back" className="checkout-back-btn" onClick={prevStep}>
                 Back
@@ -119,7 +156,12 @@ const CheckoutPage = () => {
       case 3:
         return (
           <div className="checkout-step">
-            <PaymentForm paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
+            <PaymentForm
+              paymentInfo={paymentInfo}
+              setPaymentInfo={setPaymentInfo}
+              errors={paymentErrors}
+              setErrors={setPaymentErrors}
+            />
             <div className="checkout-step__actions">
               <Button data-action="back" className="checkout-back-btn" onClick={prevStep}>
                 Back
