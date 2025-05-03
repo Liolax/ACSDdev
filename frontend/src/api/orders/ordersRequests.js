@@ -32,6 +32,7 @@ export const simulatePayment = async (orderId, paymentDetails) => {
   if (!orderId) throw new Error("Order ID is required for payment simulation.");
   try {
     const url = ORDERS_ENDPOINTS.PAYMENT_SIMULATION(orderId);
+    // FIX: Wrap paymentDetails in an object
     const response = await apiClient.post(url, { paymentDetails });
     return response.data;
   } catch (error) {

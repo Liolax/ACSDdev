@@ -7,13 +7,16 @@ const router = express.Router();
 router.use(auth);
 
 router.post('/', orderController.createOrder);
-router.post('/:orderId/paymentSimulation', orderController.simulatePayment);
+
+// Add this route for payment simulation (must come before any route with :orderId or :id)
+router.post('/:orderId/simulate-payment', orderController.simulatePayment);
+
 router.get('/my-purchases', orderController.getMyPurchases);
 router.get('/my-sales', orderController.getMySales);
 router.put('/:orderId/ship', orderController.markShipped);
 router.put('/:orderId/deliver', orderController.markDelivered);
 
-// Example of a valid dynamic route:
+// Keep this generic :id route LAST to avoid conflicts
 router.get('/:id', (req, res) => {
   // handler code
 });

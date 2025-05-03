@@ -76,8 +76,25 @@ export const simulatePayment = async (req, res) => {
     const userId = req.user._id;
     const { paymentDetails } = req.body;
 
-    if (!paymentDetails || !paymentDetails.cardNumber || !paymentDetails.cardNumber.trim()) {
+    // Basic validation for paymentDetails fields
+    if (
+      !paymentDetails ||
+      !paymentDetails.cardNumber ||
+      !paymentDetails.cardNumber.trim()
+    ) {
       return res.status(400).json({ message: 'Card number is required for payment simulation.' });
+    }
+    if (
+      !paymentDetails.expiry ||
+      !/^\d{2,4}\/?\d{2,4}$/.test(paymentDetails.expiry.replace(/\s/g, ''))
+    ) {
+      return res.status(400).json({ message: 'Expiry date is required and must be in MM/YY or MMYYYY format.' });
+    }
+    if (
+      !paymentDetails.cvv ||
+      !/^\d{3,4}$/.test(paymentDetails.cvv)
+    ) {
+      return res.status(400).json({ message: 'CVV is required and must be 3 or 4 digits.' });
     }
 
     const order = await Order.findOne({ _id: orderId, userId });
