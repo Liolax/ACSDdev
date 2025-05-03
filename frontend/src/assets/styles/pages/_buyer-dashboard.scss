@@ -147,6 +147,117 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
+
+  &__header {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: #177e48;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 0 #eab308;
+  }
+
+  &__orders {
+    background: #f5fbe6;
+    border: 1.5px solid #d4c07e;
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(34, 60, 34, 0.06);
+
+    .order-card {
+      display: flex;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid #eab308;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 1px 4px rgba(34, 60, 34, 0.04);
+      transition: box-shadow 0.15s, border-color 0.15s;
+
+      &:hover {
+        border-color: #177e48;
+        box-shadow: 0 2px 12px rgba(34, 60, 34, 0.10);
+      }
+
+      &__collage {
+        flex-shrink: 0;
+        margin-right: 1.5rem;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #d4c07e;
+        background: #f9f7ed;
+      }
+
+      &__mini-image {
+        border-radius: 4px;
+        border: 1px solid #eab308;
+        background: #f5fbe6;
+      }
+
+      &__details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      &__id {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.2rem;
+        color: #177e48;
+        margin-bottom: 0.2rem;
+      }
+
+      &__items-names {
+        font-size: 1rem;
+        color: #444;
+        margin-bottom: 0.2rem;
+      }
+
+      &__total {
+        font-weight: 600;
+        color: #eab308;
+        font-size: 1.1rem;
+        margin-bottom: 0.2rem;
+      }
+
+      &__status {
+        font-size: 0.98rem;
+        color: #177e48;
+        margin-bottom: 0.2rem;
+      }
+
+      button {
+        margin-top: 0.5rem;
+        background: #eab308;
+        color: #fff;
+        border-radius: 7px;
+        border: none;
+        padding: 0.4rem 1.2rem;
+        font-family: inherit;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.13s, color 0.13s, border-color 0.13s;
+
+        &:hover {
+          background: #177e48;
+          color: #fffbe6;
+        }
+      }
+    }
+
+    .buyer-dashboard__empty {
+      color: #888;
+      font-style: italic;
+      padding: 1.5rem 0;
+      text-align: center;
+      background: #f9f7ed;
+      border-radius: 8px;
+      border: 1px dashed #eab308;
+    }
+  }
 }
 
 // Headers & Section Titles
