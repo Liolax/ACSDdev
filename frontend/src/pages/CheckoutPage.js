@@ -65,8 +65,8 @@ const CheckoutPage = () => {
       }
       // Use the order id (from createdOrder or the response)
       const orderId = createdOrder ? createdOrder._id : orderResponse.data.order._id;
-      // Simulate payment (this could also invoke processPayment if needed)
-      await apiClient.post(`/orders/${orderId}/simulate-payment`, paymentInfo);
+      // Simulate payment (wrap paymentInfo in paymentDetails)
+      await apiClient.post(`/orders/${orderId}/simulate-payment`, { paymentDetails: paymentInfo });
       
       // Save the order details if not already saved
       if (!createdOrder) {

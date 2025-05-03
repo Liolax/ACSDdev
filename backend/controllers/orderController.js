@@ -74,6 +74,8 @@ export const simulatePayment = async (req, res) => {
   try {
     const { orderId } = req.params;
     const userId = req.user._id;
+    // Log the incoming request body for debugging
+    console.log("Received request body for payment simulation:", JSON.stringify(req.body, null, 2));
     const { paymentDetails } = req.body;
 
     // Basic validation for paymentDetails fields
