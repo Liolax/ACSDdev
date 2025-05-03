@@ -1,16 +1,75 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
 
-// Buyer Dashboard Empty Message
+// Main Dashboard Container
+.buyer-dashboard {
+  max-width: 1080px;
+  margin: 40px auto 0;
+  padding: 32px 16px;
+  color: var(--color-dark-primary);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2.5px 12px rgba(23, 98, 62, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+}
+
+// Section Headers
+.buyer-dashboard__header,
+.buyer-dashboard__section-header {
+  @include mixins.heading;
+  text-align: center;
+  margin-bottom: 12px;
+  color: base.$irish-green-dark;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+  font-size: 2.3rem;
+  font-weight: 800;
+  text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(23, 98, 62, 0.03);
+}
+
+// Quick Links
+.buyer-dashboard__quick-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.buyer-dashboard__quick-link {
+  font-size: 1rem;
+  color: base.$irish-gold-dark;
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, base.$irish-gold-light 0%, #fffbe6 100%);
+  box-shadow: 0 2px 6px rgba(247, 178, 55, 0.09);
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-dark 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(247, 178, 55, 0.13);
+  }
+}
+
+// Empty State
 .buyer-dashboard__empty {
   text-align: center;
   font-size: 1.1rem;
   color: base.$irish-green-dark;
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
   margin: 20px 0;
+  background: #f9f7ed;
+  border-radius: 8px;
+  border: 1px dashed #eab308;
+  padding: 1.5rem 0;
+  font-style: italic;
 }
 
-// Unified Styles for Wishlist & Cart Sections
+// Wishlist & Cart Section Containers
 .buyer-dashboard__wishlist,
 .buyer-dashboard__cart {
   background: none;
@@ -19,7 +78,7 @@
   padding: 0;
 }
 
-// Unified Item Styles (Wishlist & Cart)
+// Shared item style for cart and wishlist
 .buyer-dashboard__wishlist-item,
 .buyer-dashboard__cart-item {
   display: flex;
@@ -28,13 +87,48 @@
   border-radius: 7px;
   background: #f8f4e3;
   margin-bottom: 6px;
-  gap: 10px;
+  gap: 18px; // main gap between image, details, actions
   box-shadow: 0 1.5px 7px rgba(23, 98, 62, 0.04);
   transition: box-shadow 0.10s;
-  
-  &:hover {
-    box-shadow: 0 3px 11px rgba(247, 178, 55, 0.08);
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+  justify-content: flex-start;
+  position: relative;
+}
+
+// Details section (shared)
+.buyer-dashboard__wishlist-item-details,
+.buyer-dashboard__cart-item-details {
+  display: flex;
+  flex-direction: row; // horizontal: price, then name/info
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: 0.5rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+
+  // Name/info after price
+  .buyer-dashboard__wishlist-item-info,
+  .buyer-dashboard__cart-item-info {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
   }
+}
+
+.buyer-dashboard__cart-item-info {
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 // Unified Image Styles
@@ -48,27 +142,41 @@
   background: base.$irish-gold-light;
 }
 
-// Unified Price Styles
+// Unified Price Styles (left-aligned, compact)
 .buyer-dashboard__wishlist-price,
 .buyer-dashboard__cart-price {
   font-size: 0.95rem;
   font-weight: 600;
-  color: base.$irish-gold-dark;
-  font-family: var(--font-family-heading);
-  margin-left: 7px;
+  color: #bfa76f;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif); // ensure heading font
   background: #fff;
-  padding: 2px 8px;
-  border-radius: 5px;
+  padding: 1px 7px; // less padding for a tighter badge
+  border-radius: 4px;
   box-shadow: 0 1px 2px rgba(247, 178, 55, 0.05);
+  display: inline-block;
+  min-width: 32px; // shorter min width
+  line-height: 1.18;
+  vertical-align: middle;
+  margin: 0 7px 0 0; // only margin-right for spacing from image, no margin-left
+  letter-spacing: 0.01em;
+  text-align: left;
 }
 
-// Unified Actions
+// Actions section (shared)
 .buyer-dashboard__wishlist-actions,
 .buyer-dashboard__cart-actions {
   display: flex;
-  gap: 5px;
-  margin-left: auto;
   align-items: center;
+  gap: 10px; // gap between action buttons/controls
+  margin-left: 0; // remove any margin that would offset alignment
+}
+
+// Remove any margin/gap from quantity-controls
+.buyer-dashboard__quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px; // small gap between - qty + controls
+  margin-left: 0;
 }
 
 // Controls
@@ -79,6 +187,7 @@
   margin-top: 5px;
 }
 
+// See More/Less Button
 .see-more-btn {
   font-family: var(--font-family-heading);
   font-size: 1.04rem;
@@ -87,34 +196,61 @@
   background: linear-gradient(90deg, #e8f7e6 0%, #fffbe6 100%);
   border-radius: 18px;
   padding: 7px 20px;
-  box-shadow: 0 1px 5px rgba(23, 98, 62, 0.07);
-  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
-  
+  border: 1.2px solid base.$irish-gold;
+  margin-left: 5px;
+  box-shadow: 0 2px 8px rgba(247, 178, 55, 0.07);
+}
+
+// Small Button Styles for Wishlist/Cart Actions
+.buyer-dashboard__button--sm,
+.buyer-dashboard__cart-delete,
+.buyer-dashboard__wishlist-actions .button,
+.buyer-dashboard__cart-actions .button {
+  font-size: 0.92rem;
+  padding: 3px 12px;
+  border-radius: 6px;
+  min-width: 0;
+  min-height: 0;
+  line-height: 1.2;
+  font-weight: 600;
+  background: linear-gradient(90deg, base.$irish-gold-light 0%, #fffbe6 100%);
+  color: base.$irish-gold-dark;
+  border: 1px solid base.$irish-gold;
+  box-shadow: 0 1px 3px rgba(247, 178, 55, 0.10);
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
   &:hover,
   &:focus {
-    background: linear-gradient(90deg, base.$irish-green-light 0%, base.$irish-gold-light 100%);
-    color: base.$irish-gold-dark;
-    box-shadow: 0 2px 12px rgba(23, 98, 62, 0.11);
+    background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-dark 100%);
+    color: #fff;
+    border-color: base.$irish-gold-dark;
   }
 }
 
-.buyer-dashboard__quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 5px;
-}
-
+// Quantity Button
 .quantity-button {
-  padding: 4px 8px;
-  font-size: 1rem;
-  cursor: pointer;
+  font-size: 1.05rem;
+  padding: 2px 10px;
+  border-radius: 5px;
+  background: #f5fbe6;
+  color: base.$irish-green-dark;
+  border: 1px solid base.$irish-gold;
+  font-weight: 700;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+  &:hover,
+  &:focus {
+    background: base.$irish-gold-light;
+    color: base.$irish-gold-dark;
+    border-color: base.$irish-gold-dark;
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
-.quantity-display {
-  font-weight: 600;
-}
-
+// Cart Total & Pay Button
 .buyer-dashboard__cart-total {
   font-family: var(--font-family-heading);
   color: base.$irish-gold-dark;
@@ -127,176 +263,147 @@
   margin-left: 5px;
   box-shadow: 0 2px 8px rgba(247, 178, 55, 0.07);
 }
-
 .buyer-dashboard__pay-button {
-  font-family: var(--font-family-heading);
-  font-size: 1.09rem;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+  font-size: 1.04rem;
   font-weight: 700;
-  padding: 10px 30px;
-}
-
-// Main Container
-.buyer-dashboard {
-  max-width: 1080px;
-  margin: 40px auto 0;
-  padding: 32px 16px;
-  color: var(--color-dark-primary);
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2.5px 12px rgba(23, 98, 62, 0.07);
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-
-  &__header {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    color: #177e48;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 0 #eab308;
-  }
-
-  &__orders {
-    background: #f5fbe6;
-    border: 1.5px solid #d4c07e;
-    border-radius: 14px;
-    padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(34, 60, 34, 0.06);
-
-    .order-card {
-      display: flex;
-      align-items: flex-start;
-      background: #fff;
-      border: 1px solid #eab308;
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
-      padding: 1.2rem 1.5rem;
-      box-shadow: 0 1px 4px rgba(34, 60, 34, 0.04);
-      transition: box-shadow 0.15s, border-color 0.15s;
-
-      &:hover {
-        border-color: #177e48;
-        box-shadow: 0 2px 12px rgba(34, 60, 34, 0.10);
-      }
-
-      &__collage {
-        flex-shrink: 0;
-        margin-right: 1.5rem;
-        border-radius: 8px;
-        overflow: hidden;
-        border: 1px solid #d4c07e;
-        background: #f9f7ed;
-      }
-
-      &__mini-image {
-        border-radius: 4px;
-        border: 1px solid #eab308;
-        background: #f5fbe6;
-      }
-
-      &__details {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      &__id {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.2rem;
-        color: #177e48;
-        margin-bottom: 0.2rem;
-      }
-
-      &__items-names {
-        font-size: 1rem;
-        color: #444;
-        margin-bottom: 0.2rem;
-      }
-
-      &__total {
-        font-weight: 600;
-        color: #eab308;
-        font-size: 1.1rem;
-        margin-bottom: 0.2rem;
-      }
-
-      &__status {
-        font-size: 0.98rem;
-        color: #177e48;
-        margin-bottom: 0.2rem;
-      }
-
-      button {
-        margin-top: 0.5rem;
-        background: #eab308;
-        color: #fff;
-        border-radius: 7px;
-        border: none;
-        padding: 0.4rem 1.2rem;
-        font-family: inherit;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background 0.13s, color 0.13s, border-color 0.13s;
-
-        &:hover {
-          background: #177e48;
-          color: #fffbe6;
-        }
-      }
-    }
-
-    .buyer-dashboard__empty {
-      color: #888;
-      font-style: italic;
-      padding: 1.5rem 0;
-      text-align: center;
-      background: #f9f7ed;
-      border-radius: 8px;
-      border: 1px dashed #eab308;
-    }
-  }
-}
-
-// Headers & Section Titles
-.buyer-dashboard__header,
-.buyer-dashboard__section-header {
-  @include mixins.heading;
-  text-align: center;
-  margin-bottom: 12px;
-  color: base.$irish-green-dark;
-  font-family: var(--font-family-heading);
-  font-size: 2.3rem;
-  font-weight: 800;
-  text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(23, 98, 62, 0.03);
-}
-
-// Quick Links
-.buyer-dashboard__quick-links {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.buyer-dashboard__quick-link {
-  font-size: 1rem;
-  color: base.$irish-gold-dark;
-  font-family: var(--font-family-heading);
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 8px 26px;
+  border-radius: 18px;
   background: linear-gradient(90deg, base.$irish-gold-light 0%, #fffbe6 100%);
-  box-shadow: 0 2px 6px rgba(247, 178, 55, 0.09);
-  transition: background 0.16s, color 0.16s, box-shadow 0.16s;
-  text-decoration: none;
-  
+  color: base.$irish-green-dark;
+  border: 1.5px solid base.$irish-gold;
+  box-shadow: 0 2px 8px rgba(247, 178, 55, 0.07);
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
   &:hover,
   &:focus {
-    background: linear-gradient(90deg, base.$irish-gold 0%, base.$irish-gold-dark 100%);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(247, 178, 55, 0.13);
+    background: linear-gradient(90deg, base.$irish-green-light 0%, base.$irish-gold-light 100%);
+    color: base.$irish-gold-dark;
+    border-color: base.$irish-gold-dark;
   }
+}
+
+// Order Card Styles (for Purchases)
+.order-card {
+  display: flex;
+  align-items: flex-start;
+  background: linear-gradient(100deg, #f5fbe6 60%, #fffbe6 100%);
+  border: 1.5px solid #eab308;
+  border-radius: 14px;
+  margin-bottom: 1.7rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(34, 60, 34, 0.07), 0 1px 0 #fff;
+  transition: box-shadow 0.18s, border-color 0.18s;
+  gap: 1.7rem;
+  position: relative;
+  font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+
+  &:hover {
+    border-color: #177e48;
+    box-shadow: 0 4px 18px rgba(34, 60, 34, 0.13);
+    background: linear-gradient(100deg, #f9f7ed 60%, #fffbe6 100%);
+  }
+
+  &__collage {
+    flex-shrink: 0;
+    margin-right: 1.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid #d4c07e;
+    background: #f9f7ed;
+    box-shadow: 0 1px 4px rgba(247, 178, 55, 0.07);
+  }
+  &__mini-image {
+    border-radius: 4px;
+    object-fit: cover;
+    background: #fffbe6;
+    border: none;
+  }
+  &__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+    min-width: 0;
+  }
+  &__id {
+    font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+    font-size: 1.18rem;
+    color: #177e48;
+    margin-bottom: 0.15rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  &__items-names {
+    font-size: 1.01rem;
+    color: #444;
+    margin-bottom: 0.15rem;
+    font-family: inherit;
+    font-weight: 500;
+    white-space: normal;
+    word-break: break-word;
+  }
+  &__total {
+    font-weight: 700;
+    color: #eab308;
+    font-size: 1.13rem;
+    margin-bottom: 0.15rem;
+    letter-spacing: 0.01em;
+  }
+  &__status {
+    font-size: 1.01rem;
+    color: #177e48;
+    margin-bottom: 0.15rem;
+    font-weight: 600;
+  }
+  &__date {
+    font-size: 0.97rem;
+    color: #888;
+    margin-bottom: 0.1rem;
+  }
+  button {
+    margin-top: 0.6rem;
+    background: #eab308;
+    color: #fff;
+    border-radius: 7px;
+    border: none;
+    padding: 0.45rem 1.3rem;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.13s, color 0.13s, border-color 0.13s;
+    &:hover {
+      background: #177e48;
+      color: #fffbe6;
+    }
+  }
+}
+
+.quantity-display {
+  display: inline-block;
+  min-width: 2.2em;
+  text-align: center;
+  font-size: 1.08rem;
+  font-weight: 700;
+  background: #fffbe6;
+  color: #177e48;
+  border: 1.5px solid #eab308;
+  border-radius: 6px;
+  margin: 0 7px;
+  padding: 3px 10px;
+  box-shadow: 0 1px 3px rgba(247, 178, 55, 0.10);
+  vertical-align: middle;
+  transition: opacity 0.15s, background 0.15s;
+  &.loading {
+    opacity: 0.5;
+    background: #f5fbe6;
+    /* Optionally add a spinner background or animation here */
+  }
+}
+
+// Remove any loading style from .buyer-dashboard__cart-delete
+.buyer-dashboard__cart-delete {
+  // ...existing styles...
+  // Remove any loading-specific styles if present
 }

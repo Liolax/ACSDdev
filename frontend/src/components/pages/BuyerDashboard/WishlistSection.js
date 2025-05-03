@@ -21,7 +21,6 @@ const WishlistSection = ({ wishlist = [], handleRemoveWishlist, handleMoveToCart
 
     return (
         <div className="buyer-dashboard__wishlist">
-            <h2>Wishlist</h2>
             <ul className="buyer-dashboard__wishlist-list">
                 {visibleList.map((item, idx) => {
                     const prodId = getProductId(item);

@@ -12,6 +12,10 @@ $irish-gold-text: #664200;
 $irish-green-gradient: linear-gradient(90deg, $irish-green 0%, $irish-green-light 100%);
 $hover-secondary-color: $irish-gold-dark;
 
+// Irish-inspired font stacks
+$font-family-base: 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif;
+$font-family-heading: 'Cormorant Garamond', serif;
+
 :root {
   --color-primary: #17623e;
   --color-primary-light: #218c5a;
@@ -22,6 +26,9 @@ $hover-secondary-color: $irish-gold-dark;
   --color-bg: #fbfbe6;
   --color-text: #11442b;
   --color-dark-primary: #11442b;
+
+  --font-family-base: 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif;
+  --font-family-heading: 'Cormorant Garamond', serif;
 
   --font-family-base: 'Inter', 'Segoe UI', Arial, sans-serif;
   --font-family-heading: 'Merriweather', serif;

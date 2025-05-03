@@ -73,10 +73,15 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                     e.target.src = '/assets/images/default-product.png'; // Set fallback image
                                 }}
                             />
-                            {/* Product Details */}
+                            {/* Product Info and Price */}
                             <div className="buyer-dashboard__cart-item-details">
                                 <span className="buyer-dashboard__cart-item-info">{item.name}</span>
-                                {/* Quantity Controls */}
+                                <span className="buyer-dashboard__cart-price">
+                                    ${getPriceNumber(item.price).toFixed(2)}
+                                </span>
+                            </div>
+                            {/* Quantity Controls and Delete Button */}
+                            <div className="buyer-dashboard__cart-actions">
                                 <div className="buyer-dashboard__quantity-controls">
                                     {/* Decrease Quantity Button */}
                                     <button
@@ -94,7 +99,11 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                         -
                                     </button>
                                     {/* Current Quantity */}
-                                    <span className="quantity-display">{item.quantity}</span>
+                                    <span
+                                        className={`quantity-display${isLoading ? ' loading' : ''}`}
+                                    >
+                                        {item.quantity}
+                                    </span>
                                     {/* Increase Quantity Button */}
                                     <button
                                         key={`increase-quantity-${idx}`}
@@ -113,26 +122,22 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                                     {/* Optionally, show a spinner if isLoading */}
                                     {/* {isLoading && <span className="cart-spinner">...</span>} */}
                                 </div>
-                                {/* Item Price */}
-                                <span className="buyer-dashboard__cart-price">
-                                    ${getPriceNumber(item.price).toFixed(2)}
-                                </span>
+                                {/* Remove Button */}
+                                <button
+                                    key={`remove-button-${idx}`}
+                                    onClick={async () => {
+                                        if (typeof onRemove === 'function' && !isLoading) {
+                                            setLoadingItem(prodId);
+                                            await onRemove(prodId);
+                                            setLoadingItem(null);
+                                        }
+                                    }}
+                                    className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete"
+                                    disabled={isLoading}
+                                >
+                                    Delete
+                                </button>
                             </div>
-                            {/* Remove Button */}
-                            <button
-                                key={`remove-button-${idx}`}
-                                onClick={async () => {
-                                    if (typeof onRemove === 'function' && !isLoading) {
-                                        setLoadingItem(prodId);
-                                        await onRemove(prodId);
-                                        setLoadingItem(null);
-                                    }
-                                }}
-                                className="button buyer-dashboard__button--sm buyer-dashboard__cart-delete"
-                                disabled={isLoading}
-                            >
-                                Delete
-                            </button>
                         </li>
                     );
                 })}
