@@ -10,7 +10,7 @@ import getImageUrl from '../../../helpers/getImageUrl';
 import { moveWishlistToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
 import { updateCartItemQuantity, removeFromCart as removeFromCartApi } from '../../../api/cart/cartRequests';
 import { submitFeedback } from '../../../api/feedback/feedbackRequests';
-import { markDelivered } from '../../../api/orders/ordersRequests';
+import { markDelivered, getMyPurchases } from '../../../api/orders/ordersRequests';
 
 // Helper function to determine collage style based on item count
 const getCollageStyle = (count) => {
@@ -91,6 +91,20 @@ useEffect(() => {
   };
   window.addEventListener('focus', fetchCart);
   return () => window.removeEventListener('focus', fetchCart);
+}, []);
+
+// Fetch orders on component mount
+useEffect(() => {
+  setLoadingOrders(true);
+  getMyPurchases()
+    .then((orders) => {
+      setOrders(Array.isArray(orders) ? orders : []);
+    })
+    .catch((err) => {
+      console.error("Error fetching orders:", err);
+      setOrders([]);
+    })
+    .finally(() => setLoadingOrders(false));
 }, []);
 
 // Wishlist Handlers
@@ -193,8 +207,20 @@ return (
           No orders found. Your past orders will appear here when available.
         </p>
       ) : (
+        // Patch orders to always have .items and .total for rendering
         orders.map(order => {
-          const { containerSize, gridTemplateColumns } = getCollageStyle(order.items.length);
+          // Patch: always provide .items and .total for rendering
+          const items = order.items || order.orderItems || [];
+          const total =
+            (order.total !== undefined
+              ? order.total
+              : order.totalPrice?.$numberDecimal
+                ? Number(order.totalPrice.$numberDecimal)
+                : order.totalPrice !== undefined
+                  ? Number(order.totalPrice)
+                  : 0);
+
+          const { containerSize, gridTemplateColumns } = getCollageStyle(items.length);
           return (
             <div key={order._id} className="order-card">
               <div
@@ -209,7 +235,7 @@ return (
                   borderRadius: '8px',
                 }}
               >
-                {order.items.map((item, idx) => (
+                {items.map((item, idx) => (
                   <img
                     key={idx}
                     src={getImageUrl(item.image)}
@@ -230,12 +256,12 @@ return (
               <div className="order-card__details">
                 <h3 className="order-card__id">Order {order._id}</h3>
                 <p className="order-card__items-names">
-                  {order.items.map((item, idx) => (
-                    <span key={idx}>{item.name}{idx < order.items.length - 1 ? ', ' : ''}</span>
+                  {items.map((item, idx) => (
+                    <span key={idx}>{item.name}{idx < items.length - 1 ? ', ' : ''}</span>
                   ))}
                 </p>
                 <p className="order-card__total">
-                  Total: ${typeof order.total === 'number' ? order.total.toFixed(2) : Number(order.total || 0).toFixed(2)}
+                  Total: ${Number(total).toFixed(2)}
                 </p>
                 <p className="order-card__status">Status: {order.status}</p>
                 {order.status === 'Shipped' && (

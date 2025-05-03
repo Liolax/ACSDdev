@@ -46,9 +46,11 @@ export const simulatePayment = async (orderId, paymentDetails) => {
 export const getMyPurchases = async () => {
   try {
     const response = await apiClient.get(ORDERS_ENDPOINTS.GET_MY_PURCHASES);
+    // Return the array directly (backend returns an array)
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     handleApiError(error);
+    return [];
   }
 };
 

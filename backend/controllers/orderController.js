@@ -136,7 +136,8 @@ export const simulatePayment = async (req, res) => {
 export const getMyPurchases = async (req, res) => {
   try {
     const userId = req.user._id;
-    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+    // FIX: Use 'user' not 'userId'
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching buyer orders:", error);
