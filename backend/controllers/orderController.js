@@ -99,7 +99,8 @@ export const simulatePayment = async (req, res) => {
       return res.status(400).json({ message: 'CVV is required and must be 3 or 4 digits.' });
     }
 
-    const order = await Order.findOne({ _id: orderId, userId });
+    // Change userId to user if your model uses 'user'
+    const order = await Order.findOne({ _id: orderId, user: userId });
     if (!order) {
       return res.status(404).json({ message: 'Order not found or access denied.' });
     }
@@ -110,8 +111,18 @@ export const simulatePayment = async (req, res) => {
     order.paymentStatus = 'Paid';
     order.status = 'Processing'; // Now the order is processing
     order.paymentInfo = paymentDetails;
+    order.isPaid = true;
+    order.paidAt = new Date();
 
     await order.save();
+
+    // Clear the user's cart after successful payment
+    const cart = await Cart.findOne({ userId });
+    if (cart) {
+      cart.items = [];
+      await cart.save();
+    }
+
     res.status(200).json(order);
   } catch (error) {
     console.error("Error simulating payment:", error);

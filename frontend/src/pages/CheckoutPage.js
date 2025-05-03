@@ -65,6 +65,7 @@ const CheckoutPage = () => {
       }
       // Use the order id (from createdOrder or the response)
       const orderId = createdOrder ? createdOrder._id : orderResponse.data.order._id;
+      console.log("Extracted Order ID:", orderId);
       // Simulate payment (wrap paymentInfo in paymentDetails)
       await apiClient.post(`/orders/${orderId}/simulate-payment`, { paymentDetails: paymentInfo });
       
