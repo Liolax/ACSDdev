@@ -2,6 +2,8 @@ import { ROLES } from '../constants/roles';
 
 // Login function with validation and user feedback.
 export const handleLogin = (navigate, email, password, rememberMe, role) => {
+  console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
+  
   // Validate required fields before proceeding.
   if (!email || !password) {
     alert("Email and password are required.");
@@ -14,20 +16,18 @@ export const handleLogin = (navigate, email, password, rememberMe, role) => {
     return;
   }
 
-  console.log(`Logging in with ${email}, role ${role}, remember: ${rememberMe}`);
-  
   // Generate a dummy token for session management.
-  const dummyToken = "dummy.jwt.token"; 
+  const dummyToken = "dummy.jwt.token";
   localStorage.setItem('authToken', dummyToken);
   localStorage.setItem('userRole', role);
-  
+
   // Redirect users based on role.
   if (role === ROLES.BUYER) {
-    navigate('/market');
+    navigate('/market', { replace: true });
   } else if (role === ROLES.SELLER) {
-    navigate('/seller-dashboard');
+    navigate('/seller-dashboard', { replace: true });
   } else {
-    navigate('/');
+    navigate('/', { replace: true });
   }
 };
 

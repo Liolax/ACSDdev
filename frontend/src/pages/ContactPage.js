@@ -12,18 +12,17 @@ const ContactPage = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const openLoginPopup = () => setShowLoginPopup(true);
-  const closeLoginPopup = () => setShowLoginPopup(false);
+  const handleLoginClick = () => setShowLoginPopup(true);
+  const handleCloseLoginPopup = () => setShowLoginPopup(false);
 
-  // Updated: async handler to close popup after login
+  // Handler for login that closes popup after login
   const handleLogin = async (email, password, rememberMe, role) => {
     if (role === 'buyer') {
       navigate('/market');
     } else {
       navigate('/seller-dashboard');
     }
-    // Ensure popup closes after navigation (async for consistency)
-    setShowLoginPopup(false);
+    setShowLoginPopup(false); // Ensure popup closes after login
   };
 
   const handleFormSuccess = () => setFormSubmitted(true);
@@ -32,7 +31,7 @@ const ContactPage = () => {
 
   return (
     <div className="page-container contact-page-bg">
-      <Header userRole={userRole} onLoginClick={openLoginPopup} />
+      <Header userRole={userRole} onLoginClick={handleLoginClick} />
       <main className="contact-page__main">
         <section className="contact-page__content">
           {!formSubmitted && (
@@ -48,7 +47,7 @@ const ContactPage = () => {
       </main>
       <Footer />
       {showLoginPopup && (
-        <LoginPopup closePopup={closeLoginPopup} handleLogin={handleLogin} />
+        <LoginPopup onClose={handleCloseLoginPopup} handleLogin={handleLogin} />
       )}
     </div>
   );

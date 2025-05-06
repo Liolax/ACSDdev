@@ -40,9 +40,14 @@ const Home = () => {
         <LoginPopup
           onClose={closeLoginPopup}
           handleLogin={(email, password, rememberMe, role) => {
-            handleLogin(navigate, email, password, rememberMe, role);
             setUser({ role });
             localStorage.setItem('userRole', role);
+            // Redirect after login
+            if (role === 'buyer') {
+              navigate('/market', { replace: true });
+            } else if (role === 'seller') {
+              navigate('/seller-dashboard', { replace: true });
+            }
           }}
         />
       )}

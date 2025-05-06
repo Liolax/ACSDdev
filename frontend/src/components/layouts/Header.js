@@ -7,9 +7,10 @@ import { ROLES } from '../../constants/roles';
 
 const Header = ({ onLoginClick }) => {
   const navigate = useNavigate();
-  const { user, logout: authLogout } = useAuth(); // Use user and logout from context
+  const { user, logout: authLogout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // userRole is always derived from AuthContext's user object
   const userRole = user ? user.role : null;
   const ROLES_SAFE = ROLES || { BUYER: 'buyer', SELLER: 'seller' };
   const logoLink = userRole === ROLES_SAFE.SELLER ? '/seller-dashboard' : '/';

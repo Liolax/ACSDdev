@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../assets/styles/components/_popup.scss';
 import { ROLES } from '../constants/roles';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useNavigate } from 'react-router-dom';
 
 const LoginPopup = ({ onClose = () => {}, handleLogin: onLoginProp }) => {
   const [email, setEmail] = useState('');
@@ -10,12 +11,19 @@ const LoginPopup = ({ onClose = () => {}, handleLogin: onLoginProp }) => {
   const [role, setRole] = useState(ROLES.BUYER); // Default role is buyer
 
   const { login: authLogin } = useAuth(); // Get login function from context
+  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     // Pass the login credentials to the provided login handler.
     try {
       await authLogin({ email, password, role });
+      // Redirect after login based on role
+      if (role === ROLES.BUYER) {
+        navigate('/market');
+      } else if (role === ROLES.SELLER) {
+        navigate('/seller-dashboard');
+      }
       onClose();
       // Optionally call onLoginProp for navigation or other side effects
       if (onLoginProp) {
