@@ -8,7 +8,11 @@ const orderItemSchema = new mongoose.Schema({
   image: { type: String, default: '' },
   seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { type: String, enum: ['Processing', 'Shipped', 'Delivered'], default: 'Processing' },
-  feedback: { type: mongoose.Schema.Types.Mixed, default: null }
+  feedback: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null
+    // Structure: { rating, title, comments, buyer, edited }
+  }
 });
 
 const orderSchema = new mongoose.Schema(

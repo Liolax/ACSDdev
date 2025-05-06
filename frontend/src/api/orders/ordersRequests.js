@@ -14,3 +14,8 @@ export const markDelivered = (orderId, orderItemId) =>
   apiClient.post('/api/orders/mark-delivered', { orderId, orderItemId });
 export const addFeedback = (orderId, orderItemId, rating, title, comments) =>
   apiClient.post('/api/orders/add-feedback', { orderId, orderItemId, rating, title, comments });
+export const editFeedback = (orderId, orderItemId, rating, title, comments) =>
+  apiClient.post('/api/orders/edit-feedback', { orderId, orderItemId, rating, title, comments });
+
+export const deleteFeedback = (orderId, orderItemId) =>
+  apiClient.post('/api/orders/delete-feedback', { orderId, orderItemId });

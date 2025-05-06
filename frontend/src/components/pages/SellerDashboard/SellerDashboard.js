@@ -508,7 +508,9 @@ const SellerDashboard = () => {
                 <strong>Order:</strong> {fb.order?._id}<br />
                 <strong>Rating:</strong> {fb.rating}<br />
                 <strong>Title:</strong> {fb.title}<br />
-                <strong>Comments:</strong> {fb.comments}<br />
+                <strong>Comments:</strong> {fb.comments}
+                {fb.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                <br />
                 <strong>User:</strong> {fb.user?.name || 'Anonymous'}
               </li>
             ))}

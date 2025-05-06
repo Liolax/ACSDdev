@@ -17,5 +17,7 @@ router.get('/my-purchases', auth, orderController.getMyPurchases);
 router.post('/mark-shipped', auth, orderController.markShipped);
 router.post('/mark-delivered', auth, orderController.markDelivered);
 router.post('/add-feedback', auth, orderController.addFeedback);
+router.post('/edit-feedback', auth, orderController.editFeedback);
+router.post('/delete-feedback', auth, orderController.deleteFeedback);
 
 export default router;

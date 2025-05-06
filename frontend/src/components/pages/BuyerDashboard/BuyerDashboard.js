@@ -10,7 +10,7 @@ import getImageUrl from '../../../helpers/getImageUrl';
 import { moveWishlistToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
 import { updateCartItemQuantity, removeFromCart as removeFromCartApi } from '../../../api/cart/cartRequests';
 import { submitFeedback } from '../../../api/feedback/feedbackRequests';
-import { markDelivered, getMyPurchases, addFeedback } from '../../../api/orders/ordersRequests';
+import { markDelivered, getMyPurchases, addFeedback, editFeedback, deleteFeedback } from '../../../api/orders/ordersRequests';
 
 // Helper function to determine collage style based on item count
 const getCollageStyle = (count) => {
@@ -52,6 +52,7 @@ const BuyerDashboard = ({ user }) => {
   const [cartVisible, setCartVisible] = useState(5);
   const [feedbackByOrder, setFeedbackByOrder] = useState({});
   const [feedbackOrderId, setFeedbackOrderId] = useState(null);
+  const [editFeedbackData, setEditFeedbackData] = useState(null);
 
   const navigate = useNavigate();
 
@@ -154,8 +155,11 @@ const handlePay = () => {
 // Feedback Handlers
 const handleFeedbackSubmit = async ({ orderId, itemId, rating, title, comments }) => {
   try {
-    // Ensure correct argument order for addFeedback
-    await addFeedback(orderId, itemId, rating, title, comments);
+    if (editFeedbackData) {
+      await editFeedback(orderId, itemId, rating, title, comments);
+    } else {
+      await addFeedback(orderId, itemId, rating, title, comments);
+    }
     setOrders(orders =>
       orders.map(order =>
         order._id === orderId
@@ -163,7 +167,7 @@ const handleFeedbackSubmit = async ({ orderId, itemId, rating, title, comments }
               ...order,
               orderItems: order.orderItems.map(item =>
                 item._id === itemId
-                  ? { ...item, feedback: { rating, title, comments } }
+                  ? { ...item, feedback: { rating, title, comments, edited: !!editFeedbackData } }
                   : item
               )
             }
@@ -174,15 +178,32 @@ const handleFeedbackSubmit = async ({ orderId, itemId, rating, title, comments }
     // handle error
   }
   setFeedbackOrderId(null);
+  setEditFeedbackData(null);
 };
 
-const handleFeedbackDelete = (orderId) => {
-  console.log(`Deleting feedback for order ${orderId}`);
-  setFeedbackByOrder((prev) => {
-    const updated = { ...prev };
-    delete updated[orderId];
-    return updated;
-  });
+const handleEditFeedback = (orderId, itemId, feedback) => {
+  setFeedbackOrderId({ orderId, itemId });
+  setEditFeedbackData({ ...feedback });
+};
+
+const handleDeleteFeedback = async (orderId, itemId) => {
+  try {
+    await deleteFeedback(orderId, itemId);
+    setOrders(orders =>
+      orders.map(order =>
+        order._id === orderId
+          ? {
+              ...order,
+              orderItems: order.orderItems.map(item =>
+                item._id === itemId ? { ...item, feedback: null } : item
+              )
+            }
+          : order
+      )
+    );
+  } catch (err) {
+    // handle error
+  }
 };
 
 const handleMarkDelivered = async (orderId, itemId) => {
@@ -322,16 +343,42 @@ return (
                             e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
                             e.currentTarget.style.transform = 'none';
                           }}
-                          onClick={() => setFeedbackOrderId({ orderId: order._id, itemId: item._id })}
+                          onClick={() => {
+                            setFeedbackOrderId({ orderId: order._id, itemId: item._id });
+                            setEditFeedbackData(null);
+                          }}
                         >
                           Leave Feedback
                         </Button>
                       )}
+                      {item.status === 'Delivered' && item.feedback && (
+                        <>
+                          <Button
+                            className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
+                            style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
+                            onClick={() => handleEditFeedback(order._id, item._id, item.feedback)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
+                            style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
+                            onClick={() => handleDeleteFeedback(order._id, item._id)}
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      )}
                     </div>
                     {item.feedback && (
                       <div style={{ width: '100%' }}>
-                        <span>Feedback: {item.feedback.rating}★ {item.feedback.title}</span>
-                        <span>{item.feedback.comments}</span>
+                        <span>
+                          Feedback: {item.feedback.rating}★ {item.feedback.title}
+                        </span>
+                        <span>
+                          {item.feedback.comments}
+                          {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -389,8 +436,12 @@ return (
       <FeedbackPopup
         orderId={feedbackOrderId}
         userId={user?._id}
-        closePopup={() => setFeedbackOrderId(null)}
+        closePopup={() => {
+          setFeedbackOrderId(null);
+          setEditFeedbackData(null);
+        }}
         onSubmitFeedback={handleFeedbackSubmit}
+        initialFeedback={editFeedbackData}
       />
     )}
   </div>

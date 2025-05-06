@@ -237,3 +237,42 @@ export const addFeedback = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+// Buyer edits feedback for delivered item
+export const editFeedback = async (req, res) => {
+  try {
+    const { orderId, orderItemId, rating, title, comments } = req.body;
+    const buyerId = req.user._id;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    const item = order.orderItems.id(orderItemId);
+    if (!item) return res.status(404).json({ error: 'Order item not found' });
+    if (!order.buyer.equals(buyerId) || item.status !== 'Delivered')
+      return res.status(403).json({ error: 'Unauthorized or not delivered' });
+    if (!item.feedback) return res.status(400).json({ error: 'No feedback to edit' });
+    item.feedback = { rating, title, comments, buyer: buyerId, edited: true };
+    await order.save();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// Buyer deletes feedback for delivered item
+export const deleteFeedback = async (req, res) => {
+  try {
+    const { orderId, orderItemId } = req.body;
+    const buyerId = req.user._id;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    const item = order.orderItems.id(orderItemId);
+    if (!item) return res.status(404).json({ error: 'Order item not found' });
+    if (!order.buyer.equals(buyerId) || item.status !== 'Delivered')
+      return res.status(403).json({ error: 'Unauthorized or not delivered' });
+    item.feedback = null;
+    await order.save();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}

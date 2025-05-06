@@ -36,7 +36,10 @@ const MySales = () => {
                     <strong>Feedback:</strong>
                     <p>Rating: {item.feedback.rating} ★</p>
                     <p>Title: {item.feedback.title}</p>
-                    <p>Comments: {item.feedback.comments}</p>
+                    <p>
+                      Comments: {item.feedback.comments}
+                      {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                    </p>
                   </div>
                 )}
               </div>
