@@ -443,7 +443,7 @@ $breakpoint-sm: 576px;  // Mobile
 }
 
 .buyer-dashboard__button--delete {
-  background: linear-gradient(90deg, #fff3f3 0%, #ffd6d6 100%) !important;
+  background: linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%) !important;
   color: #b10e0e !important;
   border: 2px solid #b10e0e !important;
 }
@@ -729,7 +729,7 @@ $breakpoint-sm: 576px;  // Mobile
       padding-bottom: 0;
     }
 
-    // All children full width and border-box
+    // Ensure all direct children that might have padding/border are also border-box
     .order-card__item-info,
     .order-card__item-progress-container,
     .order-card__item-actions,
@@ -785,26 +785,52 @@ $breakpoint-sm: 576px;  // Mobile
 
     .order-card__item-actions {
       display: flex;
-      gap: 0.75em;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: flex-end;
+      gap: 0.75em;
       width: 100%;
 
-      // Special layout for feedback actions (Edit/Delete) on small screens
+      .buyer-dashboard__button--feedback,
+      .buyer-dashboard__button--edit,
+      .buyer-dashboard__button--delete {
+        margin: 0;
+        min-width: 110px;
+        flex: 0 0 auto;
+      }
+
+      // Responsive: Edit left, Delete right, always at far ends
       &.order-card__item-actions--feedback {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        width: 100%;
+        gap: 0;
+
+        .buyer-dashboard__button--edit {
+          margin-right: auto;
+          margin-left: 0;
+          order: 1;
+        }
+        .buyer-dashboard__button--delete {
+          margin-left: auto;
+          margin-right: 0;
+          order: 2;
+        }
+        // Remove the flex:1 spacer if present in markup
+        span[style*="flex: 1"] {
+          display: none !important;
+        }
+
         @media (max-width: $breakpoint-sm) {
           flex-direction: row;
-          justify-content: space-between;
           gap: 0;
           margin-top: 0.5em;
-          // Make buttons take left/right
           .buyer-dashboard__button--edit {
-            order: 1;
             margin-right: auto;
             margin-left: 0;
           }
           .buyer-dashboard__button--delete {
-            order: 2;
             margin-left: auto;
             margin-right: 0;
           }
@@ -819,6 +845,7 @@ $breakpoint-sm: 576px;  // Mobile
       border-radius: 4px;
       padding: 0.6em 0.9em;
       border-left: 3px solid #a3b18a;
+      width: 100%;
     }
   }
 
