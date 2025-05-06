@@ -54,10 +54,15 @@ const BuyerDashboard = ({ user }) => {
   const [feedbackOrderId, setFeedbackOrderId] = useState(null);
   const [editFeedbackData, setEditFeedbackData] = useState(null);
 
+  const [loadingWishlist, setLoadingWishlist] = useState(true); // <-- add
+  const [loadingCart, setLoadingCart] = useState(true); // <-- add
+
   const navigate = useNavigate();
 
 // Fetch wishlist and cart on component mount
 useEffect(() => {
+  setLoadingWishlist(true);
+  setLoadingCart(true);
   apiClient
     .get('/api/wishlist')
     .then((res) => {
@@ -66,7 +71,8 @@ useEffect(() => {
     .catch((err) => {
       console.error("Error fetching wishlist:", err);
       setWishlist([]);
-    });
+    })
+    .finally(() => setLoadingWishlist(false));
 
   apiClient
     .get('/api/cart')
@@ -76,19 +82,22 @@ useEffect(() => {
     .catch((err) => {
       console.error("Error fetching cart:", err);
       setCart({ items: [] });
-    });
+    })
+    .finally(() => setLoadingCart(false));
 }, []);
 
 // Re-fetch the cart when the window regains focus
 useEffect(() => {
   const fetchCart = () => {
+    setLoadingCart(true);
     apiClient
       .get('/api/cart')
       .then((res) => setCart(res.data.cart || { items: [] }))
       .catch((err) => {
         console.error("Error fetching cart:", err);
         setCart({ items: [] });
-      });
+      })
+      .finally(() => setLoadingCart(false));
   };
   window.addEventListener('focus', fetchCart);
   return () => window.removeEventListener('focus', fetchCart);
@@ -249,7 +258,7 @@ return (
     {/* Orders Section */}
     <div className="buyer-dashboard__orders">
       {loadingOrders ? (
-        <p>Loading orders...</p>
+        <p className="buyer-dashboard__empty">Loading orders...</p>
       ) : orders.length === 0 ? (
         <p className="buyer-dashboard__empty">
           No orders found. Your past orders will appear here when available.
@@ -268,15 +277,21 @@ return (
                   : 0);
 
           const { containerSize, gridTemplateColumns } = getCollageStyle(items.length);
+          // Determine collage class for grid layout
+          let collageClass = '';
+          if (items.length === 2) collageClass = 'collage-2';
+          else if (items.length === 3) collageClass = 'collage-3';
+          else if (items.length === 4) collageClass = 'collage-4';
+          else if (items.length >= 5) collageClass = 'collage-5plus';
+
           return (
             <div key={order._id} className="order-card">
               <div
-                className="order-card__collage"
+                className={`order-card__collage${collageClass ? ' ' + collageClass : ''}`}
                 style={{
                   width: `${containerSize}px`,
                   height: `${containerSize}px`,
-                  display: 'grid',
-                  gridTemplateColumns,
+                  // Remove gridTemplateColumns here, let SCSS handle it
                   gap: '2px',
                   overflow: 'hidden',
                   borderRadius: '8px',
@@ -333,7 +348,10 @@ return (
                       </div>
                       <div className="order-card__item-actions">
                         {item.status === 'Shipped' && (
-                          <Button onClick={() => handleMarkDelivered(order._id, item._id)}>
+                          <Button
+                            className="buyer-dashboard__button--mark-delivered"
+                            onClick={() => handleMarkDelivered(order._id, item._id)}
+                          >
                             Mark Delivered
                           </Button>
                         )}
@@ -428,7 +446,9 @@ return (
     {/* Wishlist Section */}
     <div id="wishlist-section" className="buyer-dashboard__wishlist">
       <h2 className="buyer-dashboard__header">Wishlist</h2>
-      {wishlist && wishlist.length > 0 ? (
+      {loadingWishlist ? (
+        <p className="buyer-dashboard__empty">Loading wishlist...</p>
+      ) : wishlist && wishlist.length > 0 ? (
         <WishlistSection
           wishlist={wishlist}
           handleRemoveWishlist={handleRemoveWishlist}
@@ -446,7 +466,9 @@ return (
     {/* Cart Section */}
     <div id="cart-section" className="buyer-dashboard__cart">
       <h2 className="buyer-dashboard__header">Cart</h2>
-      {cartItems.length > 0 ? (
+      {loadingCart ? (
+        <p className="buyer-dashboard__empty">Loading cart...</p>
+      ) : cartItems.length > 0 ? (
         <CartSection
           items={cartItems}
           visibleCount={cartVisible}

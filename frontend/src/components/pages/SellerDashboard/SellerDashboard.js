@@ -279,10 +279,11 @@ const SellerDashboard = () => {
 
       {/* Products to Ship Section */}
       <h2 className="seller-dashboard__header">Products to Ship</h2>
-      {orderError && <p className="seller-dashboard__error">{orderError}</p>}
       <div className="seller-dashboard__orders">
         {loadingOrders ? (
-          <p>Loading products to ship...</p>
+          <p className="seller-dashboard__empty">Loading products to ship...</p>
+        ) : orderError ? (
+          <p className="seller-dashboard__empty">{orderError}</p>
         ) : toShip.length === 0 ? (
           <p className="seller-dashboard__empty">No products pending shipment.</p>
         ) : (
@@ -342,7 +343,7 @@ const SellerDashboard = () => {
 
       {/* Manage Products Section */}
       <h2 className="seller-dashboard__header" id="manage-products-section">Manage Products</h2>
-      {prodError && <p className="seller-dashboard__error">{prodError}</p>}
+      {prodError && <p className="seller-dashboard__empty">{prodError}</p>}
       <div className="seller-dashboard__search">
         <input
           type="text"
@@ -422,7 +423,9 @@ const SellerDashboard = () => {
         </form>
       )}
       {loadingProducts ? (
-        <p>Loading products...</p>
+        <p className="seller-dashboard__empty">Loading products...</p>
+      ) : filteredProducts.length === 0 ? (
+        <p className="seller-dashboard__empty">No products found. Add a product to get started.</p>
       ) : (
         <div className="seller-dashboard__list">
           {currentProducts.map((product) => {
@@ -572,9 +575,9 @@ const SellerDashboard = () => {
         <h2 className="seller-dashboard__header">My Sales</h2>
         <div className="my-sales__list">
           {loadingOrders ? (
-            <p className="my-sales__loading">Loading sales…</p>
+            <p className="seller-dashboard__empty">Loading sales…</p>
           ) : sales.length === 0 ? (
-            <p className="my-sales__empty">No sales yet.</p>
+            <p className="seller-dashboard__empty">No sales yet.</p>
           ) : (
             <>
               {sales.slice(0, salesVisible).map(item => (

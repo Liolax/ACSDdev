@@ -44,7 +44,11 @@ export default function SellerDashboard() {
                   )}
                 </div>
               ))
-            ) : <p className="panel__empty-message">No sales data available yet.</p>}
+            ) : (
+              <p className="seller-dashboard__empty">
+                No sales yet. Your sales will appear here when available.
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -71,7 +75,11 @@ export default function SellerDashboard() {
                   </div>
                 </div>
               ))
-            ) : <p className="panel__empty-message">No orders currently pending shipment.</p>}
+            ) : (
+              <p className="seller-dashboard__empty">
+                No orders currently pending shipment.
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -80,7 +88,9 @@ export default function SellerDashboard() {
         <h2 className="seller-dashboard__title">Manage Products</h2>
         <div className="panel">
           <div className="panel__content">
-            <p className="panel__empty-message">Product management features are coming soon!</p>
+            <p className="seller-dashboard__empty">
+              Product management features are coming soon!
+            </p>
             {/* 
               Future elements:
               <button className="add-product-button">Add New Product</button>

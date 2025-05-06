@@ -20,11 +20,11 @@ const MySales = () => {
     <div className="my-sales">
       <h2 className="my-sales__header">My Sales</h2>
       {loading ? (
-        <p className="my-sales__loading">Loading sales…</p>
+        <p className="seller-dashboard__empty">Loading sales…</p>
       ) : (
         <div className="my-sales__list">
           {sales.length === 0 ? (
-            <p className="my-sales__empty">No sales yet.</p>
+            <p className="seller-dashboard__empty">No sales yet.</p>
           ) : (
             sales.map((item) => (
               <div key={item._id} className="order-card my-sales__order-card">
