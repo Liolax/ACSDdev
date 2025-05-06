@@ -376,8 +376,20 @@ return (
                             Leave Feedback
                           </Button>
                         )}
-                        {isDelivered && item.feedback && (
-                          <>
+                      </div>
+                      {item.feedback && (
+                        <>
+                          <div className="order-card__item-feedback-display">
+                            <span>
+                              Feedback: {item.feedback.rating}★ {item.feedback.title}
+                            </span>
+                            <span style={{ display: 'inline-block', marginLeft: 8 }}>
+                              {item.feedback.comments}
+                              {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                            </span>
+                          </div>
+                          {/* Edit/Delete buttons below feedback, with mobile-friendly layout */}
+                          <div className="order-card__item-actions order-card__item-actions--feedback">
                             <Button
                               className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
                               style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
@@ -385,6 +397,7 @@ return (
                             >
                               Edit
                             </Button>
+                            <span style={{ flex: 1 }} />
                             <Button
                               className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
                               style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
@@ -392,19 +405,8 @@ return (
                             >
                               Delete
                             </Button>
-                          </>
-                        )}
-                      </div>
-                      {item.feedback && (
-                        <div className="order-card__item-feedback-display">
-                          <span>
-                            Feedback: {item.feedback.rating}★ {item.feedback.title}
-                          </span>
-                          <span>
-                            {item.feedback.comments}
-                            {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
-                          </span>
-                        </div>
+                          </div>
+                        </>
                       )}
                     </div>
                   );
