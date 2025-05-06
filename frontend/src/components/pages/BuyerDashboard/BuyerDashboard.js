@@ -383,10 +383,13 @@ return (
                     )}
                   </div>
                 ))}
-                <p className="order-card__total">
-                  Total: ${Number(total).toFixed(2)}
-                </p>
-                <p className="order-card__status">Status: {order.status}</p>
+                {/* NEW: Wrap total and status */}
+                <div className="order-card__summary">
+                  <p className="order-card__total">
+                    Total: ${Number(total).toFixed(2)}
+                  </p>
+                  <p className="order-card__status">Status: {order.status}</p>
+                </div>
               </div>
             </div>
           );

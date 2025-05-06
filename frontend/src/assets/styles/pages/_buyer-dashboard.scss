@@ -602,54 +602,55 @@ $breakpoint-sm: 576px;  // Mobile
   gap: 1.7rem; // Gap between order cards
 }
 
-// --- Refined Order Card Styling ---
+// --- Further Refined Order Card Styling ---
 .order-card {
-  background: #fdfcf7; // Slightly warmer parchment background
-  border: 1px solid #eab308; // Slightly thinner border
-  border-radius: 12px; // Soften the corners a bit
-  box-shadow: 0 3px 15px rgba(234, 179, 8, 0.08); // Softer, more diffused shadow
-  margin-bottom: 1.8rem; // Slightly reduced margin
-  padding: 1.2rem 1.5rem; // Adjust padding for better spacing
-  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.15s ease-out; // Smoother transitions
+  background: #fdfdf9; // Slightly brighter parchment background
+  border: 1px solid #e0d6b3; // Use the lighter dashed border color for the main border
+  border-radius: 10px; // Slightly smaller radius
+  box-shadow: 0 2px 10px rgba(184, 134, 11, 0.07); // Softer, darkgoldenrod-based shadow
+  margin-bottom: 1.8rem;
+  padding: 1.2rem 1.5rem;
+  // Slightly faster transitions
+  transition: box-shadow 0.18s ease-out, border-color 0.18s ease-out, transform 0.15s ease-out;
   position: relative;
   display: flex;
-  gap: 1.2rem; // Slightly reduced gap
+  gap: 1.2rem;
   align-items: flex-start;
 
   &:hover,
   &:focus-within {
-    box-shadow: 0 6px 20px rgba(234, 179, 8, 0.15); // Slightly more pronounced shadow on hover
-    border-color: #b8860b; // Darker gold border on hover (was #bfa800)
-    transform: translateY(-2px); // Keep subtle lift
+    box-shadow: 0 5px 18px rgba(184, 134, 11, 0.12); // Refined hover shadow
+    border-color: #b8860b; // Keep darker gold border on hover
+    transform: translateY(-2px);
   }
 
   &__collage {
-    min-width: 100px; // Slightly smaller collage area
+    min-width: 100px;
     min-height: 100px;
-    background: #fffdf0; // Lighter background for collage
-    border-radius: 8px; // Match softer corners
+    background: #fff; // White background for contrast
+    border-radius: 6px; // Match mini-image radius more closely
     overflow: hidden;
     display: grid;
     align-items: center;
     justify-items: center;
-    box-shadow: 0 1px 4px rgba(234, 179, 8, 0.06); // Very subtle inner shadow
-    margin-right: 1rem; // Adjust margin
-    // Keep grid template columns/rows if you were using them
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); // Simpler shadow
+    margin-right: 1rem;
+    border: 1px solid #f0e6d2; // Subtle border around collage
   }
 
   &__mini-image {
-    border-radius: 4px; // Slightly less rounded mini-images
-    border: 1px solid #f0e68c; // Lighter border on mini-images (Khaki)
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.18s, border-color 0.18s, transform 0.15s ease-out;
+    border-radius: 4px;
+    border: none; // Remove border, collage has one now
+    box-shadow: none; // Remove shadow, collage has one now
+    transition: transform 0.18s ease-out; // Only transition transform
     cursor: pointer;
+    display: block; // Ensure no extra space below image if grid isn't used
 
     &:hover,
     &:focus {
-      border-color: #177e48; // Green border on hover
-      box-shadow: 0 3px 12px rgba(23, 126, 72, 0.12); // Greenish shadow
-      transform: scale(1.05) rotate(-1deg); // Slightly less rotation
-      z-index: 2;
+      // Keep scale effect but remove border/shadow changes here
+      transform: scale(1.06);
+      z-index: 2; // Keep z-index for overlap if needed
     }
   }
 
@@ -657,28 +658,29 @@ $breakpoint-sm: 576px;  // Mobile
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem; // Reduced gap between detail elements
+    gap: 0.5rem; // Slightly increase gap for readability
   }
 
   &__id {
-    color: #2e4d32; // Slightly darker, less saturated green
-    font-size: 1.1rem; // Slightly smaller ID font size
-    font-weight: 600; // Slightly less bold
-    margin-bottom: 0.6rem; // Increased margin below ID
-    letter-spacing: 0.02em; // Slightly increased letter spacing
-    border-bottom: 1px solid #eee8aa; // Paler gold underline
+    color: #2e4d32;
+    font-size: 1.05rem; // Slightly smaller ID
+    font-weight: 600;
+    margin-bottom: 0.5rem; // Reduced margin
+    letter-spacing: 0.01em; // Reduced spacing
+    border-bottom: 1px solid #eee8aa;
     padding-bottom: 0.3rem;
   }
 
-  // Refined item styling within the card
+  // Further refined item styling
   &__item {
     display: flex;
-    align-items: center; // Vertically align items in the row
-    gap: 0.8em; // Consistent gap
+    align-items: center;
+    gap: 0.8em;
     flex-wrap: wrap;
-    padding-bottom: 0.5rem; // Increased padding below item
-    margin-bottom: 0.5rem; // Consistent margin
-    border-bottom: 1px dashed #e0d6b3; // Lighter dashed border
+    padding-bottom: 0.6rem; // Slightly more padding below item
+    margin-bottom: 0.6rem; // Slightly more margin below item
+    // Slightly stronger dashed border for item separation
+    border-bottom: 1px dashed #dcd1a0;
     position: relative;
 
     &:last-child {
@@ -689,21 +691,19 @@ $breakpoint-sm: 576px;  // Mobile
 
     // Item Name refinement
     .order-card__item-name {
-      font-weight: 600; // Less bold
-      color: #3a5a40; // Primary green color
-      font-size: 1.05rem; // Slightly smaller
-      letter-spacing: 0; // Reset letter spacing
-      margin-bottom: 0; // Remove bottom margin as it's handled by flex gap
-      text-shadow: none; // Remove text shadow for cleaner look
-      flex-shrink: 0; // Prevent shrinking
-      margin-right: 0.5em; // Ensure some space
+      font-weight: 600;
+      color: #3a5a40;
+      font-size: 1.0rem; // Standardize font size
+      flex-shrink: 0;
+      margin-right: 0.5em;
+      text-shadow: none;
     }
 
-    // General span styling within item
+    // General span styling within item (for status etc.)
     > span {
       flex-shrink: 0;
-      font-size: 0.95rem; // Slightly smaller secondary text
-      color: #555; // Dark gray for secondary info like status
+      font-size: 0.9rem; // Make secondary info smaller
+      color: #6c757d; // Use a standard muted gray color
     }
 
     // Actions container (buttons)
@@ -711,44 +711,59 @@ $breakpoint-sm: 576px;  // Mobile
     .buyer-dashboard__button--feedback,
     .move-to-cart-btn,
     .wishlist-delete-btn {
-      margin-left: auto; // Keep aligned to the right
+      margin-left: auto;
       display: flex;
-      gap: 0.5em; // Consistent gap between buttons
+      gap: 0.5em;
       align-items: center;
     }
 
     // Feedback display refinement
-    > div { // Targeting the feedback div specifically
+    // Target the div containing feedback text (assumes it's a direct child div)
+    > div {
       width: 100%;
-      margin-top: 0.4em; // Space above feedback
-      font-size: 0.9rem; // Smaller feedback text
-      color: #4a684f; // Subtler green for feedback text
-      background: #f0f3eb; // Very light green background
+      margin-top: 0.5rem; // More space above feedback
+      font-size: 0.9rem;
+      color: #4a684f;
+      background: #f4f6f2; // Slightly different background
       border-radius: 4px;
-      padding: 0.4em 0.6em;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04); // Subtle inset shadow
+      padding: 0.5em 0.8em; // Adjust padding
+      box-shadow: none; // Remove inset shadow
+      // Add a subtle left border for visual distinction
+      border-left: 3px solid #a3b18a; // Moss green accent border
     }
   }
 
+  // Container for Total and Status for alignment
+  &__summary {
+      margin-top: 0.8rem; // Space above the summary line
+      padding-top: 0.6rem; // Padding inside the summary line
+      border-top: 1px solid #eee8aa; // Match ID underline color
+      display: flex; // Use flexbox for alignment
+      justify-content: space-between; // Space out total and status
+      align-items: baseline; // Align text baselines
+  }
 
   &__total {
-    font-weight: 600; // Less bold
-    color: #8b7300; // Darker gold/brown for total
-    margin-top: 0.8rem; // Adjust spacing
-    font-size: 1.15rem; // Slightly larger total
-    text-align: right; // Ensure total is right-aligned
-    padding-top: 0.5rem;
-    border-top: 1px solid #eee8aa; // Match ID underline color
+    font-weight: 600;
+    color: #8b7300;
+    font-size: 1.1rem; // Slightly smaller total
+    // Remove margin/padding/border-top as it's handled by __summary
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: left; // Align left within its flex item space
   }
 
   &__status {
-    color: #177e48; // Keep green for status
-    font-size: 0.95rem; // Slightly smaller status text
-    margin-top: 0.3rem;
-    text-align: right; // Align status right, below total
+    color: #177e48;
+    font-size: 0.9rem; // Match other secondary text
+    // Remove margin/padding/border-top as it's handled by __summary
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: right; // Align right within its flex item space
   }
 }
-
 
 // Ensure feedback and other action buttons are always right-aligned
 // (These rules might be redundant if the parent .order-card__item handles it, but good for clarity)
