@@ -114,28 +114,96 @@
     align-items: center;
     padding: 0.75rem 1.2rem;
     border-top: 1px solid #f5f5e6;
-    background-color: #f9f7ed;
+    background: linear-gradient(90deg, #fffbe6 0%, #f9f7ed 100%);
     margin-top: auto;
+    gap: 0.7rem;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(247, 178, 55, 0.06);
+    width: 100%; // <-- Make actions bar stretch full width of card
+    box-sizing: border-box;
+
+    // Subtle gold accent bar at the top
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(90deg, #ffe4a1 0%, #f7b237 60%, #b58319 100%);
+      opacity: 0.45;
+      pointer-events: none;
+    }
 
     .product-card__action-button {
-      background: transparent;
-      border: none;
-      color: #17623e;
-      padding: 0.5rem;
+      background: linear-gradient(90deg, #fffbe6 0%, #ffe4a1 100%);
+      border: 1.5px solid #eab308;
+      color: #b58319;
+      padding: 0.5rem 0.7rem;
       border-radius: 50%;
       cursor: pointer;
-      transition: background-color 0.13s, color 0.13s;
+      transition: 
+        background 0.18s, 
+        color 0.18s, 
+        border-color 0.18s, 
+        box-shadow 0.18s, 
+        transform 0.13s;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 1.5px 7px 0 rgba(247, 178, 55, 0.08);
 
       .icon {
         font-size: 1.3rem;
+        filter: drop-shadow(0 1px 0 #ffe4a1);
       }
 
-      &:hover {
-        background-color: #e8f7e6;
-        color: #218c5a;
+      &:hover,
+      &:focus {
+        background: linear-gradient(90deg, #ffe4a1 0%, #f7b237 100%);
+        color: #17623e;
+        border-color: #b58319;
+        box-shadow: 0 4px 16px 0 rgba(247, 178, 55, 0.13);
+        transform: translateY(-2px) scale(1.08) rotate(-2deg);
+        outline: none;
+      }
+
+      &:active {
+        background: #fffbe6;
+        color: #b58319;
+        border-color: #eab308;
+        transform: scale(0.97);
+      }
+    }
+
+    // Details button wrapper (for non-buyer users)
+    .details-button__wrapper {
+      flex: 1 1 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-left: 1rem;
+
+      .details-button {
+        font-family: var(--font-family-heading);
+        font-size: 0.97rem;
+        font-weight: 700;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #fffbe6 0%, #ffe4a1 100%);
+        color: #b58319;
+        border: 2px solid #eab308;
+        box-shadow: 0 1px 4px rgba(247, 178, 55, 0.07);
+        cursor: pointer;
+        transition: background 0.16s, color 0.16s, border-color 0.16s, box-shadow 0.13s;
+
+        &:hover,
+        &:focus {
+          background: linear-gradient(90deg, #ffe4a1 0%, #f7b237 100%);
+          color: #17623e;
+          border-color: #b58319;
+          box-shadow: 0 4px 12px rgba(247, 178, 55, 0.13);
+        }
       }
     }
   }
