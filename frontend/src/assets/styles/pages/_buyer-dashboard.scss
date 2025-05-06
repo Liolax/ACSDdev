@@ -604,53 +604,79 @@ $breakpoint-sm: 576px;  // Mobile
 
 // --- Further Refined Order Card Styling ---
 .order-card {
-  background: #fdfdf9; // Slightly brighter parchment background
-  border: 1px solid #e0d6b3; // Use the lighter dashed border color for the main border
-  border-radius: 10px; // Slightly smaller radius
-  box-shadow: 0 2px 10px rgba(184, 134, 11, 0.07); // Softer, darkgoldenrod-based shadow
+  background: #fdfdf9;
+  border: 1px solid #e0d6b3;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(184, 134, 11, 0.07);
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 1.8rem;
-  padding: 1.2rem 1.5rem;
-  // Slightly faster transitions
+  padding: 1rem 1.2rem;
   transition: box-shadow 0.18s ease-out, border-color 0.18s ease-out, transform 0.15s ease-out;
   position: relative;
   display: flex;
-  gap: 1.2rem;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 680px;
+
+  @media (min-width: $breakpoint-md) {
+    flex-direction: row;
+    padding: 1.2rem 1.5rem;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
 
   &:hover,
   &:focus-within {
-    box-shadow: 0 5px 18px rgba(184, 134, 11, 0.12); // Refined hover shadow
-    border-color: #b8860b; // Keep darker gold border on hover
+    box-shadow: 0 5px 18px rgba(184, 134, 11, 0.12);
+    border-color: #b8860b;
     transform: translateY(-2px);
   }
 
   &__collage {
-    min-width: 100px;
-    min-height: 100px;
-    background: #fff; // White background for contrast
-    border-radius: 6px; // Match mini-image radius more closely
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 80px;
+    background: #fff;
+    border-radius: 6px;
     overflow: hidden;
     display: grid;
-    align-items: center;
-    justify-items: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); // Simpler shadow
-    margin-right: 1rem;
-    border: 1px solid #f0e6d2; // Subtle border around collage
+    gap: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0e6d2;
+
+    @media (max-width: $breakpoint-md) {
+      width: 95vw; // Make collage much wider on small screens
+      max-width: 340px; // Prevent overflow on very small screens
+      min-width: 180px;
+      margin-left: auto;
+      margin-right: auto;
+      display: grid;
+      // grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); // Optionally adjust grid
+    }
+    @media (min-width: $breakpoint-md) {
+      width: 100px;
+      min-height: 100px;
+      margin-right: 1rem;
+    }
   }
 
   &__mini-image {
     border-radius: 4px;
-    border: none; // Remove border, collage has one now
-    box-shadow: none; // Remove shadow, collage has one now
-    transition: transform 0.18s ease-out; // Only transition transform
+    border: none;
+    box-shadow: none;
+    transition: transform 0.18s ease-out;
     cursor: pointer;
-    display: block; // Ensure no extra space below image if grid isn't used
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 
     &:hover,
     &:focus {
-      // Keep scale effect but remove border/shadow changes here
       transform: scale(1.06);
-      z-index: 2; // Keep z-index for overlap if needed
+      z-index: 2;
     }
   }
 
@@ -658,28 +684,26 @@ $breakpoint-sm: 576px;  // Mobile
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; // Slightly increase gap for readability
+    gap: 0.5rem;
+    width: 100%;
   }
 
   &__id {
     color: #2e4d32;
-    font-size: 1.05rem; // Slightly smaller ID
+    font-size: 1.05rem;
     font-weight: 600;
-    margin-bottom: 0.5rem; // Reduced margin
-    letter-spacing: 0.01em; // Reduced spacing
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
     border-bottom: 1px solid #eee8aa;
     padding-bottom: 0.3rem;
   }
 
-  // Further refined item styling
   &__item {
     display: flex;
-    align-items: center;
-    gap: 0.8em;
-    flex-wrap: wrap;
-    padding-bottom: 0.6rem; // Slightly more padding below item
-    margin-bottom: 0.6rem; // Slightly more margin below item
-    // Slightly stronger dashed border for item separation
+    flex-direction: column;
+    gap: 0.5em;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.6rem;
     border-bottom: 1px dashed #dcd1a0;
     position: relative;
 
@@ -689,79 +713,106 @@ $breakpoint-sm: 576px;  // Mobile
       padding-bottom: 0;
     }
 
-    // Item Name refinement
+    .order-card__item-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
     .order-card__item-name {
       font-weight: 600;
       color: #3a5a40;
-      font-size: 1.0rem; // Standardize font size
-      flex-shrink: 0;
-      margin-right: 0.5em;
+      font-size: 1.0rem;
+      flex-grow: 1;
       text-shadow: none;
     }
 
-    // General span styling within item (for status etc.)
-    > span {
-      flex-shrink: 0;
-      font-size: 0.9rem; // Make secondary info smaller
-      color: #6c757d; // Use a standard muted gray color
+    .order-card__item-status-text {
+      font-size: 0.9rem;
+      color: #6c757d;
+      white-space: nowrap;
+      margin-left: 0.5em;
     }
 
-    // Actions container (buttons)
-    .order-card__item-actions,
-    .buyer-dashboard__button--feedback,
-    .move-to-cart-btn,
-    .wishlist-delete-btn {
+    // Progress Bar Styling
+    .order-card__item-progress-container {
+      width: 100%;
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.25em;
+      margin-bottom: 0.5em;
+      transition: background-color 0.3s ease;
+    }
+    .order-card__item-progress-fill {
+      height: 100%;
+      background-color: #eab308;
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.4s ease-out, background-color 0.3s ease;
+    }
+    &.is-delivered .order-card__item-progress-container {
+      background-color: #d4edda;
+    }
+    &.is-delivered .order-card__item-progress-fill {
+      background-color: #28a745;
+      width: 100% !important;
+    }
+
+    .order-card__item-actions {
       margin-left: auto;
       display: flex;
       gap: 0.5em;
       align-items: center;
+      width: 100%;
+      justify-content: flex-end;
+      padding-right: 0.5rem; // Add right padding so buttons don't touch edge
+      padding-left: 0.5rem;  // Add left padding for symmetry
+      box-sizing: border-box;
     }
 
-    // Feedback display refinement
-    // Target the div containing feedback text (assumes it's a direct child div)
-    > div {
+    > .order-card__item-feedback-display {
       width: 100%;
-      margin-top: 0.5rem; // More space above feedback
+      margin-top: 0.5rem;
       font-size: 0.9rem;
       color: #4a684f;
-      background: #f4f6f2; // Slightly different background
+      background: #f4f6f2;
       border-radius: 4px;
-      padding: 0.5em 0.8em; // Adjust padding
-      box-shadow: none; // Remove inset shadow
-      // Add a subtle left border for visual distinction
-      border-left: 3px solid #a3b18a; // Moss green accent border
+      padding: 0.5em 0.8em;
+      border-left: 3px solid #a3b18a;
+      margin-left: 0.75rem;  // Increase margin so feedback doesn't touch card edge
+      margin-right: 0.75rem;
     }
   }
 
-  // Container for Total and Status for alignment
   &__summary {
-      margin-top: 0.8rem; // Space above the summary line
-      padding-top: 0.6rem; // Padding inside the summary line
-      border-top: 1px solid #eee8aa; // Match ID underline color
-      display: flex; // Use flexbox for alignment
-      justify-content: space-between; // Space out total and status
-      align-items: baseline; // Align text baselines
+    margin-top: 0.8rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid #eee8aa;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
   &__total {
     font-weight: 600;
     color: #8b7300;
-    font-size: 1.1rem; // Slightly smaller total
-    // Remove margin/padding/border-top as it's handled by __summary
+    font-size: 1.1rem;
     margin: 0;
     padding: 0;
     border: none;
-    text-align: left; // Align left within its flex item space
+    text-align: left;
   }
 
   &__status {
     color: #177e48;
-    font-size: 0.9rem; // Match other secondary text
-    // Remove margin/padding/border-top as it's handled by __summary
+    font-size: 0.9rem;
     margin: 0;
     padding: 0;
     border: none;
-    text-align: right; // Align right within its flex item space
+    text-align: right;
   }
 }
 
@@ -771,6 +822,13 @@ $breakpoint-sm: 576px;  // Mobile
 .order-card__item > .move-to-cart-btn,
 .order-card__item > .wishlist-delete-btn {
   margin-left: auto;
+}
+
+// Feedback buttons: add margin so they don't flood into the card edge
+.buyer-dashboard__button--feedback.buyer-dashboard__button--delete,
+.buyer-dashboard__button--feedback.buyer-dashboard__button--edit {
+  margin-right: 0.75rem !important; // Increase margin from card edge
+  margin-left: 0.2rem !important;
 }
 
 // ... (rest of the styles in the file, including button styles) ...

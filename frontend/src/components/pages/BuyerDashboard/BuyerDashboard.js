@@ -302,87 +302,113 @@ return (
               </div>
               <div className="order-card__details">
                 <h3 className="order-card__id">Order {order._id}</h3>
-                {items.map((item, idx) => (
-                  <div key={item._id || idx} className="order-card__item" style={{ display: 'flex', alignItems: 'center', gap: '0.7em', flexWrap: 'wrap' }}>
-                    <span className="order-card__item-name">{item.name}</span>
-                    <span>Status: {item.status}</span>
-                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.4em', alignItems: 'center' }}>
-                      {item.status === 'Shipped' && (
-                        <Button onClick={() => handleMarkDelivered(order._id, item._id)}>
-                          Mark Delivered
-                        </Button>
-                      )}
-                      {item.status === 'Delivered' && !item.feedback && (
-                        <Button
-                          className="buyer-dashboard__button--feedback"
+                {items.map((item, idx) => {
+                  // Progress bar logic
+                  let progressPercent = 0;
+                  let isDelivered = item.status === 'Delivered';
+                  if (item.status === 'Processing') progressPercent = 33;
+                  else if (item.status === 'Shipped') progressPercent = 66;
+                  else if (item.status === 'Delivered') progressPercent = 100;
+
+                  return (
+                    <div
+                      key={item._id || idx}
+                      className={`order-card__item${isDelivered ? ' is-delivered' : ''}`}
+                      style={{ display: 'flex', flexDirection: 'column', gap: '0.5em', flexWrap: 'wrap' }}
+                    >
+                      <div className="order-card__item-info">
+                        <span className="order-card__item-name">{item.name}</span>
+                        {/* Optionally show status text */}
+                        {/* <span className="order-card__item-status-text">Status: {item.status}</span> */}
+                      </div>
+                      {/* Progress Bar */}
+                      <div className="order-card__item-progress-container">
+                        <div
+                          className="order-card__item-progress-fill"
                           style={{
-                            padding: '0.32em 0.9em',
-                            fontSize: '0.95rem',
-                            borderRadius: '6px',
-                            border: '2px solid #1caf68',
-                            background: 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)',
-                            color: '#177e48',
-                            marginRight: '0.3em',
-                            marginBottom: '0.2em',
-                            boxShadow: '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)',
-                            letterSpacing: '0.01em',
-                            fontWeight: 600,
-                            transition: 'background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s'
+                            width: isDelivered ? '100%' : `${progressPercent}%`,
+                            backgroundColor: isDelivered ? '#28a745' : '#eab308'
                           }}
-                          onMouseOver={e => {
-                            e.currentTarget.style.background = 'linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%)';
-                            e.currentTarget.style.color = '#1caf68';
-                            e.currentTarget.style.borderColor = '#177e48';
-                            e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(23, 126, 72, 0.14)';
-                            e.currentTarget.style.transform = 'scale(1.06) rotate(-1deg)';
-                          }}
-                          onMouseOut={e => {
-                            e.currentTarget.style.background = 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)';
-                            e.currentTarget.style.color = '#177e48';
-                            e.currentTarget.style.borderColor = '#1caf68';
-                            e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
-                            e.currentTarget.style.transform = 'none';
-                          }}
-                          onClick={() => {
-                            setFeedbackOrderId({ orderId: order._id, itemId: item._id });
-                            setEditFeedbackData(null);
-                          }}
-                        >
-                          Leave Feedback
-                        </Button>
-                      )}
-                      {item.status === 'Delivered' && item.feedback && (
-                        <>
-                          <Button
-                            className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
-                            style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
-                            onClick={() => handleEditFeedback(order._id, item._id, item.feedback)}
-                          >
-                            Edit
+                        ></div>
+                      </div>
+                      <div className="order-card__item-actions">
+                        {item.status === 'Shipped' && (
+                          <Button onClick={() => handleMarkDelivered(order._id, item._id)}>
+                            Mark Delivered
                           </Button>
+                        )}
+                        {isDelivered && !item.feedback && (
                           <Button
-                            className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
-                            style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
-                            onClick={() => handleDeleteFeedback(order._id, item._id)}
+                            className="buyer-dashboard__button--feedback"
+                            style={{
+                              padding: '0.32em 0.9em',
+                              fontSize: '0.95rem',
+                              borderRadius: '6px',
+                              border: '2px solid #1caf68',
+                              background: 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)',
+                              color: '#177e48',
+                              marginRight: '0.3em',
+                              marginBottom: '0.2em',
+                              boxShadow: '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)',
+                              letterSpacing: '0.01em',
+                              fontWeight: 600,
+                              transition: 'background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s'
+                            }}
+                            onMouseOver={e => {
+                              e.currentTarget.style.background = 'linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%)';
+                              e.currentTarget.style.color = '#1caf68';
+                              e.currentTarget.style.borderColor = '#177e48';
+                              e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(23, 126, 72, 0.14)';
+                              e.currentTarget.style.transform = 'scale(1.06) rotate(-1deg)';
+                            }}
+                            onMouseOut={e => {
+                              e.currentTarget.style.background = 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)';
+                              e.currentTarget.style.color = '#177e48';
+                              e.currentTarget.style.borderColor = '#1caf68';
+                              e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
+                              e.currentTarget.style.transform = 'none';
+                            }}
+                            onClick={() => {
+                              setFeedbackOrderId({ orderId: order._id, itemId: item._id });
+                              setEditFeedbackData(null);
+                            }}
                           >
-                            Delete
+                            Leave Feedback
                           </Button>
-                        </>
+                        )}
+                        {isDelivered && item.feedback && (
+                          <>
+                            <Button
+                              className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
+                              style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
+                              onClick={() => handleEditFeedback(order._id, item._id, item.feedback)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
+                              style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
+                              onClick={() => handleDeleteFeedback(order._id, item._id)}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                      {item.feedback && (
+                        <div className="order-card__item-feedback-display">
+                          <span>
+                            Feedback: {item.feedback.rating}★ {item.feedback.title}
+                          </span>
+                          <span>
+                            {item.feedback.comments}
+                            {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                          </span>
+                        </div>
                       )}
                     </div>
-                    {item.feedback && (
-                      <div style={{ width: '100%' }}>
-                        <span>
-                          Feedback: {item.feedback.rating}★ {item.feedback.title}
-                        </span>
-                        <span>
-                          {item.feedback.comments}
-                          {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
                 {/* NEW: Wrap total and status */}
                 <div className="order-card__summary">
                   <p className="order-card__total">
