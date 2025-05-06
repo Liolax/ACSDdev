@@ -15,12 +15,15 @@ const ContactPage = () => {
   const openLoginPopup = () => setShowLoginPopup(true);
   const closeLoginPopup = () => setShowLoginPopup(false);
 
-  const handleLogin = (email, password, rememberMe, role) => {
+  // Updated: async handler to close popup after login
+  const handleLogin = async (email, password, rememberMe, role) => {
     if (role === 'buyer') {
-      navigate('/buyer-dashboard');
+      navigate('/market');
     } else {
       navigate('/seller-dashboard');
     }
+    // Ensure popup closes after navigation (async for consistency)
+    setShowLoginPopup(false);
   };
 
   const handleFormSuccess = () => setFormSubmitted(true);

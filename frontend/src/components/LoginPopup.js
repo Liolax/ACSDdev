@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import '../assets/styles/components/_popup.scss';
 import { ROLES } from '../constants/roles';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
-const LoginPopup = ({ onClose = () => {}, handleLogin }) => {
+const LoginPopup = ({ onClose = () => {}, handleLogin: onLoginProp }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [role, setRole] = useState(ROLES.BUYER); // Default role is buyer
 
-  const onSubmit = (e) => {
+  const { login: authLogin } = useAuth(); // Get login function from context
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     // Pass the login credentials to the provided login handler.
-    handleLogin(email, password, rememberMe, role);
-    onClose();
+    try {
+      await authLogin({ email, password, role });
+      onClose();
+      // Optionally call onLoginProp for navigation or other side effects
+      if (onLoginProp) {
+        // onLoginProp(email, password, rememberMe, role);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Optionally show error to user
+    }
   };
 
   return (

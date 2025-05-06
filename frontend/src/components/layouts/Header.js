@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import '../../assets/styles/components/_header.scss';
@@ -7,37 +7,23 @@ import { ROLES } from '../../constants/roles';
 
 const Header = ({ onLoginClick }) => {
   const navigate = useNavigate();
+  const { user, logout: authLogout } = useAuth(); // Use user and logout from context
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
 
-  // Defensive fallback if ROLES is undefined for any reason
+  const userRole = user ? user.role : null;
   const ROLES_SAFE = ROLES || { BUYER: 'buyer', SELLER: 'seller' };
-
-  useEffect(() => {
-    const updateUserRole = () => {
-      setUserRole(localStorage.getItem('userRole'));
-    };
-
-    updateUserRole();
-    window.addEventListener('storage', updateUserRole);
-    return () => {
-      window.removeEventListener('storage', updateUserRole);
-    };
-  }, []);
+  const logoLink = userRole === ROLES_SAFE.SELLER ? '/seller-dashboard' : '/';
 
   const handleLogout = () => {
-    localStorage.removeItem('userRole');
-    setUserRole(null);
+    authLogout();
     navigate('/');
-  };
-
-  const toggleMenu = () => setMenuOpen(prev => !prev);
-
-  const handleLinkClick = () => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  const logoLink = userRole === ROLES_SAFE.SELLER ? '/seller-dashboard' : '/';
+  const toggleMenu = () => setMenuOpen(prev => !prev);
+  const handleLinkClick = () => {
+    if (menuOpen) setMenuOpen(false);
+  };
 
   return (
     <header className="header">

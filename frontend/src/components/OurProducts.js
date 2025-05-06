@@ -22,13 +22,7 @@ const OurProducts = ({ user, openLoginPopup, onAddToCart, onAddToWishlist }) => 
         onAddToWishlist={onAddToWishlist}
         onDetails={openLoginPopup}
       />
-      {Array.isArray(products) && products.map((product) =>
-        product && product.id ? (
-          <div key={product.id}>
-            <span>Sold by: {product.seller?.name || 'Seller'}</span>
-          </div>
-        ) : null
-      )}
+      {/* Removed duplicate "Sold by: Seller" rendering here */}
     </div>
   );
 };
