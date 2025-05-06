@@ -1,5 +1,6 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
+@use 'sass:color';
 
 /* --- Artisanal Irish-Style Seller Dashboard Page --- */
 .seller-dashboard-page {
@@ -50,7 +51,7 @@
   border-radius: 8px;
   font-size: 1rem;
   font-family: var(--font-family-base, base.$font-family-base);
-  background-color: lighten(base.$irish-cream, 2%);
+  background-color: color.adjust(base.$irish-cream, $lightness: 2%);
   color: base.$irish-green-dark;
   @include mixins.transition(border-color, box-shadow);
 
@@ -104,7 +105,7 @@
     font-family: var(--font-family-base, base.$font-family-base);
     border: 1px solid base.$irish-gold-light;
     border-radius: 8px;
-    background-color: lighten(base.$irish-cream, 2%);
+    background-color: color.adjust(base.$irish-cream, $lightness: 2%);
     color: base.$irish-green-dark;
     @include mixins.transition(border-color, box-shadow);
 
@@ -155,7 +156,7 @@
 
 /* PRODUCT CARD */
 .seller-dashboard__product-card {
-  background: lighten(base.$irish-cream, 3%);
+  background: color.adjust(base.$irish-cream, $lightness: 3%);
   border-radius: 10px;
   padding: 16px;
   box-shadow: var(--shadow-light, 0 1.5px 7px rgba(23, 98, 62, 0.04));
@@ -251,7 +252,7 @@
     font-family: var(--font-family-base, base.$font-family-base);
     border: 1px solid base.$irish-gold-light;
     border-radius: 6px;
-    background-color: lighten(base.$irish-cream, 5%);
+    background-color: color.adjust(base.$irish-cream, $lightness: 5%);
     @include mixins.transition(border-color, box-shadow);
 
     &:focus {
@@ -329,7 +330,7 @@
 
 /* FEEDBACK SECTION */
 .seller-dashboard__feedback {
-  background: lighten(base.$irish-cream, 3%);
+  background: color.adjust(base.$irish-cream, $lightness: 3%);
   border-radius: 14px;
   padding: 24px 20px;
   box-shadow: var(--shadow-light, 0 2px 12px rgba(23, 98, 62, 0.07));
@@ -355,7 +356,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: lighten(base.$irish-cream, 5%);
+  background: color.adjust(base.$irish-cream, $lightness: 5%);
   padding: 10px 14px;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(base.$irish-gold, 0.1);
