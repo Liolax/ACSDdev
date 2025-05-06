@@ -59,6 +59,13 @@ const MarketPage = () => {
           onAddToCart={handleAddToCart}
           onDetails={handleDetails}
         />
+        {products.map((product) =>
+          product && product._id ? (
+            <div key={product._id}>
+              <span>Sold by: {product.seller?.name || 'Seller'}</span>
+            </div>
+          ) : null
+        )}
         {showLogin && (
           <LoginPopup 
             onClose={() => setShowLogin(false)}

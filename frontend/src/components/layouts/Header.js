@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { ROLES } from '../../constants/roles';
 import logo from '../../assets/images/logo.svg';
 import '../../assets/styles/components/_header.scss';
+import { useAuth } from '../../context/AuthContext';
+import { ROLES } from '../../constants/roles';
 
 const Header = ({ onLoginClick }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
+
+  // Defensive fallback if ROLES is undefined for any reason
+  const ROLES_SAFE = ROLES || { BUYER: 'buyer', SELLER: 'seller' };
 
   useEffect(() => {
     const updateUserRole = () => {
@@ -33,7 +37,7 @@ const Header = ({ onLoginClick }) => {
     if (menuOpen) setMenuOpen(false);
   };
 
-  const logoLink = userRole === ROLES.SELLER ? '/seller-dashboard' : '/';
+  const logoLink = userRole === ROLES_SAFE.SELLER ? '/seller-dashboard' : '/';
 
   return (
     <header className="header">
@@ -56,7 +60,7 @@ const Header = ({ onLoginClick }) => {
         &#9776;
       </button>
       <nav className={`header__nav${menuOpen ? ' open' : ''}`} id="main-navigation">
-        {userRole === ROLES.SELLER ? (
+        {userRole === ROLES_SAFE.SELLER ? (
           <>
             <NavLink to="/seller-dashboard" className="header__link" onClick={handleLinkClick}>
               My Products
@@ -68,7 +72,7 @@ const Header = ({ onLoginClick }) => {
               Logout
             </button>
           </>
-        ) : userRole === ROLES.BUYER ? (
+        ) : userRole === ROLES_SAFE.BUYER ? (
           <>
             <NavLink to="/buyer-dashboard" className="header__link" onClick={handleLinkClick}>
               My Purchases

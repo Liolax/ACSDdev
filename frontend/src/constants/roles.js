@@ -1,4 +1,4 @@
 export const ROLES = {
   BUYER: 'buyer',
-  SELLER: 'seller',
+  SELLER: 'seller'
 };

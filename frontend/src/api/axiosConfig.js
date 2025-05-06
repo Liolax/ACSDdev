@@ -1,18 +1,14 @@
 import axios from 'axios';
 
-// Determine base URL based on environment
-const baseURL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api'
-    : '/api';
-
-console.log(`API Base URL: ${baseURL}`);
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  baseURL: API_BASE_URL, // <-- Note the /api here!
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
+
+console.log(`API Base URL: ${API_BASE_URL}`);
 
 // Request interceptor: attach token if available and log the request
 apiClient.interceptors.request.use(

@@ -1,6 +1,6 @@
-const feedbackEndpoints = {
-  getAll: '/api/feedback',
-  create: '/api/feedback/create',
+export const FEEDBACK_ENDPOINTS = {
+  GET_FEEDBACKS: '/api/feedback',
+  SUBMIT_FEEDBACK: '/api/feedback/create'
 };
 
-export default feedbackEndpoints;
+export default FEEDBACK_ENDPOINTS;

@@ -94,7 +94,7 @@ app.use('/uploads', (req, res, next) => {
 app.use('/api/products', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes);
+app.use('/api/orders', orderRoutes); // <-- Ensure this is /api/orders
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 

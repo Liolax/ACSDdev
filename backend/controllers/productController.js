@@ -23,7 +23,7 @@ async function safeDeleteFile(filePath) {
 // GET /products - fetch all products
 export async function fetchProducts(req, res) {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate('seller', 'name');
     res.status(200).json(products);
   } catch (error) {
     console.error('Error fetching products:', error.message);
@@ -34,7 +34,7 @@ export async function fetchProducts(req, res) {
 // GET /products/:id - fetch single product
 export async function getProductById(req, res) {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('seller', 'name');
     if (!product) return res.status(404).json({ error: 'Product not found.' });
     res.status(200).json(product);
   } catch (error) {
@@ -42,33 +42,64 @@ export async function getProductById(req, res) {
   }
 }
 
+// GET /products/my - fetch user's products
+export async function getMyProducts(req, res) {
+  try {
+    const products = await Product.find({ seller: req.user._id }).populate('seller', 'name');
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch your products.' });
+  }
+}
+
 // POST /products - create product
 export async function createProduct(req, res) {
   try {
+    // Log incoming form fields for debugging
+    console.log('Received form fields:', req.body);
+    console.log('Received file:', req.file);
+
     const { name, price, description, category, tags } = req.body;
+    // Defensive: check for missing fields
+    if (!name || !price || !description || !category) {
+      return res.status(400).json({ error: 'All fields (name, price, description, category) are required.' });
+    }
     const parsedPrice = parseFloat(price);
-    if (!name || isNaN(parsedPrice) || parsedPrice < 0) {
-      return res.status(400).json({ error: 'Valid name and price are required.' });
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      return res.status(400).json({ error: 'Valid price is required.' });
     }
-    const existingProduct = await Product.findOne({ name });
-    if (existingProduct) {
-      return res.status(400).json({ error: 'Product with this name already exists.' });
-    }
+    // Remove duplicate name check if you want to allow same name for different sellers
+    // const existingProduct = await Product.findOne({ name });
+    // if (existingProduct) {
+    //   return res.status(400).json({ error: 'Product with this name already exists.' });
+    // }
     let imagePath = req.file?.path;
     if (imagePath) {
-      imagePath = imagePath.replace(/\\/g, '/'); // Normalize to forward slashes
+      // Always store as relative path: uploads/filename
+      const uploadsIndex = imagePath.replace(/\\/g, '/').indexOf('uploads/');
+      if (uploadsIndex !== -1) {
+        imagePath = imagePath.replace(/\\/g, '/').slice(uploadsIndex);
+      } else {
+        imagePath = imagePath.replace(/\\/g, '/');
+      }
     }
     const newProduct = new Product({
-      name,
+      name: name.trim(),
       price: parsedPrice,
-      description,
-      image: imagePath,
+      description: description.trim(),
+      image: imagePath, // <-- Save the normalized relative path
       category: category ? category.trim() : 'General',
-      tags: tags ? tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : []
+      tags: tags
+        ? typeof tags === 'string'
+          ? tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+          : Array.isArray(tags) ? tags : []
+        : [],
+      seller: req.user._id // Set seller
     });
     const savedProduct = await newProduct.save();
     res.status(201).json({ success: true, product: savedProduct });
   } catch (error) {
+    console.error('Error creating product:', error, error?.stack);
     res.status(500).json({ error: 'An error occurred while creating the product.' });
   }
 }
@@ -94,7 +125,13 @@ export async function updateProduct(req, res) {
       updateData.tags = req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     }
     if (req.file) {
-      updateData.image = req.file.path.replace(/\\/g, '/');
+      // Normalize to relative path
+      let newImagePath = req.file.path.replace(/\\/g, '/');
+      const uploadsIndex = newImagePath.indexOf('uploads/');
+      if (uploadsIndex !== -1) {
+        newImagePath = newImagePath.slice(uploadsIndex);
+      }
+      updateData.image = newImagePath;
       if (existingProduct.image && !existingProduct.image.startsWith('http')) {
         const oldFilePath = path.join(process.cwd(), existingProduct.image);
         await safeDeleteFile(oldFilePath);

@@ -18,7 +18,8 @@ export const AuthProvider = ({ children }) => {
       const dummyUser = {
         _id: storedRole === ROLES.SELLER ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
         role: storedRole,
-        email: ""
+        email: "",
+        name: storedRole === ROLES.SELLER ? "Demo Seller" : "Demo Buyer"
       };
       setUser(dummyUser);
       setIsAuthenticated(true);
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       _id: role === ROLES.SELLER ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
       role,
       email,
+      name: role === ROLES.SELLER ? "Demo Seller" : "Demo Buyer"
     };
     setUser(dummyUser);
     setIsAuthenticated(true);

@@ -8,7 +8,7 @@ const handleApiError = (error) => {
 
 export const getWishlist = async () => {
   try {
-    const response = await apiClient.get('/wishlist');
+    const response = await apiClient.get(WISHLIST_ENDPOINTS.GET_WISHLIST);
     return response.data.wishlist;
   } catch (error) {
     handleApiError(error);

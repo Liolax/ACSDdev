@@ -1,6 +1,8 @@
 import apiClient from '../axiosConfig';
 import { CART_ENDPOINTS } from './cartEndpoints';
 
+// All endpoints should use /api/cart via CART_ENDPOINTS
+
 const handleApiError = (error) => {
   console.error("API Error:", error);
   throw new Error(error.message || "API request failed");
@@ -21,7 +23,7 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
     safePrice = Number(safePrice);
   }
   try {
-    const res = await apiClient.post('/cart/add-item', {
+    const res = await apiClient.post(CART_ENDPOINTS.ADD_ITEM, {
       productId,
       quantity,
       name,
@@ -39,7 +41,7 @@ export const addToCart = async (productId, quantity = 1, name, price, image) => 
  */
 export const getCart = async () => {
   try {
-    const response = await apiClient.get('/cart');
+    const response = await apiClient.get(CART_ENDPOINTS.GET_CART);
     return response.data.cart;
   } catch (error) {
     handleApiError(error);
@@ -54,7 +56,7 @@ export const updateCartItemQuantity = async (productId, quantity) => {
     throw new Error("Product ID and valid quantity are required.");
   }
   try {
-    const res = await apiClient.put(`/cart/update-item/${productId}`, { quantity });
+    const res = await apiClient.put(`${CART_ENDPOINTS.UPDATE_ITEM}/${productId}`, { quantity });
     return res.data.cart;
   } catch (error) {
     handleApiError(error);
@@ -67,7 +69,7 @@ export const updateCartItemQuantity = async (productId, quantity) => {
 export const removeFromCart = async (productId) => {
   if (!productId) throw new Error("Product ID is required.");
   try {
-    const res = await apiClient.delete(`/cart/remove-item/${productId}`);
+    const res = await apiClient.delete(`${CART_ENDPOINTS.REMOVE_ITEM}/${productId}`);
     return res.data.cart;
   } catch (error) {
     handleApiError(error);
@@ -80,7 +82,7 @@ export const removeFromCart = async (productId) => {
  */
 export const clearCart = async () => {
   try {
-    const res = await apiClient.delete('/cart/clear');
+    const res = await apiClient.delete(CART_ENDPOINTS.CLEAR_CART);
     return res.data.cart;
   } catch (error) {
     handleApiError(error);

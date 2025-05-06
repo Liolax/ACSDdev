@@ -4,7 +4,7 @@ import Feedback from '../models/FeedbackModel.js';
 export async function getFeedbacks(req, res) {
   try {
     const feedbacks = await Feedback.find()
-      .populate('user', 'name email')
+      .populate('buyer', 'name email')
       .populate('order', '_id');
     res.status(200).json({ feedbacks });
   } catch (error) {
@@ -15,11 +15,12 @@ export async function getFeedbacks(req, res) {
 // POST /api/feedback/create - Submit new feedback
 export async function submitFeedback(req, res) {
   try {
-    const { user, order, rating, title, comments } = req.body;
-    if (!user || !order || !rating) {
-      return res.status(400).json({ error: 'User, order, and rating are required.' });
+    const { buyer, order, rating, title, comments, itemId } = req.body;
+    if (!buyer || !order || !rating) {
+      return res.status(400).json({ error: 'Buyer, order, and rating are required.' });
     }
-    const feedback = new Feedback({ user, order, rating, title, comments });
+    // Optionally: store itemId if you want to relate feedback to a specific order item
+    const feedback = new Feedback({ buyer, order, rating, title, comments, itemId });
     await feedback.save();
     res.status(201).json({ success: true, feedback });
   } catch (error) {

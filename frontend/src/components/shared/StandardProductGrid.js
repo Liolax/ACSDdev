@@ -149,6 +149,7 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
                         Tags: {product.tags.join(', ')}
                       </p>
                     )}
+                    <span>Sold by: {product.seller?.name || 'Seller'}</span>
                   </div>
                   <div className="product-card__actions">
                     {user && user.role === 'buyer' ? (

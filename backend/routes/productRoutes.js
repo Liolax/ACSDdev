@@ -1,71 +1,95 @@
-import { Router } from 'express';
+import express from 'express';
+import Product from '../models/ProductModel.js';
+import auth from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
-import {
-  fetchProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getProductById
-} from '../controllers/productController.js';
 
-// Configure multer storage
+const router = express.Router();
+
+// Multer setup for image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, path.join(process.cwd(), 'uploads'));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+    // Use timestamp + original name for uniqueness
+    cb(null, Date.now() + '-' + file.originalname.replace(/\s+/g, '_'));
   }
 });
+const upload = multer({ storage });
 
-// File filter: Only allow JPEG, PNG, and WEBP image types.
-const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
-  if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type. Only JPG, PNG, and WEBP are allowed.'));
-  }
-};
-
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // Limit file size to 5MB
-});
-
-const router = Router();
-
-// Securely serve product images by filename (handles both / and \ in DB)
-router.get('/images/:filename', (req, res) => {
-  // Normalize filename to prevent path traversal and handle backslashes
-  let filename = req.params.filename.replace(/\\/g, '/');
-  // Only allow safe filenames (alphanumeric, dash, underscore, dot, extension)
-  if (!/^[a-zA-Z0-9._-]+\.(jpg|jpeg|png|gif|webp)$/i.test(filename)) {
-    return res.status(400).send('Invalid filename');
-  }
-  // Ensure the file exists in the uploads directory
-  const uploadsDir = path.resolve(process.cwd(), 'uploads');
-  const imagePath = path.resolve(uploadsDir, path.basename(filename));
-  if (!imagePath.startsWith(uploadsDir + path.sep)) {
-    return res.status(403).send('Forbidden');
-  }
-  fs.access(imagePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      return res.status(404).send('Image not found');
+// Seller: create product (with image upload)
+router.post('/', auth, upload.single('image'), async (req, res) => {
+  try {
+    let imagePath = req.file?.path;
+    if (imagePath) {
+      const uploadsIndex = imagePath.replace(/\\/g, '/').indexOf('uploads/');
+      if (uploadsIndex !== -1) {
+        imagePath = imagePath.replace(/\\/g, '/').slice(uploadsIndex);
+      } else {
+        imagePath = imagePath.replace(/\\/g, '/');
+      }
     }
-    res.sendFile(imagePath);
-  });
+    const product = await Product.create({ ...req.body, seller: req.user._id, image: imagePath });
+    // Return updated product list for this seller
+    const products = await Product.find({ seller: req.user._id });
+    res.status(201).json({ product, products });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
-router.get('/', fetchProducts);
-router.get('/:id', getProductById);
-router.post('/', upload.single('image'), createProduct);
-router.put('/:id', upload.single('image'), updateProduct);
-router.delete('/:id', deleteProduct);
+// Seller: update product (with image upload)
+router.put('/:id', auth, upload.single('image'), async (req, res) => {
+  try {
+    let updateData = { ...req.body };
+    if (req.file) {
+      let imagePath = req.file.path.replace(/\\/g, '/');
+      const uploadsIndex = imagePath.indexOf('uploads/');
+      if (uploadsIndex !== -1) {
+        imagePath = imagePath.slice(uploadsIndex);
+      }
+      updateData.image = imagePath;
+    }
+    const product = await Product.findOneAndUpdate(
+      { _id: req.params.id, seller: req.user._id },
+      updateData,
+      { new: true }
+    );
+    // Return updated product list for this seller
+    const products = await Product.find({ seller: req.user._id });
+    res.json({ product, products });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Seller: delete product
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const product = await Product.findOneAndDelete({ _id: req.params.id, seller: req.user._id });
+    // Return updated product list for this seller
+    const products = await Product.find({ seller: req.user._id });
+    res.json({ product, products });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Get all products (market)
+router.get('/', async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
+});
+
+// Get current user's products
+router.get('/my', auth, async (req, res) => {
+  try {
+    const products = await Product.find({ seller: req.user._id });
+    res.json(products);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 export default router;

@@ -9,6 +9,7 @@ import PaymentForm from '../components/checkout/PaymentForm';
 import Button from '../components/ui/Button';
 import '../assets/styles/pages/_checkout.scss';
 import { validateShippingInfo, validatePaymentInfo, validateCartItems } from '../components/checkout/validation';
+import { getCart } from '../api/cart/cartRequests';
 
 const CheckoutPage = () => {
   const [cart, setCart] = useState({ items: [] });
@@ -28,8 +29,9 @@ const CheckoutPage = () => {
   // Fetch current cart details
   const fetchCart = async () => {
     try {
-      const response = await apiClient.get('/cart');
-      setCart(response.data.cart || { items: [] });
+      // getCart() already returns the cart object, not { cart: ... }
+      const cartData = await getCart();
+      setCart(cartData || { items: [] });
     } catch (err) {
       console.error("Error fetching cart", err);
       setError("Failed to load cart. Please try again later.");
@@ -90,13 +92,14 @@ const CheckoutPage = () => {
           shippingInfo,
           paymentInfo
         };
-        orderResponse = await apiClient.post('/orders', orderPayload);
+        // Use the correct API call for order creation
+        orderResponse = await createOrder(orderPayload);
       }
       // Use the order id (from createdOrder or the response)
       const orderId = createdOrder ? createdOrder._id : orderResponse.data.order._id;
       console.log("Extracted Order ID:", orderId);
       // Simulate payment (wrap paymentInfo in paymentDetails)
-      await apiClient.post(`/orders/${orderId}/simulate-payment`, { paymentDetails: paymentInfo });
+      await simulatePayment(orderId, paymentInfo);
       
       // Save the order details if not already saved
       if (!createdOrder) {

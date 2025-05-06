@@ -21,12 +21,16 @@ export default function auth(req, res, next) {
       req.user = { _id: decoded.id, role: decoded.role };
       next();
     } catch (err) {
-      console.error("Invalid token provided. Using dummy user for testing.", err);
+      if (process.env.NODE_ENV !== 'production') {
+        // console.error("Invalid token provided. Using dummy user for testing.", err);
+      }
       req.user = getDummyUser(req.headers['x-dummy-role']);
       next();
     }
   } else {
-    console.log("No token provided. Using dummy user for testing.");
+    if (process.env.NODE_ENV !== 'production') {
+      // console.log("No token provided. Using dummy user for testing.");
+    }
     req.user = getDummyUser(req.headers['x-dummy-role']);
     next();
   }
@@ -37,6 +41,7 @@ function getDummyUser(role) {
   return {
     _id: role === "seller" ? DUMMY_SELLER_ID : DUMMY_BUYER_ID,
     role: role || "buyer",
+    name: role === "seller" ? "Demo Seller" : "Demo Buyer"
   };
 }
 

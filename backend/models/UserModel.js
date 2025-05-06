@@ -4,7 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      trim: true
+      trim: true,
+      required: true,
+      default: function() {
+        return this.role === 'seller' ? 'Demo Seller' : 'Demo Buyer';
+      }
     },
     email: {
       type: String,

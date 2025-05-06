@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import WishlistSection from './WishlistSection'; 
 import CartSection from './CartSection';
@@ -10,7 +10,7 @@ import getImageUrl from '../../../helpers/getImageUrl';
 import { moveWishlistToCart, removeFromWishlist } from '../../../api/wishlist/wishlistRequests';
 import { updateCartItemQuantity, removeFromCart as removeFromCartApi } from '../../../api/cart/cartRequests';
 import { submitFeedback } from '../../../api/feedback/feedbackRequests';
-import { markDelivered, getMyPurchases } from '../../../api/orders/ordersRequests';
+import { markDelivered, getMyPurchases, addFeedback } from '../../../api/orders/ordersRequests';
 
 // Helper function to determine collage style based on item count
 const getCollageStyle = (count) => {
@@ -57,7 +57,7 @@ const BuyerDashboard = ({ user }) => {
 
 // Fetch wishlist and cart on component mount
 useEffect(() => {
-  axios
+  apiClient
     .get('/api/wishlist')
     .then((res) => {
       setWishlist(res.data.wishlist?.items || []);
@@ -67,7 +67,7 @@ useEffect(() => {
       setWishlist([]);
     });
 
-  axios
+  apiClient
     .get('/api/cart')
     .then((res) => {
       setCart(res.data.cart || { items: [] });
@@ -81,7 +81,7 @@ useEffect(() => {
 // Re-fetch the cart when the window regains focus
 useEffect(() => {
   const fetchCart = () => {
-    axios
+    apiClient
       .get('/api/cart')
       .then((res) => setCart(res.data.cart || { items: [] }))
       .catch((err) => {
@@ -152,10 +152,24 @@ const handlePay = () => {
 };
 
 // Feedback Handlers
-const handleFeedbackSubmit = async (feedbackData) => {
+const handleFeedbackSubmit = async ({ orderId, itemId, rating, title, comments }) => {
   try {
-    await submitFeedback(feedbackData);
-    // Optionally update local state or refetch feedback/orders
+    // Ensure correct argument order for addFeedback
+    await addFeedback(orderId, itemId, rating, title, comments);
+    setOrders(orders =>
+      orders.map(order =>
+        order._id === orderId
+          ? {
+              ...order,
+              orderItems: order.orderItems.map(item =>
+                item._id === itemId
+                  ? { ...item, feedback: { rating, title, comments } }
+                  : item
+              )
+            }
+          : order
+      )
+    );
   } catch (err) {
     // handle error
   }
@@ -171,18 +185,31 @@ const handleFeedbackDelete = (orderId) => {
   });
 };
 
-const handleMarkDelivered = async (orderId) => {
+const handleMarkDelivered = async (orderId, itemId) => {
   try {
-    await markDelivered(orderId);
+    await markDelivered(orderId, itemId);
     setOrders(orders =>
       orders.map(order =>
-        order._id === orderId ? { ...order, status: 'Delivered' } : order
+        order._id === orderId
+          ? {
+              ...order,
+              orderItems: order.orderItems.map(item =>
+                item._id === itemId ? { ...item, status: 'Delivered' } : item
+              )
+            }
+          : order
       )
     );
   } catch (err) {
     // Optionally show error to user
     console.error("Failed to mark as delivered", err);
   }
+};
+
+// To check if a product is related to an itemId:
+const isProductRelatedToItem = (order, itemId, productId) => {
+  const item = order.orderItems.find(i => i._id === itemId || i._id?.toString() === itemId?.toString());
+  return item && item.productId && item.productId.toString() === productId.toString();
 };
 
 // Defensive: fallback to empty array if cart or cart.items is undefined
@@ -209,8 +236,7 @@ return (
       ) : (
         // Patch orders to always have .items and .total for rendering
         orders.map(order => {
-          // Patch: always provide .items and .total for rendering
-          const items = order.items || order.orderItems || [];
+          const items = order.orderItems || [];
           const total =
             (order.total !== undefined
               ? order.total
@@ -255,25 +281,65 @@ return (
               </div>
               <div className="order-card__details">
                 <h3 className="order-card__id">Order {order._id}</h3>
-                <p className="order-card__items-names">
-                  {items.map((item, idx) => (
-                    <span key={idx}>{item.name}{idx < items.length - 1 ? ', ' : ''}</span>
-                  ))}
-                </p>
+                {items.map((item, idx) => (
+                  <div key={item._id || idx} className="order-card__item" style={{ display: 'flex', alignItems: 'center', gap: '0.7em', flexWrap: 'wrap' }}>
+                    <span className="order-card__item-name">{item.name}</span>
+                    <span>Status: {item.status}</span>
+                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.4em', alignItems: 'center' }}>
+                      {item.status === 'Shipped' && (
+                        <Button onClick={() => handleMarkDelivered(order._id, item._id)}>
+                          Mark Delivered
+                        </Button>
+                      )}
+                      {item.status === 'Delivered' && !item.feedback && (
+                        <Button
+                          className="buyer-dashboard__button--feedback"
+                          style={{
+                            padding: '0.32em 0.9em',
+                            fontSize: '0.95rem',
+                            borderRadius: '6px',
+                            border: '2px solid #1caf68',
+                            background: 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)',
+                            color: '#177e48',
+                            marginRight: '0.3em',
+                            marginBottom: '0.2em',
+                            boxShadow: '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)',
+                            letterSpacing: '0.01em',
+                            fontWeight: 600,
+                            transition: 'background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s'
+                          }}
+                          onMouseOver={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%)';
+                            e.currentTarget.style.color = '#1caf68';
+                            e.currentTarget.style.borderColor = '#177e48';
+                            e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(23, 126, 72, 0.14)';
+                            e.currentTarget.style.transform = 'scale(1.06) rotate(-1deg)';
+                          }}
+                          onMouseOut={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)';
+                            e.currentTarget.style.color = '#177e48';
+                            e.currentTarget.style.borderColor = '#1caf68';
+                            e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
+                            e.currentTarget.style.transform = 'none';
+                          }}
+                          onClick={() => setFeedbackOrderId({ orderId: order._id, itemId: item._id })}
+                        >
+                          Leave Feedback
+                        </Button>
+                      )}
+                    </div>
+                    {item.feedback && (
+                      <div style={{ width: '100%' }}>
+                        <span>Feedback: {item.feedback.rating}★ {item.feedback.title}</span>
+                        <span>{item.feedback.comments}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
                 <p className="order-card__total">
                   Total: ${Number(total).toFixed(2)}
                 </p>
                 <p className="order-card__status">Status: {order.status}</p>
-                {order.status === 'Shipped' && (
-                  <Button onClick={() => handleMarkDelivered(order._id)}>
-                    Delivered
-                  </Button>
-                )}
-                {order.status === 'Delivered' && (
-                  <Button onClick={() => setFeedbackOrderId(order._id)}>
-                    Leave Feedback
-                  </Button>
-                )}
               </div>
             </div>
           );

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import '../assets/styles/components/_popup.scss';
+import { ROLES } from '../constants/roles';
 
 const LoginPopup = ({ onClose = () => {}, handleLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [role, setRole] = useState('buyer'); // Default role is buyer
+  const [role, setRole] = useState(ROLES.BUYER); // Default role is buyer
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -59,30 +60,30 @@ const LoginPopup = ({ onClose = () => {}, handleLogin }) => {
             background: '#f5fbe6', borderRadius: 8, justifyContent: 'center'
           }}>
             <span
-              className={`toggle-option${role === 'buyer' ? ' active' : ''}`}
+              className={`toggle-option${role === ROLES.BUYER ? ' active' : ''}`}
               style={{
                 flex: 1, textAlign: 'center', padding: '6px 0', cursor: 'pointer',
-                background: role === 'buyer' ? '#1caf68' : 'transparent',
-                color: role === 'buyer' ? '#fff' : '#177e48',
+                background: role === ROLES.BUYER ? '#1caf68' : 'transparent',
+                color: role === ROLES.BUYER ? '#fff' : '#177e48',
                 fontWeight: 'bold',
                 borderRadius: 6,
                 transition: 'background 0.14s'
               }}
-              onClick={() => setRole('buyer')}
+              onClick={() => setRole(ROLES.BUYER)}
             >
               BUY
             </span>
             <span
-              className={`toggle-option${role === 'seller' ? ' active' : ''}`}
+              className={`toggle-option${role === ROLES.SELLER ? ' active' : ''}`}
               style={{
                 flex: 1, textAlign: 'center', padding: '6px 0', cursor: 'pointer',
-                background: role === 'seller' ? '#1caf68' : 'transparent',
-                color: role === 'seller' ? '#fff' : '#177e48',
+                background: role === ROLES.SELLER ? '#1caf68' : 'transparent',
+                color: role === ROLES.SELLER ? '#fff' : '#177e48',
                 fontWeight: 'bold',
                 borderRadius: 6,
                 transition: 'background 0.14s'
               }}
-              onClick={() => setRole('seller')}
+              onClick={() => setRole(ROLES.SELLER)}
             >
               SELL
             </span>

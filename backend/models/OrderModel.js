@@ -1,54 +1,42 @@
 import mongoose from 'mongoose';
 
+const orderItemSchema = new mongoose.Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  name: { type: String, required: true },
+  price: { type: String, required: true }, // Store as string for consistency
+  qty: { type: Number, required: true },
+  image: { type: String, default: '' },
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  status: { type: String, enum: ['Processing', 'Shipped', 'Delivered'], default: 'Processing' },
+  feedback: { type: mongoose.Schema.Types.Mixed, default: null }
+});
+
 const orderSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    buyer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     cartId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
-    orderItems: [
-      {
-        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-        name: { type: String, required: true },
-        price: {
-          type: mongoose.Schema.Types.Decimal128,
-          required: true
-        },
-        qty: { type: Number, required: true },
-        image: String,
-      },
-    ],
+    orderItems: [orderItemSchema],
     shippingAddress: {
-      fullName: { type: String, required: true },
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      fullName: String,
+      address: String,
+      city: String,
+      postalCode: String,
+      country: String
     },
-    paymentInfo: { type: Object },
-    itemsPrice: {
-      type: mongoose.Schema.Types.Decimal128,
-      required: true,
-      default: 0.0
+    paymentInfo: {
+      method: String,
+      last4: String
     },
-    taxPrice: {
-      type: mongoose.Schema.Types.Decimal128,
-      required: true,
-      default: 0.0
-    },
-    shippingPrice: {
-      type: mongoose.Schema.Types.Decimal128,
-      required: true,
-      default: 0.0
-    },
-    totalPrice: {
-      type: mongoose.Schema.Types.Decimal128,
-      required: true
-    },
-    isPaid: { type: Boolean, required: true, default: false },
-    paidAt: { type: Date },
-    isDelivered: { type: Boolean, required: true, default: false },
-    deliveredAt: { type: Date },
-    status: { type: String, default: 'Pending', required: true },
-    paymentStatus: { type: String, default: 'Pending', required: true }
+    itemsPrice: { type: String, required: true },
+    taxPrice: { type: String, required: true },
+    shippingPrice: { type: String, required: true },
+    totalPrice: { type: String, required: true },
+    isPaid: { type: Boolean, default: false },
+    paidAt: { type: Date, default: null },
+    isDelivered: { type: Boolean, default: false },
+    deliveredAt: { type: Date, default: null },
+    status: { type: String, default: 'Pending' },
+    paymentStatus: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' }
   },
   { timestamps: true }
 );

@@ -19,9 +19,6 @@
 @use './pages/buyer-dashboard' as buyerDashboard;
 @use './pages/home' as home;
 
-// Import shipping-details from the checkout components folder
-@use './components/checkout/shipping-details' as shippingDetails;
-
 @use './pages/market' as market;
 @use './pages/contact' as contact;
 

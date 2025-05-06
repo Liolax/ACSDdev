@@ -375,6 +375,66 @@ $breakpoint-sm: 576px;  // Mobile
   }
 }
 
+.buyer-dashboard__button--sm,
+.buyer-dashboard__button--feedback,
+.move-to-cart-btn,
+.wishlist-delete-btn {
+  padding: 0.45em 1.1em;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid #177e48;
+  background: linear-gradient(90deg, #eab308 0%, #ffe066 100%);
+  color: #177e48;
+  margin-right: 0.5em;
+  margin-bottom: 0.3em;
+  box-shadow: 0 2px 8px 0 rgba(23, 126, 72, 0.08);
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s, transform 0.12s;
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    background: linear-gradient(90deg, #ffe066 0%, #eab308 100%);
+    color: #bfa800;
+    box-shadow: 0 4px 18px 0 rgba(234, 179, 8, 0.18);
+    transform: translateY(-2px) scale(1.03);
+    outline: none;
+  }
+  &:active {
+    filter: brightness(0.97);
+    transform: translateY(1px) scale(0.98);
+  }
+}
+
+// Refined Leave Feedback button: smaller, artisanal, with checkout-style gradient
+.buyer-dashboard__button--feedback {
+  padding: 0.32em 0.9em;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 2px solid #1caf68;
+  // Use checkout button gradient
+  background: linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%);
+  color: #177e48;
+  margin-right: 0.3em;
+  margin-bottom: 0.2em;
+  box-shadow: 0 1.5px 6px 0 rgba(23, 126, 72, 0.10);
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  transition: background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s;
+  &:hover,
+  &:focus {
+    background: linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%);
+    color: #1caf68;
+    border-color: #177e48;
+    box-shadow: 0 4px 18px 0 rgba(23, 126, 72, 0.14);
+    transform: scale(1.06) rotate(-1deg);
+    outline: none;
+  }
+  &:active {
+    filter: brightness(0.97);
+    transform: translateY(1px) scale(0.97);
+  }
+}
+
 // Controls section for cart/wishlist (See More/Less)
 .buyer-dashboard__cart-controls,
 .buyer-dashboard__wishlist-controls {
@@ -698,4 +758,166 @@ $breakpoint-sm: 576px;  // Mobile
       font-size: 0.9rem;
     }
   }
+}
+
+.order-card {
+  background: #f8faf5;
+  border: 2px solid #eab308;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(234, 179, 8, 0.14);
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.12s;
+  position: relative;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 8px 32px 0 rgba(234, 179, 8, 0.22);
+    border-color: #bfa800;
+    transform: translateY(-2px) scale(1.01);
+  }
+
+  &__collage {
+    min-width: 120px;
+    min-height: 120px;
+    background: #fffbe6;
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    box-shadow: 0 2px 8px 0 rgba(234, 179, 8, 0.08);
+    margin-right: 1.2rem;
+  }
+
+  &__mini-image {
+    border-radius: 6px;
+    border: 1.5px solid #eab308;
+    box-shadow: 0 1.5px 4px 0 rgba(255, 190, 11, 0.10);
+    transition: box-shadow 0.18s, border-color 0.18s, transform 0.12s;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      border-color: #177e48;
+      box-shadow: 0 4px 18px 0 rgba(23, 126, 72, 0.14);
+      transform: scale(1.08) rotate(-2deg);
+      z-index: 2;
+    }
+  }
+
+  &__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__id {
+    color: #177e48;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+  }
+
+  &__item {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px dashed #eab308;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__total {
+    font-weight: 700;
+    color: #bfa800;
+    margin-top: 0.7rem;
+    font-size: 1.1rem;
+  }
+
+  &__status {
+    color: #177e48;
+    font-size: 1rem;
+    margin-top: 0.2rem;
+  }
+}
+
+// Order card item name styling
+.order-card__item-name {
+  font-weight: 700;
+  color: #177e48;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.1em;
+  text-shadow: 0 1px 0 #fffbe6, 0 0.5px 0 #eab30833;
+  display: inline-block;
+}
+
+.order-card__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  flex-wrap: wrap;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px dashed #eab308;
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .order-card__item-name {
+    margin-right: 0.7em;
+    flex-shrink: 0;
+    font-weight: 700;
+    color: #177e48;
+    font-size: 1.08rem;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.1em;
+    text-shadow: 0 1px 0 #fffbe6, 0 0.5px 0 #eab30833;
+    display: inline-block;
+  }
+
+  > span {
+    flex-shrink: 0;
+  }
+
+  .order-card__item-actions,
+  .buyer-dashboard__button--feedback,
+  .move-to-cart-btn,
+  .wishlist-delete-btn {
+    margin-left: auto;
+    display: flex;
+    gap: 0.4em;
+    align-items: center;
+  }
+}
+
+// Ensure feedback and other action buttons are always right-aligned
+.order-card__item > .buyer-dashboard__button--feedback,
+.order-card__item > .move-to-cart-btn,
+.order-card__item > .wishlist-delete-btn {
+  margin-left: auto;
+}
+
+// Feedback display (when present) should take full width and be visually distinct
+.order-card__item > div {
+  width: 100%;
+  margin-top: 0.2em;
+  font-size: 0.97em;
+  color: #177e48;
+  background: #f8faf5;
+  border-radius: 6px;
+  padding: 0.3em 0.5em;
+  box-shadow: 0 1px 4px 0 rgba(23, 126, 72, 0.04);
 }

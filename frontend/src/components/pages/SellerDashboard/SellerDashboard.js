@@ -7,9 +7,12 @@ import {
   fetchProducts,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  fetchMyProducts
 } from '../../../api/products/productRequests';
 import { getFeedbacks } from '../../../api/feedback/feedbackRequests';
+import { getMySales, getOrdersToShip, markShipped } from '../../../api/orders/ordersRequests';
+import apiClient from '../../../api/axiosConfig';
 
 // Preinstalled categories – expanded list.
 const categories = [
@@ -50,34 +53,46 @@ const SellerDashboard = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [orderError, setOrderError] = useState(null);
 
+  // Orders to ship: now an array of order items (products to ship)
+  const [toShip, setToShip] = useState([]);
+  const [sales, setSales] = useState([]);
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      setLoadingOrders(true);
-      try {
-        const res = await axios.get('/api/orders');
-        const ordersData = res.data && res.data.orders ? res.data.orders : res.data;
-        setOrders(Array.isArray(ordersData) ? ordersData : []);
+    setLoadingOrders(true);
+    Promise.all([getMySales(), getOrdersToShip()])
+      .then(([salesItems, toShipItems]) => {
+        setSales(salesItems);
+        setToShip(toShipItems);
         setLoadingOrders(false);
-      } catch (err) {
+      })
+      .catch(() => {
         setOrderError('Failed to fetch orders');
         setLoadingOrders(false);
-      }
-    };
-    fetchOrders();
+      });
   }, []);
 
-  const handleMarkShipped = async (orderId) => {
+  // Refetch orders helper
+  const refetchOrders = async () => {
+    setLoadingOrders(true);
     try {
-      // Assuming your backend endpoint for marking as shipped is working at /api/orders/:orderId/ship
-      await axios.patch(`/api/orders/${orderId}/ship`);
-      setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'Shipped' } : o));
+      const [salesItems, toShipItems] = await Promise.all([getMySales(), getOrdersToShip()]);
+      setSales(salesItems);
+      setToShip(toShipItems);
+    } catch {
+      setOrderError('Failed to fetch orders');
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  const handleMarkShipped = async (orderId, orderItemId) => {
+    try {
+      await markShipped(orderId, orderItemId);
+      await refetchOrders(); // <-- Auto-update after marking as shipped
     } catch (err) {
       setOrderError('Failed to mark as shipped');
     }
   };
-
-  // Orders to ship: only those with status "Processing" (i.e. orders that buyers have paid for)
-  const ordersToShip = orders.filter(o => o.status === 'Processing');
 
   // Product CRUD State
   const [products, setProducts] = useState([]);
@@ -115,7 +130,7 @@ const SellerDashboard = () => {
     const fetchProductsAsync = async () => {
       setLoadingProducts(true);
       try {
-        const data = await fetchProducts();
+        const data = await fetchMyProducts();
         setProducts(data);
         setLoadingProducts(false);
       } catch (err) {
@@ -128,15 +143,25 @@ const SellerDashboard = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
+    // Validate required fields before sending
+    if (
+      !newProduct.name.trim() ||
+      !newProduct.price ||
+      !newProduct.description.trim() ||
+      !newProduct.category.trim()
+    ) {
+      setProdError('All fields are required.');
+      return;
+    }
     try {
       const formData = new FormData();
-      formData.append('name', newProduct.name);
-      formData.append('price', newProduct.price);
-      formData.append('description', newProduct.description);
-      formData.append('category', newProduct.category);
+      formData.append('name', newProduct.name.trim());
+      formData.append('price', String(newProduct.price));
+      formData.append('description', newProduct.description.trim());
+      formData.append('category', newProduct.category.trim());
       formData.append('tags', newProduct.tags);
       if (newImageFile) {
-        formData.append('image', newImageFile);
+        formData.append('image', newImageFile); // <-- This must match backend field name
       }
       const data = await createProduct(formData);
       setProducts([...products, data.product]);
@@ -149,6 +174,7 @@ const SellerDashboard = () => {
       });
       setNewImageFile(null);
       setShowAddForm(false);
+      setProdError('');
     } catch (err) {
       setProdError('Failed to add product');
     }
@@ -158,10 +184,10 @@ const SellerDashboard = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append('name', editProduct.name);
-      formData.append('price', editProduct.price);
-      formData.append('description', editProduct.description);
-      formData.append('category', editProduct.category);
+      formData.append('name', editProduct.name.trim());
+      formData.append('price', String(editProduct.price));
+      formData.append('description', editProduct.description.trim());
+      formData.append('category', editProduct.category.trim());
       formData.append('tags', editProduct.tags);
       if (editImageFile) {
         formData.append('image', editImageFile);
@@ -192,7 +218,7 @@ const SellerDashboard = () => {
   };
 
   const filteredProducts = products.filter(
-    p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+    p => p && typeof p.name === 'string' && p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
@@ -219,26 +245,21 @@ const SellerDashboard = () => {
 
   return (
     <div className="seller-dashboard">
-      {/* Orders to Ship Section */}
-      <h2 className="seller-dashboard__header">Orders to Ship</h2>
+      {/* Products to Ship Section */}
+      <h2 className="seller-dashboard__header">Products to Ship</h2>
       {orderError && <p className="seller-dashboard__error">{orderError}</p>}
       <div className="seller-dashboard__orders">
         {loadingOrders ? (
-          <p>Loading orders...</p>
-        ) : ordersToShip.length === 0 ? (
-          <p className="seller-dashboard__empty">No orders pending shipment.</p>
+          <p>Loading products to ship...</p>
+        ) : toShip.length === 0 ? (
+          <p className="seller-dashboard__empty">No products pending shipment.</p>
         ) : (
-          ordersToShip.map(order => (
-            <div key={order._id} className="order-card">
-              <h3 className="order-card__id">Order {order._id}</h3>
-              <p className="order-card__items-names">
-                {(order.items || []).map(item => item.name).join(', ')}
-              </p>
-              <p className="order-card__status">Status: {order.status}</p>
-              <p className="order-card__date">
-                Date: {new Date(order.date).toLocaleDateString()}
-              </p>
-              <Button onClick={() => handleMarkShipped(order._id)}>
+          toShip.map(item => (
+            <div key={item._id} className="order-card">
+              <h3 className="order-card__id">Order {item.orderId}</h3>
+              <p className="order-card__product-name">{item.name} (x{item.qty})</p>
+              <p className="order-card__product-status">Status: {item.status}</p>
+              <Button onClick={() => handleMarkShipped(item.orderId, item._id)}>
                 Mark as Shipped
               </Button>
             </div>

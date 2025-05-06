@@ -22,6 +22,16 @@ const FeedbackPopup = ({ orderId, userId, closePopup, onSubmitFeedback, initialF
     setSubmitted(false);
   }, [initialFeedback, orderId]);
 
+  // Add validation effect
+  useEffect(() => {
+    // Title and comments must be non-empty, rating must be 1-5
+    if (title.trim() && comments.trim() && rating >= 1 && rating <= 5) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [title, comments, rating]);
+
   const handleSubmit = e => {
     e.preventDefault();
     if (!title.trim() || !comments.trim()) {
@@ -29,9 +39,17 @@ const FeedbackPopup = ({ orderId, userId, closePopup, onSubmitFeedback, initialF
       setIsValid(false);
       return;
     }
-    onSubmitFeedback({ order: orderId, user: userId, rating, title, comments });
+    // Support orderId as object { orderId, itemId }
+    let order = orderId;
+    let itemId = undefined;
+    if (order && typeof order === 'object' && order.orderId && order.itemId) {
+      itemId = order.itemId;
+      order = order.orderId;
+    }
+    // Change user -> buyer
+    onSubmitFeedback({ orderId: order, itemId, rating, title, comments });
     setSubmitted(true);
-    setIsValid(true);
+    // Don't set isValid to true here, let the effect handle it
   };
 
   return (
