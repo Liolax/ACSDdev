@@ -495,28 +495,6 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-      <section className="seller-dashboard__feedback">
-        <h3>Customer Feedback</h3>
-        {loadingFeedback ? (
-          <p>Loading feedback...</p>
-        ) : feedbacks.length === 0 ? (
-          <p>No feedback yet.</p>
-        ) : (
-          <ul>
-            {feedbacks.map(fb => (
-              <li key={fb._id}>
-                <strong>Order:</strong> {fb.order?._id}<br />
-                <strong>Rating:</strong> {fb.rating}<br />
-                <strong>Title:</strong> {fb.title}<br />
-                <strong>Comments:</strong> {fb.comments}
-                {fb.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
-                <br />
-                <strong>User:</strong> {fb.user?.name || 'Anonymous'}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
       <MySales />
     </div>
   );
