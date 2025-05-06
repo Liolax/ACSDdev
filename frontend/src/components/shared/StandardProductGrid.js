@@ -29,7 +29,22 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
   const [popupImagePath, setPopupImagePath] = useState(null);
   const itemsPerPage = 8;
 
-  const uniqueTags = Array.from(new Set(products.flatMap(product => product.tags || [])));
+  // Flatten all tags, split by comma, trim, dedupe, and lowercase for suggestions
+  const uniqueTags = Array.from(
+    new Set(
+      products
+        .flatMap(product =>
+          (product.tags || [])
+            .flatMap(tag =>
+              typeof tag === 'string'
+                ? tag.split(',').map(t => t.trim())
+                : []
+            )
+        )
+        .filter(Boolean)
+        .map(tag => tag.toLowerCase())
+    )
+  );
 
   const getFilteredProducts = () => {
     let filtered = [...products];
@@ -48,11 +63,25 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
     }
 
     if (searchTags.trim() !== '') {
-      const tagArray = searchTags.split(',').map(tag => tag.trim().toLowerCase());
-      filtered = filtered.filter(product => {
-        if (!product.tags) return false;
-        return tagArray.some(tag => product.tags.map(t => t.toLowerCase()).includes(tag));
-      });
+      const enteredTags = searchTags
+        .split(',')
+        .map(tag => tag.trim().toLowerCase())
+        .filter(tag => tag !== '');
+
+      if (enteredTags.length > 0) {
+        filtered = filtered.filter(product => {
+          if (!product.tags || product.tags.length === 0) return false;
+          // Flatten product tags for matching
+          const productTagsLower = product.tags
+            .flatMap(tag =>
+              typeof tag === 'string'
+                ? tag.split(',').map(t => t.trim().toLowerCase())
+                : []
+            )
+            .filter(Boolean);
+          return enteredTags.every(enteredTag => productTagsLower.includes(enteredTag));
+        });
+      }
     }
 
     if (sortOrder === 'asc') {
@@ -74,8 +103,20 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
     setCurrentPage(1);
   }, [searchTerm, selectedCategory, searchTags, sortOrder, products]);
 
-  const filteredTagSuggestions = searchTags
-    ? uniqueTags.filter(tag => tag.startsWith(searchTags.toLowerCase()))
+  // Only suggest individual tags that start with the current fragment and are not already entered
+  const currentTagFragment = searchTags.includes(',')
+    ? searchTags.substring(searchTags.lastIndexOf(',') + 1).trimStart()
+    : searchTags.trimStart();
+  const filteredTagSuggestions = currentTagFragment
+    ? uniqueTags.filter(
+        tag =>
+          tag.startsWith(currentTagFragment.toLowerCase()) &&
+          !searchTags
+            .toLowerCase()
+            .split(',')
+            .map(t => t.trim())
+            .includes(tag)
+      )
     : [];
 
   return (
@@ -97,15 +138,24 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
         </select>
         <input
           type="text"
-          placeholder="Search by tags (comma separated)..."
+          placeholder="Tags (e.g. wood, handmade)"
           value={searchTags}
           onChange={e => setSearchTags(e.target.value)}
           list="tagSuggestions"
         />
         <datalist id="tagSuggestions">
-          {filteredTagSuggestions.map(tag => (
-            <option key={tag} value={tag} />
-          ))}
+          {currentTagFragment.length > 0 &&
+            filteredTagSuggestions.slice(0, 10).map(tag => (
+              <option
+                key={tag}
+                value={
+                  searchTags.substring(
+                    0,
+                    searchTags.toLowerCase().lastIndexOf(currentTagFragment.toLowerCase())
+                  ) + tag
+                }
+              />
+            ))}
         </datalist>
         <select
           value={sortOrder}
@@ -118,7 +168,7 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
       </div>
 
       {filteredProducts.length === 0 ? (
-        <p>No products match the current filters.</p>
+        <p className="standard-product-grid__empty-message">No products match the current filters.</p>
       ) : (
         <>
           <div className="standard-product-grid">
