@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getMySales } from '../../../api/orders/ordersRequests';
-import '../../../assets/styles/pages/_my-sales.scss';
+import '../../../assets/styles/pages/_seller-dashboard.scss';
 
 const MySales = () => {
   const [sales, setSales] = useState([]);

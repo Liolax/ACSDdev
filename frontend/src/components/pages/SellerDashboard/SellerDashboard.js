@@ -57,6 +57,10 @@ const SellerDashboard = () => {
   const [toShip, setToShip] = useState([]);
   const [sales, setSales] = useState([]);
 
+  // For "See More..." logic
+  const [toShipVisible, setToShipVisible] = useState(5);
+  const [salesVisible, setSalesVisible] = useState(5);
+
   useEffect(() => {
     setLoadingOrders(true);
     Promise.all([getMySales(), getOrdersToShip()])
@@ -243,8 +247,36 @@ const SellerDashboard = () => {
     fetchFeedbacks();
   }, []);
 
+  // Quick links logic
+  const handleGoToManageProducts = () => {
+    document.getElementById('manage-products-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+  const handleGoToMySales = () => {
+    document.getElementById('my-sales-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="seller-dashboard">
+      {/* Quick links for navigation */}
+      <div className="seller-dashboard__quick-links" style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginBottom: 8 }}>
+        <button
+          type="button"
+          className="seller-dashboard__quick-link"
+          onClick={handleGoToManageProducts}
+          style={{ cursor: 'pointer' }}
+        >
+          🛠️ Manage Products
+        </button>
+        <button
+          type="button"
+          className="seller-dashboard__quick-link"
+          onClick={handleGoToMySales}
+          style={{ cursor: 'pointer' }}
+        >
+          📦 My Sales
+        </button>
+      </div>
+
       {/* Products to Ship Section */}
       <h2 className="seller-dashboard__header">Products to Ship</h2>
       {orderError && <p className="seller-dashboard__error">{orderError}</p>}
@@ -254,21 +286,62 @@ const SellerDashboard = () => {
         ) : toShip.length === 0 ? (
           <p className="seller-dashboard__empty">No products pending shipment.</p>
         ) : (
-          toShip.map(item => (
-            <div key={item._id} className="order-card">
-              <h3 className="order-card__id">Order {item.orderId}</h3>
-              <p className="order-card__product-name">{item.name} (x{item.qty})</p>
-              <p className="order-card__product-status">Status: {item.status}</p>
-              <Button onClick={() => handleMarkShipped(item.orderId, item._id)}>
-                Mark as Shipped
-              </Button>
+          <>
+            {toShip.slice(0, toShipVisible).map(item => (
+              <div key={item._id} className="order-card" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <img
+                  src={getImageUrl(item.image)}
+                  alt={item.name}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    objectFit: 'cover',
+                    borderRadius: 6,
+                    border: '1px solid #eab308',
+                    background: '#fffbe6',
+                    marginRight: 12,
+                    flexShrink: 0
+                  }}
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <h3 className="order-card__id" style={{ margin: 0, fontSize: '1.05rem' }}>Order {item.orderId}</h3>
+                  <p className="order-card__product-name" style={{ margin: 0 }}>{item.name} (x{item.qty})</p>
+                  <p className="order-card__product-status" style={{ margin: 0 }}>Status: {item.status}</p>
+                </div>
+                <Button onClick={() => handleMarkShipped(item.orderId, item._id)}>
+                  Mark as Shipped
+                </Button>
+              </div>
+            ))}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+              {toShipVisible > 5 && (
+                <Button
+                  className="see-more-btn"
+                  onClick={() => setToShipVisible(5)}
+                  style={{ marginRight: 8 }}
+                >
+                  See Less...
+                </Button>
+              )}
+              {toShipVisible < toShip.length && (
+                <Button
+                  className="see-more-btn"
+                  onClick={() => setToShipVisible(toShipVisible + 5)}
+                >
+                  See More...
+                </Button>
+              )}
             </div>
-          ))
+          </>
         )}
       </div>
 
       {/* Manage Products Section */}
-      <h2 className="seller-dashboard__header">Manage Products</h2>
+      <h2 className="seller-dashboard__header" id="manage-products-section">Manage Products</h2>
       {prodError && <p className="seller-dashboard__error">{prodError}</p>}
       <div className="seller-dashboard__search">
         <input
@@ -495,7 +568,76 @@ const SellerDashboard = () => {
           ))}
         </div>
       )}
-      <MySales />
+      <div id="my-sales-section" style={{ marginTop: 32 }}>
+        <h2 className="seller-dashboard__header">My Sales</h2>
+        <div className="my-sales__list">
+          {loadingOrders ? (
+            <p className="my-sales__loading">Loading sales…</p>
+          ) : sales.length === 0 ? (
+            <p className="my-sales__empty">No sales yet.</p>
+          ) : (
+            <>
+              {sales.slice(0, salesVisible).map(item => (
+                <div key={item._id} className="order-card my-sales__order-card" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <img
+                    src={getImageUrl(item.image)}
+                    alt={item.name}
+                    style={{
+                      width: 48,
+                      height: 48,
+                      objectFit: 'cover',
+                      borderRadius: 6,
+                      border: '1px solid #eab308',
+                      background: '#fffbe6',
+                      marginRight: 12,
+                      flexShrink: 0
+                    }}
+                    onError={e => {
+                      e.target.onerror = null;
+                      e.target.src = defaultImage;
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <h3 className="order-card__id" style={{ margin: 0, fontSize: '1.05rem' }}>Order #{item.orderId}</h3>
+                    <p className="order-card__product-name" style={{ margin: 0 }}>{item.name} (x{item.qty})</p>
+                    <p className="order-card__product-status" style={{ margin: 0 }}>Status: {item.status}</p>
+                    {item.feedback && (
+                      <div className="order-card__feedback" style={{ marginTop: 4 }}>
+                        <strong>Feedback:</strong>
+                        <p style={{ margin: 0 }}>Rating: {item.feedback.rating} ★</p>
+                        <p style={{ margin: 0 }}>Title: {item.feedback.title}</p>
+                        <p style={{ margin: 0 }}>
+                          Comments: {item.feedback.comments}
+                          {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+                {salesVisible > 5 && (
+                  <Button
+                    className="see-more-btn"
+                    onClick={() => setSalesVisible(5)}
+                    style={{ marginRight: 8 }}
+                  >
+                    See Less...
+                  </Button>
+                )}
+                {salesVisible < sales.length && (
+                  <Button
+                    className="see-more-btn"
+                    onClick={() => setSalesVisible(salesVisible + 5)}
+                  >
+                    See More...
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
