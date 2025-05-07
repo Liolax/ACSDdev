@@ -227,7 +227,10 @@
 
 .checkout-form__input,
 .shipping-form input,
-.payment-form input {
+.payment-form input,
+.shipping-form select, // <-- Add select here
+.payment-form select   // <-- Add select here
+{
   border: 2px solid #eab308;
   border-radius: 7px;
   padding: 0.7rem 1rem;
@@ -236,6 +239,25 @@
   color: #222;
   font-family: inherit;
   transition: border-color 0.14s, box-shadow 0.14s;
+  &:focus {
+    border-color: #177e48;
+    outline: none;
+    box-shadow: 0 0 0 2px #eab30833;
+  }
+}
+
+.shipping-form select,
+.payment-form select {
+  // Match input style
+  border: 2px solid #eab308;
+  border-radius: 7px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #222;
+  font-family: inherit;
+  transition: border-color 0.14s, box-shadow 0.14s;
+  appearance: none;
   &:focus {
     border-color: #177e48;
     outline: none;
