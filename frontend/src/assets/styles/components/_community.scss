@@ -7,29 +7,7 @@ $irish-green-dark: base.$irish-green-dark;
 $irish-cream: base.$irish-cream;
 $irish-gold: base.$irish-gold;
 
-.home-page__community {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px rgba(23, 98, 62, 0.10);
-  padding: 38px 32px 32px 32px;
-  margin: 38px auto 0 auto;
-  max-width: 1000px;
-
-  h2 {
-    @include mixins.heading; // Use base heading for consistency
-    margin-bottom: 18px;
-  }
-
-  p {
-    color: $irish-green-dark;
-    font-size: 1.13rem;
-    line-height: 1.6;
-    margin-bottom: 18px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
+// Removed .home-page__community styles
 
 .eirecraft-portfolio {
   background: color.adjust($irish-cream, $lightness: 5%);
@@ -165,18 +143,6 @@ $irish-gold: base.$irish-gold;
 }
 
 @media (max-width: 900px) {
-  .home-page__community {
-    padding: 22px 10px 20px 10px;
-    border-radius: 12px;
-    margin: 20px 4px 0 4px;
-    h2 {
-      font-size: 1.35rem;
-    }
-    p {
-      font-size: 1.01rem;
-    }
-  }
-
   .eirecraft-portfolio {
     padding: 30px 20px;
     margin: 30px auto;
