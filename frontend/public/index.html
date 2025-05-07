@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -16,5 +16,12 @@
   <body>
     <div id="root"></div>
     <!-- The built bundle will be automatically injected here by Create React App. -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('%PUBLIC_URL%/service-worker.js');
+        });
+      }
+    </script>
   </body>
 </html>

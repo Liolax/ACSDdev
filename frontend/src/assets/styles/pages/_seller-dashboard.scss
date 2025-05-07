@@ -314,7 +314,7 @@
 
     &:hover:not(.active),
     &:focus:not(.active) {
-      background: lighten(base.$irish-gold-light, 10%);
+      background: color.adjust(base.$irish-gold-light, $lightness: 10%);
       color: base.$irish-gold-text;
       box-shadow: 0 1px 4px rgba(base.$irish-gold, 0.15);
     }

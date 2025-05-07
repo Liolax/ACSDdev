@@ -1,11 +1,11 @@
 {
-  "name": "Artisan & Local Craft Marketplace",
-  "short_name": "ArtisanMarket",
-  "description": "A React-based Progressive Web App connecting local artisans with craft enthusiasts.",
-  "start_url": "/",
+  "name": "ÉireCraft Artisan Market",
+  "short_name": "ÉireCraft",
+  "description": "An online marketplace for artisanal Irish goods.",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#f0efeb",
-  "theme_color": "#ffffff",
+  "background_color": "#fbfbe6",
+  "theme_color": "#17623e",
   "icons": [
     {
       "src": "/assets/images/logo.svg",

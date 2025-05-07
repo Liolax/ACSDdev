@@ -44,12 +44,6 @@
   letter-spacing: 0.01em;
 }
 
-@mixin card($radius: 14px, $shadow: var(--shadow-light), $bg: #fff) {
-  border-radius: $radius;
-  box-shadow: $shadow;
-  background: $bg;
-}
-
 @mixin flex-center($direction: row, $gap: 1rem) {
   display: flex;
   flex-direction: $direction;
