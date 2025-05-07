@@ -1,8 +1,11 @@
 @use '../base' as base;
 @use '../mixins' as mixins;
+@use 'sass:color';
 
-$irish-green: #17623e;
-$irish-green-dark: #11442b;
+$irish-green: base.$irish-green;
+$irish-green-dark: base.$irish-green-dark;
+$irish-cream: base.$irish-cream;
+$irish-gold: base.$irish-gold;
 
 .home-page__community {
   background: #fff;
@@ -28,6 +31,139 @@ $irish-green-dark: #11442b;
   }
 }
 
+.eirecraft-portfolio {
+  background: color.adjust($irish-cream, $lightness: 5%);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba($irish-green, 0.12);
+  padding: 40px 35px;
+  margin: 40px auto;
+  max-width: 960px;
+  text-align: left;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid color.adjust($irish-gold, $alpha: -0.7);
+    padding-bottom: 25px;
+
+    h2 {
+      @include mixins.heading;
+      font-size: 2.2rem;
+      color: $irish-green-dark;
+      margin-bottom: 8px;
+    }
+
+    .eirecraft-portfolio__tagline {
+      font-size: 1.2rem;
+      color: $irish-gold;
+      font-style: italic;
+      font-family: base.$font-family-heading, serif;
+    }
+  }
+
+  &__content {
+    // No specific styles needed for the content wrapper itself unless for layout
+  }
+
+  &__section {
+    margin-bottom: 30px;
+
+    h3 {
+      font-family: base.$font-family-heading, serif;
+      color: $irish-green;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 1px dashed color.adjust($irish-gold, $alpha: -0.8);
+      display: inline-block;
+    }
+
+    p, ul li {
+      color: $irish-green-dark;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 10px;
+
+        &::before {
+          content: '☘';
+          color: $irish-gold;
+          position: absolute;
+          left: 0;
+          top: 0px;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__invitation {
+    background-color: color.adjust($irish-cream, $lightness: -2%);
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 20px;
+    text-align: center;
+
+    h3 {
+      border-bottom: none;
+      display: block;
+      text-align: center;
+    }
+  }
+
+  &__actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  &__button {
+    @include mixins.transition(background, color, box-shadow);
+    font-family: base.$font-family-heading, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, $irish-gold 0%, base.$irish-gold-light 100%);
+    color: $irish-green-dark;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba($irish-gold, 0.09);
+
+    &:hover,
+    &:focus {
+      background: linear-gradient(90deg, base.$irish-gold-dark 0%, $irish-gold 100%);
+      color: #fff;
+      outline: none;
+    }
+
+    &--secondary {
+      background: #fffbe6;
+      color: $irish-gold;
+      border: 1.5px solid $irish-gold;
+      &:hover,
+      &:focus {
+        background: $irish-gold;
+        color: #fff;
+      }
+    }
+  }
+}
+
 @media (max-width: 900px) {
   .home-page__community {
     padding: 22px 10px 20px 10px;
@@ -38,6 +174,61 @@ $irish-green-dark: #11442b;
     }
     p {
       font-size: 1.01rem;
+    }
+  }
+
+  .eirecraft-portfolio {
+    padding: 30px 20px;
+    margin: 30px auto;
+
+    &__header {
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      h2 {
+        font-size: 1.9rem;
+      }
+      .eirecraft-portfolio__tagline {
+        font-size: 1.1rem;
+      }
+    }
+
+    &__section {
+      h3 {
+        font-size: 1.35rem;
+      }
+      p, ul li {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .eirecraft-portfolio {
+    padding: 25px 15px;
+    border-radius: 15px;
+    margin: 20px auto;
+
+    &__header {
+      h2 {
+        font-size: 1.7rem;
+      }
+      .eirecraft-portfolio__tagline {
+        font-size: 1rem;
+      }
+    }
+
+    &__section {
+      h3 {
+        font-size: 1.25rem;
+      }
+      p, ul li {
+        font-size: 0.95rem;
+        padding-left: 22px;
+        &::before {
+          font-size: 1rem;
+        }
+      }
     }
   }
 }
