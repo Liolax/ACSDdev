@@ -5,6 +5,9 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
   background: base.$irish-green-gradient;
   color: #e7fff3;
   text-align: center;
@@ -42,5 +45,7 @@
     padding: 12px 7px 8px 7px;
     font-size: 0.97rem;
     border-radius: 9px 9px 0 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

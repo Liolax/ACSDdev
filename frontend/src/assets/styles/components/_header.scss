@@ -16,6 +16,8 @@
   box-shadow: 0 2px 14px rgba(23, 98, 62, 0.13);
   position: relative;
   z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
 
   &__logo {
     display: flex;
@@ -113,6 +115,8 @@
     flex-direction: row;
     padding: 0 5px;
     min-height: 0;
+    left: 50%;
+    transform: translateX(-50%);
 
     &__logo {
       padding: 8px 4px 8px 2px;
@@ -137,11 +141,12 @@
     }
 
     &__nav {
-      position: fixed;
-      top: 0;
+      position: absolute;
+      top: 100%;
       left: 0;
       width: 100vw;
-      height: 100dvh;
+      min-width: 100vw;
+      height: auto;
       background: base.$irish-green-gradient;
       flex-direction: column;
       align-items: flex-start;
@@ -154,6 +159,14 @@
       &.open {
         display: flex;
         animation: navbar-slide-down 0.20s cubic-bezier(0.4, 0, 0.2, 1);
+        // Ensure nav is always below the header, not covering it
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vw;
+        min-width: 100vw;
+        border-radius: 0 0 18px 18px;
+        box-shadow: 0 10px 32px 0 rgba(23, 98, 62, 0.13);
       }
 
       a,
