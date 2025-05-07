@@ -21,21 +21,30 @@ const InstagramIcon = () => (
 const Footer = () => (
   <div className="footer-bg">
     <footer className="footer">
-      <div className="footer__body" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: 12,
-        width: '100%',
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: 0,
-      }}>
-        <div className="footer__copyright" style={{ flex: '1 1 180px', textAlign: 'left', fontSize: '0.98em' }}>
-          © {new Date().getFullYear()} ÉireCraft. All rights reserved.
-        </div>
-        <nav className="footer__social-links" aria-label="Social media links" style={{ flex: '1 1 220px', textAlign: 'center', display: 'flex', justifyContent: 'center', gap: 10 }}>
+      <div className="footer__body"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 12,
+          width: '100%',
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: 0,
+        }}
+      >
+        {/* Social icons always at top on mobile, otherwise in center */}
+        <div className="footer__social-links" aria-label="Social media links"
+          style={{
+            flex: '1 1 100%',
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 10,
+            marginBottom: 2,
+          }}
+        >
           <a
             href="https://twitter.com/eirecraft"
             target="_blank"
@@ -63,11 +72,43 @@ const Footer = () => (
           >
             <InstagramIcon />
           </a>
-        </nav>
-        <div className="footer__contact" style={{ flex: '1 1 180px', textAlign: 'right', fontSize: '0.98em' }}>
-          <a href="mailto:info@eirecraft.ie" className="footer__contact-link" style={{ color: '#b0ffd7', textDecoration: 'none' }}>
-            info@eirecraft.ie
-          </a>
+        </div>
+        {/* Row for copyright and contact */}
+        <div className="footer__row" style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          width: '100%',
+          fontSize: '0.97em',
+          margin: 0,
+          padding: 0,
+          flexWrap: 'wrap',
+        }}>
+          <div className="footer__copyright" style={{
+            flex: '0 0 auto',
+            textAlign: 'center',
+            fontSize: '0.97em',
+            margin: 0,
+            padding: 0,
+            display: 'inline',
+          }}>
+            © {new Date().getFullYear()} ÉireCraft. All rights reserved.
+          </div>
+          <span style={{ display: 'inline-block', width: 8 }} />
+          <div className="footer__contact" style={{
+            flex: '0 0 auto',
+            textAlign: 'center',
+            fontSize: '0.97em',
+            margin: 0,
+            padding: 0,
+            display: 'inline',
+          }}>
+            <a href="mailto:info@eirecraft.ie" className="footer__contact-link" style={{ color: '#b0ffd7', textDecoration: 'none' }}>
+              info@eirecraft.ie
+            </a>
+          </div>
         </div>
       </div>
     </footer>
