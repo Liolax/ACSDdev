@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import axios from 'axios';
 
 import productRoutes from './routes/productRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
@@ -97,6 +98,24 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes); // <-- Ensure this is /api/orders
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+
+// Example proxy endpoint for GeoDB Cities API
+app.get('/api/geodb/cities', async (req, res) => {
+  try {
+    const { country, city } = req.query;
+    const apiKey = process.env.GEODB_API_KEY; // Set this in your .env file
+    const response = await axios.get('https://wft-geo-db.p.rapidapi.com/v1/geo/cities', {
+      params: { countryIds: country, namePrefix: city },
+      headers: {
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+      }
+    });
+    res.json(response.data);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch cities' });
+  }
+});
 
 // 404 handler
 app.use((req, res, next) => {

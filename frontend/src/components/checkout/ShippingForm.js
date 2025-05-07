@@ -17,15 +17,9 @@ const fetchCountries = async () => {
 // Helper: fetch city suggestions from GeoDB Cities API
 // a free API key from RapidAPI for GeoDB Cities
 const fetchCitySuggestions = async (country, cityPrefix) => {
-  // Use GeoDB Cities API with our key and host
-  const apiKey = 'b88993f0aemsh0bf8c4b7315dc36p168d38jsnef98b027d622';
-  const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?limit=8&namePrefix=${encodeURIComponent(cityPrefix)}${country && country.length === 2 ? `&countryIds=${country}` : ''}`;
-  const res = await fetch(url, {
-    headers: {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    }
-  });
+  // Call your backend endpoint instead of using a hardcoded API key
+  const url = `/api/geodb/cities?country=${country}&city=${cityPrefix}`;
+  const res = await fetch(url);
   if (!res.ok) return [];
   const data = await res.json();
   return data.data ? data.data.map(city => city.city) : [];
@@ -93,9 +87,9 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
   };
 
   return (
-    <div className="shipping-form">
+    <div className="shipping-form" aria-label="Shipping details form">
       <h3>Shipping Details</h3>
-      <form autoComplete="off">
+      <form autoComplete="off" noValidate>
         <div className="form-group">
           <label htmlFor="fullName">Full Name:</label>
           <input
@@ -105,8 +99,12 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
             value={shippingInfo.fullName || ''}
             onChange={handleChange}
             required
+            minLength={2}
+            aria-required="true"
+            aria-invalid={!!errors.fullName}
+            aria-describedby={errors.fullName ? "fullName-error" : undefined}
           />
-          {errors.fullName && <span className="form-error">{errors.fullName}</span>}
+          {errors.fullName && <span className="form-error" id="fullName-error">{errors.fullName}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="address">Address:</label>
@@ -117,8 +115,12 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
             value={shippingInfo.address || ''}
             onChange={handleChange}
             required
+            minLength={5}
+            aria-required="true"
+            aria-invalid={!!errors.address}
+            aria-describedby={errors.address ? "address-error" : undefined}
           />
-          {errors.address && <span className="form-error">{errors.address}</span>}
+          {errors.address && <span className="form-error" id="address-error">{errors.address}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="country">Country:</label>
@@ -131,6 +133,9 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
               value={shippingInfo.country || ''}
               onChange={handleChange}
               required
+              aria-required="true"
+              aria-invalid={!!errors.country}
+              aria-describedby={errors.country ? "country-error" : undefined}
             >
               <option value="">Select country</option>
               {countries.map(c => (
@@ -138,7 +143,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
               ))}
             </select>
           )}
-          {errors.country && <span className="form-error">{errors.country}</span>}
+          {errors.country && <span className="form-error" id="country-error">{errors.country}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="city">City/Town:</label>
@@ -149,6 +154,10 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
             value={shippingInfo.city || ''}
             onChange={handleChange}
             required
+            minLength={2}
+            aria-required="true"
+            aria-invalid={!!errors.city}
+            aria-describedby={errors.city ? "city-error" : undefined}
             placeholder="Enter your city/town"
             disabled={!shippingInfo.country}
             list="city-suggestions"
@@ -161,7 +170,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
           </datalist>
           {loadingCities && <span style={{ fontSize: 12, color: '#888' }}>Loading suggestions...</span>}
           {cityFetchError && <span className="form-error">{cityFetchError}</span>}
-          {errors.city && <span className="form-error">{errors.city}</span>}
+          {errors.city && <span className="form-error" id="city-error">{errors.city}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="postalCode">Postal Code:</label>
@@ -172,8 +181,12 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, errors = {}, setErrors })
             value={shippingInfo.postalCode || ''}
             onChange={handleChange}
             required
+            minLength={3}
+            aria-required="true"
+            aria-invalid={!!errors.postalCode}
+            aria-describedby={errors.postalCode ? "postalCode-error" : undefined}
           />
-          {errors.postalCode && <span className="form-error">{errors.postalCode}</span>}
+          {errors.postalCode && <span className="form-error" id="postalCode-error">{errors.postalCode}</span>}
         </div>
       </form>
     </div>
