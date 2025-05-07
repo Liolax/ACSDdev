@@ -190,7 +190,7 @@ function StandardProductGrid({ products = [], user, onAddToCart, onAddToWishlist
                   />
                   <div className="product-card__content">
                     <h3 className="product-card__content__title">{product.name}</h3>
-                    <p className="product-card__content__price">${Number(product.price).toFixed(2)}</p>
+                    <p className="product-card__content__price">€{Number(product.price).toFixed(2)}</p>
                     <p className="product-card__content__category">
                       Category: {product.category || 'General'}
                     </p>

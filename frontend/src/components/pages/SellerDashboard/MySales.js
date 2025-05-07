@@ -31,6 +31,7 @@ const MySales = () => {
                 <h3 className="order-card__id">Order #{item.orderId}</h3>
                 <p className="order-card__product-name">{item.name} (x{item.qty})</p>
                 <p className="order-card__product-status">Status: {item.status}</p>
+                <p className="order-card__product-price">€{item.price}</p>
                 {item.feedback && (
                   <div className="order-card__feedback">
                     <strong>Feedback:</strong>

@@ -77,7 +77,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
                             <div className="buyer-dashboard__cart-item-details">
                                 <span className="buyer-dashboard__cart-item-info">{item.name}</span>
                                 <span className="buyer-dashboard__cart-price">
-                                    ${getPriceNumber(item.price).toFixed(2)}
+                                    €{getPriceNumber(item.price).toFixed(2)}
                                 </span>
                             </div>
                             {/* Quantity Controls and Delete Button */}
@@ -176,7 +176,7 @@ const CartSection = ({ items, visibleCount, onSeeMore, onSeeLess, onRemove, onUp
             {/* Cart Total and Pay Button */}
             <div className="buyer-dashboard__cart-summary">
                 <p>
-                    Total: <span className="buyer-dashboard__cart-total">${total.toFixed(2)}</span>
+                    Total: <span className="buyer-dashboard__cart-total">€{total.toFixed(2)}</span>
                 </p>
                 <button
                     key="pay-button"

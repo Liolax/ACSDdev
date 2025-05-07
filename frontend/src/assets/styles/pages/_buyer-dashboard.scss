@@ -243,6 +243,7 @@ $breakpoint-sm: 576px;  // Mobile
   letter-spacing: 0.01em;
   white-space: nowrap; // Keep price on one line
   margin-top: 2px; // Add slight space below name
+  // The price will now be displayed as €{price}
 
   @media (max-width: $breakpoint-sm) {
     font-size: 0.95rem;
@@ -578,6 +579,7 @@ $breakpoint-sm: 576px;  // Mobile
     box-shadow: 0 2px 8px rgba(247, 178, 55, 0.07);
     white-space: nowrap; // Keep price on one line
     flex-shrink: 0; // Prevent shrinking
+    // The total will now be displayed as €{total}
 
     @media (max-width: $breakpoint-sm) {
       font-size: 1.1rem;

@@ -14,7 +14,7 @@ export default function Market() {
       {products.map(product => (
         <div key={product._id}>
           <div>{product.name}</div>
-          <div>{product.price}</div>
+          <div>€{product.price}</div>
           {/* ...add to cart/wishlist buttons... */}
         </div>
       ))}
