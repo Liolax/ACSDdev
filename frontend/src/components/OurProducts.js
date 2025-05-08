@@ -22,7 +22,7 @@ const OurProducts = ({ user, openLoginPopup, onAddToCart, onAddToWishlist }) => 
         onAddToWishlist={onAddToWishlist}
         onDetails={openLoginPopup}
       />
-      {/* Removed duplicate "Sold by: Seller" rendering here */}
+      {/* No duplicate "Sold by: Seller" rendering here */}
     </div>
   );
 };

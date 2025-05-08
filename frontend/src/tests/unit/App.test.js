@@ -12,7 +12,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/home/i)).toBeInTheDocument();
   });
 
-  test('renders Login page', () => {
+  test('renders Login page when navigating to /login', () => {
     render(
       <MemoryRouter initialEntries={['/login']}>
         <App />
@@ -22,7 +22,7 @@ describe('App Routing', () => {
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  test('renders Buyer Dashboard page', () => {
+  test('renders Buyer Dashboard page at /buyer-dashboard', () => {
     render(
       <MemoryRouter initialEntries={['/buyer-dashboard']}>
         <App />
@@ -31,7 +31,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/my purchases/i)).toBeInTheDocument();
   });
 
-  test('renders Seller Dashboard page', () => {
+  test('renders Seller Dashboard page at /seller-dashboard', () => {
     render(
       <MemoryRouter initialEntries={['/seller-dashboard']}>
         <App />
@@ -40,7 +40,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/orders to ship/i)).toBeInTheDocument();
   });
 
-  test('renders Market page', () => {
+  test('renders Market page at /market', () => {
     render(
       <MemoryRouter initialEntries={['/market']}>
         <App />
@@ -49,7 +49,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/market/i)).toBeInTheDocument();
   });
 
-  test('renders Contact page', () => {
+  test('renders Contact page at /contact', () => {
     render(
       <MemoryRouter initialEntries={['/contact']}>
         <App />
@@ -58,7 +58,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/contact/i)).toBeInTheDocument();
   });
 
-  test('renders Checkout page', () => {
+  test('renders Checkout page at /checkout', () => {
     render(
       <MemoryRouter initialEntries={['/checkout']}>
         <App />
@@ -67,7 +67,7 @@ describe('App Routing', () => {
     expect(screen.getByText(/order summary/i)).toBeInTheDocument();
   });
 
-  test('renders 404 for unknown route', () => {
+  test('renders 404 page for unknown route', () => {
     render(
       <MemoryRouter initialEntries={['/some-unknown-route']}>
         <App />

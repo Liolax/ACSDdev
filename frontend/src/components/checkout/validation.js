@@ -1,4 +1,4 @@
-// Comprehensive validation functions for checkout steps and dynamic elements
+// Validation functions for checkout steps and form fields
 
 // Shipping Info Validation
 export function validateShippingInfo(shippingInfo) {

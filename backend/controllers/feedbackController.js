@@ -1,6 +1,9 @@
+// All aspects of the ÉireCraft project – from concept to final delivery – represent my individual work and effort.
+// Where AI tools (such as Copilot or ChatGPT) were used to assist with code suggestions, documentation drafting, or troubleshooting, their usage has been properly acknowledged in accordance with academic integrity guidelines.
+
 import Feedback from '../models/FeedbackModel.js';
 
-// GET /api/feedback - Retrieve all feedback entries
+// Retrieve all feedback entries
 export async function getFeedbacks(req, res) {
   try {
     const feedbacks = await Feedback.find()
@@ -12,7 +15,7 @@ export async function getFeedbacks(req, res) {
   }
 }
 
-// POST /api/feedback/create - Submit new feedback
+// Submit new feedback
 export async function submitFeedback(req, res) {
   try {
     const { buyer, order, rating, title, comments, itemId } = req.body;

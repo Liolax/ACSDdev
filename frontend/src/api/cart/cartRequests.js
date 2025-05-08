@@ -10,7 +10,7 @@ const handleApiError = (error) => {
 
 /**
  * Adds an item to the cart.
- * Expects: productId, quantity, name, price, image.
+ * Requires: productId, quantity, name, price, image.
  */
 export const addToCart = async (productId, quantity = 1, name, price, image) => {
   if (!productId) throw new Error("Product ID is required.");

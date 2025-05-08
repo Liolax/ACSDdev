@@ -44,6 +44,7 @@
   letter-spacing: 0.01em;
 }
 
+// Flex-center mixin for centering flex items
 @mixin flex-center($direction: row, $gap: 1rem) {
   display: flex;
   flex-direction: $direction;
@@ -52,6 +53,7 @@
   gap: $gap;
 }
 
+// Visually-hidden mixin for accessibility
 @mixin visually-hidden {
   position: absolute !important;
   height: 1px;

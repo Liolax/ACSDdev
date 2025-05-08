@@ -9,9 +9,7 @@ const MySales = () => {
   useEffect(() => {
     setLoading(true);
     getMySales()
-      .then((items) => {
-        setSales(items);
-      })
+      .then((items) => setSales(items))
       .catch((error) => console.error("Failed to get sales", error))
       .finally(() => setLoading(false));
   }, []);
