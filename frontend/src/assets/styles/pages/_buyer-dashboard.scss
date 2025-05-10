@@ -995,4 +995,53 @@ $breakpoint-sm: 576px;  // Mobile
   margin-left: 0.2rem !important;
 }
 
+// --- Pagination for Orders Section (match seller dashboard style) ---
+.buyer-dashboard__pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  button {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    font-family: var(--font-family-base, 'Cormorant Garamond', 'Inter', "Segoe UI", Arial, sans-serif);
+    font-weight: 700;
+    border: 1px solid #eab308;
+    border-radius: 6px;
+    background: #fff;
+    color: #b58319;
+    cursor: pointer;
+    transition: background 0.13s, color 0.13s, border-color 0.13s, box-shadow 0.13s;
+
+    &:hover:not(.active),
+    &:focus:not(.active) {
+      background: #ffe4a1;
+      color: #664200;
+      border-color: #b58319;
+      box-shadow: 0 1px 4px rgba(247, 178, 55, 0.15);
+      outline: none;
+    }
+
+    &.active {
+      background: #eab308;
+      color: #fff;
+      border-color: #b58319;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f5f5e6;
+      color: #aaa;
+      border-color: #eee;
+      box-shadow: none;
+    }
+  }
+}
+
 // ... (rest of the styles in the file, including button styles) ...

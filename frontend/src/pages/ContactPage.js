@@ -17,11 +17,7 @@ const ContactPage = () => {
 
   // Handler for login that closes popup after login
   const handleLogin = async (email, password, rememberMe, role) => {
-    if (role === 'buyer') {
-      navigate('/market');
-    } else {
-      navigate('/seller-dashboard');
-    }
+    // Remove navigation here to allow user to submit the contact form
     setShowLoginPopup(false); // Ensure popup closes after login
   };
 

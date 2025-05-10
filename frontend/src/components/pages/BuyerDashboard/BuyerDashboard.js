@@ -56,6 +56,8 @@ const BuyerDashboard = ({ user }) => {
 
   const [loadingWishlist, setLoadingWishlist] = useState(true); // <-- add
   const [loadingCart, setLoadingCart] = useState(true); // <-- add
+  const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
+  const ordersPerPage = 5;
 
   const navigate = useNavigate();
 
@@ -245,6 +247,14 @@ const isProductRelatedToItem = (order, itemId, productId) => {
 // Defensive: fallback to empty array if cart or cart.items is undefined
 const cartItems = (cart && Array.isArray(cart.items)) ? cart.items : [];
 
+// Pagination logic for orders
+const totalOrders = orders.length;
+const totalOrdersPages = Math.ceil(totalOrders / ordersPerPage);
+const paginatedOrders = orders.slice(
+  (currentOrdersPage - 1) * ordersPerPage,
+  currentOrdersPage * ordersPerPage
+);
+
 return (
   <div className="buyer-dashboard">
     <h2 className="buyer-dashboard__header">My Purchases</h2>
@@ -264,182 +274,218 @@ return (
           No orders found. Your past orders will appear here when available.
         </p>
       ) : (
-        // Patch orders to always have .items and .total for rendering
-        orders.map(order => {
-          const items = order.orderItems || [];
-          const total =
-            (order.total !== undefined
-              ? order.total
-              : order.totalPrice?.$numberDecimal
-                ? Number(order.totalPrice.$numberDecimal)
-                : order.totalPrice !== undefined
-                  ? Number(order.totalPrice)
-                  : 0);
+        <>
+          {/* Render only paginated orders */}
+          {paginatedOrders.map(order => {
+            const items = order.orderItems || [];
+            const total =
+              (order.total !== undefined
+                ? order.total
+                : order.totalPrice?.$numberDecimal
+                  ? Number(order.totalPrice.$numberDecimal)
+                  : order.totalPrice !== undefined
+                    ? Number(order.totalPrice)
+                    : 0);
 
-          const { containerSize, gridTemplateColumns } = getCollageStyle(items.length);
-          // Determine collage class for grid layout
-          let collageClass = '';
-          if (items.length === 2) collageClass = 'collage-2';
-          else if (items.length === 3) collageClass = 'collage-3';
-          else if (items.length === 4) collageClass = 'collage-4';
-          else if (items.length >= 5) collageClass = 'collage-5plus';
+            const { containerSize, gridTemplateColumns } = getCollageStyle(items.length);
+            // Determine collage class for grid layout
+            let collageClass = '';
+            if (items.length === 2) collageClass = 'collage-2';
+            else if (items.length === 3) collageClass = 'collage-3';
+            else if (items.length === 4) collageClass = 'collage-4';
+            else if (items.length >= 5) collageClass = 'collage-5plus';
 
-          return (
-            <div key={order._id} className="order-card">
-              <div
-                className={`order-card__collage${collageClass ? ' ' + collageClass : ''}`}
-                style={{
-                  width: `${containerSize}px`,
-                  height: `${containerSize}px`,
-                  // Remove gridTemplateColumns here, let SCSS handle it
-                  gap: '2px',
-                  overflow: 'hidden',
-                  borderRadius: '8px',
-                }}
-              >
-                {items.map((item, idx) => (
-                  <img
-                    key={idx}
-                    src={getImageUrl(item.image)}
-                    alt={item.name}
-                    className="order-card__mini-image"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/assets/images/default-product.png';
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="order-card__details">
-                <h3 className="order-card__id">Order {order._id}</h3>
-                {items.map((item, idx) => {
-                  // Progress bar logic
-                  let progressPercent = 0;
-                  let isDelivered = item.status === 'Delivered';
-                  if (item.status === 'Processing') progressPercent = 33;
-                  else if (item.status === 'Shipped') progressPercent = 66;
-                  else if (item.status === 'Delivered') progressPercent = 100;
+            return (
+              <div key={order._id} className="order-card">
+                <div
+                  className={`order-card__collage${collageClass ? ' ' + collageClass : ''}`}
+                  style={{
+                    width: `${containerSize}px`,
+                    height: `${containerSize}px`,
+                    // Remove gridTemplateColumns here, let SCSS handle it
+                    gap: '2px',
+                    overflow: 'hidden',
+                    borderRadius: '8px',
+                  }}
+                >
+                  {items.map((item, idx) => (
+                    <img
+                      key={idx}
+                      src={getImageUrl(item.image)}
+                      alt={item.name}
+                      className="order-card__mini-image"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/assets/images/default-product.png';
+                      }}
+                    />
+                  ))}
+                </div>
+                <div className="order-card__details">
+                  <h3 className="order-card__id">Order {order._id}</h3>
+                  {items.map((item, idx) => {
+                    // Progress bar logic
+                    let progressPercent = 0;
+                    let isDelivered = item.status === 'Delivered';
+                    if (item.status === 'Processing') progressPercent = 33;
+                    else if (item.status === 'Shipped') progressPercent = 66;
+                    else if (item.status === 'Delivered') progressPercent = 100;
 
-                  return (
-                    <div
-                      key={item._id || idx}
-                      className={`order-card__item${isDelivered ? ' is-delivered' : ''}`}
-                      style={{ display: 'flex', flexDirection: 'column', gap: '0.5em', flexWrap: 'wrap' }}
-                    >
-                      <div className="order-card__item-info">
-                        <span className="order-card__item-name">{item.name}</span>
-                        {/* Optionally show status text */}
-                        {/* <span className="order-card__item-status-text">Status: {item.status}</span> */}
-                      </div>
-                      {/* Progress Bar */}
-                      <div className="order-card__item-progress-container">
-                        <div
-                          className="order-card__item-progress-fill"
-                          style={{
-                            width: isDelivered ? '100%' : `${progressPercent}%`,
-                            backgroundColor: isDelivered ? '#28a745' : '#eab308'
-                          }}
-                        ></div>
-                      </div>
-                      <div className="order-card__item-actions">
-                        {item.status === 'Shipped' && (
-                          <Button
-                            className="buyer-dashboard__button--mark-delivered"
-                            onClick={() => handleMarkDelivered(order._id, item._id)}
-                          >
-                            Mark Delivered
-                          </Button>
-                        )}
-                        {isDelivered && !item.feedback && (
-                          <Button
-                            className="buyer-dashboard__button--feedback"
+                    return (
+                      <div
+                        key={item._id || idx}
+                        className={`order-card__item${isDelivered ? ' is-delivered' : ''}`}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '0.5em', flexWrap: 'wrap' }}
+                      >
+                        <div className="order-card__item-info">
+                          <span className="order-card__item-name">{item.name}</span>
+                          <span className="order-card__item-status-text">Status: {item.status}</span>
+                        </div>
+                        {/* Progress Bar */}
+                        <div className="order-card__item-progress-container">
+                          <div
+                            className="order-card__item-progress-fill"
                             style={{
-                              padding: '0.32em 0.9em',
-                              fontSize: '0.95rem',
-                              borderRadius: '6px',
-                              border: '2px solid #1caf68',
-                              background: 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)',
-                              color: '#177e48',
-                              marginRight: '0.3em',
-                              marginBottom: '0.2em',
-                              boxShadow: '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)',
-                              letterSpacing: '0.01em',
-                              fontWeight: 600,
-                              transition: 'background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s'
+                              width: isDelivered ? '100%' : `${progressPercent}%`,
+                              backgroundColor: isDelivered ? '#28a745' : '#eab308'
                             }}
-                            onMouseOver={e => {
-                              e.currentTarget.style.background = 'linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%)';
-                              e.currentTarget.style.color = '#1caf68';
-                              e.currentTarget.style.borderColor = '#177e48';
-                              e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(23, 126, 72, 0.14)';
-                              e.currentTarget.style.transform = 'scale(1.06) rotate(-1deg)';
-                            }}
-                            onMouseOut={e => {
-                              e.currentTarget.style.background = 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)';
-                              e.currentTarget.style.color = '#177e48';
-                              e.currentTarget.style.borderColor = '#1caf68';
-                              e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
-                              e.currentTarget.style.transform = 'none';
-                            }}
-                            onClick={() => {
-                              setFeedbackOrderId({ orderId: order._id, itemId: item._id });
-                              setEditFeedbackData(null);
-                            }}
-                          >
-                            Leave Feedback
-                          </Button>
+                          ></div>
+                        </div>
+                        <div className="order-card__item-actions">
+                          {item.status === 'Shipped' && (
+                            <Button
+                              className="buyer-dashboard__button--mark-delivered"
+                              onClick={() => handleMarkDelivered(order._id, item._id)}
+                            >
+                              Mark Delivered
+                            </Button>
+                          )}
+                          {isDelivered && !item.feedback && (
+                            <Button
+                              className="buyer-dashboard__button--feedback"
+                              style={{
+                                padding: '0.32em 0.9em',
+                                fontSize: '0.95rem',
+                                borderRadius: '6px',
+                                border: '2px solid #1caf68',
+                                background: 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)',
+                                color: '#177e48',
+                                marginRight: '0.3em',
+                                marginBottom: '0.2em',
+                                boxShadow: '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)',
+                                letterSpacing: '0.01em',
+                                fontWeight: 600,
+                                transition: 'background 0.16s, color 0.16s, box-shadow 0.16s, border-color 0.16s, transform 0.12s'
+                              }}
+                              onMouseOver={e => {
+                                e.currentTarget.style.background = 'linear-gradient(90deg, #ffbe0b 0%, #ffd700 60%, #ffe066 100%)';
+                                e.currentTarget.style.color = '#1caf68';
+                                e.currentTarget.style.borderColor = '#177e48';
+                                e.currentTarget.style.boxShadow = '0 4px 18px 0 rgba(23, 126, 72, 0.14)';
+                                e.currentTarget.style.transform = 'scale(1.06) rotate(-1deg)';
+                              }}
+                              onMouseOut={e => {
+                                e.currentTarget.style.background = 'linear-gradient(90deg, #ffe066 0%, #ffd700 60%, #ffbe0b 100%)';
+                                e.currentTarget.style.color = '#177e48';
+                                e.currentTarget.style.borderColor = '#1caf68';
+                                e.currentTarget.style.boxShadow = '0 1.5px 6px 0 rgba(23, 126, 72, 0.10)';
+                                e.currentTarget.style.transform = 'none';
+                              }}
+                              onClick={() => {
+                                setFeedbackOrderId({ orderId: order._id, itemId: item._id });
+                                setEditFeedbackData(null);
+                              }}
+                            >
+                              Leave Feedback
+                            </Button>
+                          )}
+                        </div>
+                        {item.feedback && (
+                          <>
+                            <div className="order-card__item-feedback-display">
+                              <span>
+                                Feedback: {item.feedback.rating}★ {item.feedback.title}
+                              </span>
+                              <span style={{ display: 'inline-block', marginLeft: 8 }}>
+                                {item.feedback.comments}
+                                {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
+                              </span>
+                            </div>
+                            {/* Edit/Delete buttons below feedback, with mobile-friendly layout */}
+                            <div className="order-card__item-actions order-card__item-actions--feedback">
+                              <Button
+                                className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
+                                style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
+                                onClick={() => handleEditFeedback(order._id, item._id, item.feedback)}
+                              >
+                                Edit
+                              </Button>
+                              <span style={{ flex: 1 }} />
+                              <Button
+                                className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
+                                style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
+                                onClick={() => handleDeleteFeedback(order._id, item._id)}
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </>
                         )}
                       </div>
-                      {item.feedback && (
-                        <>
-                          <div className="order-card__item-feedback-display">
-                            <span>
-                              Feedback: {item.feedback.rating}★ {item.feedback.title}
-                            </span>
-                            <span style={{ display: 'inline-block', marginLeft: 8 }}>
-                              {item.feedback.comments}
-                              {item.feedback.edited && <span style={{ color: '#bfa800', marginLeft: 8 }}> (Edited)</span>}
-                            </span>
-                          </div>
-                          {/* Edit/Delete buttons below feedback, with mobile-friendly layout */}
-                          <div className="order-card__item-actions order-card__item-actions--feedback">
-                            <Button
-                              className="buyer-dashboard__button--feedback buyer-dashboard__button--edit"
-                              style={{ background: '#ffe066', color: '#177e48', border: '2px solid #1caf68' }}
-                              onClick={() => handleEditFeedback(order._id, item._id, item.feedback)}
-                            >
-                              Edit
-                            </Button>
-                            <span style={{ flex: 1 }} />
-                            <Button
-                              className="buyer-dashboard__button--feedback buyer-dashboard__button--delete"
-                              style={{ background: '#fff3f3', color: '#b10e0e', border: '2px solid #b10e0e' }}
-                              onClick={() => handleDeleteFeedback(order._id, item._id)}
-                            >
-                              Delete
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-                {/* NEW: Wrap total and status */}
-                <div className="order-card__summary">
-                  <p className="order-card__total">
-                    Total: €{Number(total).toFixed(2)}
-                  </p>
-                  <p className="order-card__status">Status: {order.status}</p>
+                    );
+                  })}
+                  {/* NEW: Wrap total and status */}
+                  <div className="order-card__summary">
+                    <p className="order-card__total">
+                      Total: €{Number(total).toFixed(2)}
+                    </p>
+                    {/* Removed misleading order-level status */}
+                    {/* <p className="order-card__status">Status: {order.status}</p> */}
+                  </div>
                 </div>
               </div>
+            );
+          })}
+          {/* Pagination controls */}
+          {totalOrdersPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '1.2rem 0' }}>
+              <button
+                className="see-more-btn"
+                onClick={() => setCurrentOrdersPage(p => Math.max(1, p - 1))}
+                disabled={currentOrdersPage === 1}
+                aria-label="Previous page"
+              >
+                &lt;
+              </button>
+              {Array.from({ length: totalOrdersPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  className={`see-more-btn${currentOrdersPage === i + 1 ? ' active' : ''}`}
+                  style={{
+                    fontWeight: currentOrdersPage === i + 1 ? 700 : 400,
+                    textDecoration: currentOrdersPage === i + 1 ? 'underline' : 'none'
+                  }}
+                  onClick={() => setCurrentOrdersPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                className="see-more-btn"
+                onClick={() => setCurrentOrdersPage(p => Math.min(totalOrdersPages, p + 1))}
+                disabled={currentOrdersPage === totalOrdersPages}
+                aria-label="Next page"
+              >
+                &gt;
+              </button>
             </div>
-          );
-        })
+          )}
+        </>
       )}
     </div>
 

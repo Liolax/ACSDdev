@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 import '../../assets/styles/components/_contact-form.scss';
 
 const ContactForm = ({ onSuccess }) => {
   const [state, handleSubmit] = useForm("mjkydqyo");
   const nameRef = useRef(null);
+  const [clientErrors, setClientErrors] = useState({});
 
   useEffect(() => {
     if (state.succeeded && onSuccess) {
@@ -28,21 +29,26 @@ const ContactForm = ({ onSuccess }) => {
   // Simple client-side validation for accessibility
   const validate = (e) => {
     const form = e.target;
-    if (!form.name.value.trim()) {
+    const errors = {};
+    if (!form.name.value.trim() || form.name.value.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters.";
+    }
+    if (!form.email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value)) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!form.message.value.trim() || form.message.value.trim().length < 5) {
+      errors.message = "Message must be at least 5 characters.";
+    }
+    setClientErrors(errors);
+    if (Object.keys(errors).length > 0) {
       e.preventDefault();
-      form.name.focus();
+      // Focus first invalid field
+      if (errors.name && nameRef.current) nameRef.current.focus();
+      else if (errors.email) form.email.focus();
+      else if (errors.message) form.message.focus();
       return false;
     }
-    if (!form.email.value.trim() || !/\S+@\S+\.\S+/.test(form.email.value)) {
-      e.preventDefault();
-      form.email.focus();
-      return false;
-    }
-    if (!form.message.value.trim()) {
-      e.preventDefault();
-      form.message.focus();
-      return false;
-    }
+    setClientErrors({});
     return true;
   };
 
@@ -68,6 +74,7 @@ const ContactForm = ({ onSuccess }) => {
           aria-label="Name"
           ref={nameRef}
         />
+        {clientErrors.name && <span className="form-error">{clientErrors.name}</span>}
         <ValidationError prefix="Name" field="name" errors={state.errors} />
 
         <label htmlFor="email" className="contact-form__label">Email:</label>
@@ -81,6 +88,7 @@ const ContactForm = ({ onSuccess }) => {
           aria-label="Email"
           autoComplete="email"
         />
+        {clientErrors.email && <span className="form-error">{clientErrors.email}</span>}
         <ValidationError prefix="Email" field="email" errors={state.errors} />
 
         <label htmlFor="message" className="contact-form__label">Message:</label>
@@ -93,6 +101,7 @@ const ContactForm = ({ onSuccess }) => {
           aria-required="true"
           aria-label="Message"
         ></textarea>
+        {clientErrors.message && <span className="form-error">{clientErrors.message}</span>}
         <ValidationError prefix="Message" field="message" errors={state.errors} />
 
         <button
